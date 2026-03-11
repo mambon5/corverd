@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ca">
+
+<head>
+    <meta charset="UTF-8">
+    <title>{{ noticia.titol }} - Coordinadora Verda</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            max-width: 800px;
+        }
+
+        .comment-section {
+            margin-top: 40px;
+            border-top: 1px solid #ccc;
+            padding-top: 20px;
+        }
+
+        .comment {
+            background: #f9f9f9;
+            padding: 10px;
+            margin-bottom: 15px;
+            border-radius: 4px;
+        }
+
+        textarea {
+            width: 100%;
+            height: 80px;
+            margin-bottom: 10px;
+        }
+
+        button {
+            padding: 8px 15px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+    <a href="{% url 'entitats_list' %}">&larr; Tornar a les entitats</a>
+
+    <h1>{{ noticia.titol }}</h1>
+    <p><em>Publicat per {{ noticia.associacio.nom }} el {{ noticia.data_publicacio|date:"d/m/Y H:i" }}</em></p>
+
+    <div>
+        {{ noticia.contingut|linebreaks }}
+    </div>
+
+    <div class="comment-section">
+        <h2>Comentaris ({{ comentaris.count }})</h2>
+
+        {% if user.is_authenticated %}
+        <h3>Afegeix un comentari com a {{ user.username }}</h3>
+        <form method="POST">
+            {% csrf_token %}
+            <textarea name="text" placeholder="Escriu la teva opinió..." required></textarea><br>
+            <button type="submit">Enviar comentari</button>
+        </form>
+        {% else %}
+        <p><strong><a href="/admin/login/?next={{ request.path }}">Inicia sessió</a> per poder comentar.</strong></p>
+        {% endif %}
+
+        <hr>
+
+        {% for comentari in comentaris %}
+        <div class="comment">
+            <strong>{{ comentari.usuari.username }}</strong>
+            <span style="color: #666; font-size: 0.8em;">el {{ comentari.data|date:"d/m/Y H:i" }}</span>
+            <p>{{ comentari.text|linebreaksbr }}</p>
+        </div>
+        {% empty %}
+        <p>No hi ha cap comentari. Sigues el primer en dir-hi la teva!</p>
+        {% endfor %}
+    </div>
+
+</body>
+
+</html>
