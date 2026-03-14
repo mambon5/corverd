@@ -22,3 +22,28 @@ def noticia_detail(request, pk):
         'noticia': noticia, 
         'comentaris': comentaris
     })
+
+def manifest(request):
+    return render(request, 'manifest.html')
+
+def sobre(request):
+    return render(request, 'sobre.html')
+
+def testimonis(request):
+    return render(request, 'testimonis.html')
+
+def faq(request):
+    return render(request, 'faq.html')
+
+def recursos(request):
+    return render(request, 'recursos.html')
+
+def serveis(request):
+    return render(request, 'serveis.html')
+
+def blog(request):
+    return render(request, 'blog.html')
+
+def contacte(request):
+    # En el futur podria gestionar un formulari aquí
+    return render(request, 'contacte.html')

@@ -16,8 +16,18 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.conf import settings
+from django.conf.urls.static import static
+import os
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('core.urls')),
 ]
+
+if settings.DEBUG:
+    # Servim wp-content i wp-includes directament des de static/ per compatibilitat amb el dump de WordPress
+    urlpatterns += static('wp-content/', document_root=os.path.join(settings.BASE_DIR, 'static/wp-content'))
+    urlpatterns += static('wp-includes/', document_root=os.path.join(settings.BASE_DIR, 'static/wp-includes'))
+    # També servim els fitxers de media si n'hi ha
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
