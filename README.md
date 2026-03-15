@@ -28,6 +28,56 @@ python manage.py runserver 0.0.0.0:8000
 ```
 Després, només caldrà visitar `http://localhost:8000` des del navegador.
 
+## Instal·lació en un nou servidor
+
+Si vols instal·lar l'aplicació des de zero en un nou servidor Linux, segueix aquests passos:
+
+### 1. Clonar el repositori i preparar l'entorn
+```bash
+git clone <url-del-repositori>
+cd corverd
+```
+
+### 2. Crear i activar l'entorn virtual
+```bash
+python3 -m venv venv
+source venv/bin/activate
+```
+
+### 3. Instal·lar les dependències
+```bash
+pip install --upgrade pip
+pip install -r requirements.txt
+```
+
+### 4. Configurar la Base de Dades MySQL
+Crea una base de dades i un usuari a MySQL:
+```sql
+CREATE DATABASE coordinadoraverda CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE USER 'corverd_user'@'localhost' IDENTIFIED BY 'coordi123';
+GRANT ALL PRIVILEGES ON coordinadoraverda.* TO 'corverd_user'@'localhost';
+FLUSH PRIVILEGES;
+```
+
+### 5. Configurar les dades de l'entorn (.env)
+Copia el fitxer d'exemple i edita'l amb les teves dades:
+```bash
+cp .env.example .env
+nano .env  # O el teu editor preferit
+```
+Assegura't que els paràmetres de la base de dades coincideixin amb els que has creat al pas anterior.
+
+### 6. Aplicar migracions i crear superusuari
+```bash
+python manage.py migrate
+python manage.py createsuperuser
+```
+
+### 7. Recollir fitxers estàtics (per a producció)
+```bash
+python manage.py collectstatic
+```
+
 ### 3. Accés a l'Administració
 L'aplicació compta amb un tauler d'administrador central per gestionar-ho tot.
 
