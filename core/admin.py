@@ -6,22 +6,22 @@ class BaseEntityAdmin(admin.ModelAdmin):
         qs = super().get_queryset(request)
         if request.user.is_superuser:
             return qs
-        return qs.filter(associacio__admin=request.user)
+        return qs.filter(associacio__gerent=request.user)
     
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if not request.user.is_superuser and db_field.name == "associacio":
-            kwargs["queryset"] = Associacio.objects.filter(admin=request.user)
+            kwargs["queryset"] = Associacio.objects.filter(gerent=request.user)
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
 @admin.register(Associacio)
 class AssociacioAdmin(admin.ModelAdmin):
-    list_display = ('nom', 'any_fundacio', 'zona_geografica', 'admin')
+    list_display = ('nom', 'any_fundacio', 'zona_geografica', 'gerent')
     
     def get_queryset(self, request):
         qs = super().get_queryset(request)
         if request.user.is_superuser:
             return qs
-        return qs.filter(admin=request.user)
+        return qs.filter(gerent=request.user)
 
 @admin.register(Activitat)
 class ActivitatAdmin(BaseEntityAdmin):

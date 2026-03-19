@@ -8,7 +8,7 @@ class Associacio(models.Model):
     zona_geografica = models.CharField(max_length=255, null=True, blank=True)
     latitud = models.FloatField(null=True, blank=True)
     longitud = models.FloatField(null=True, blank=True)
-    admin = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='associacions_administrades')
+    gerent = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='associacions_administrades')
 
     def __str__(self):
         return self.nom
@@ -16,8 +16,13 @@ class Associacio(models.Model):
 class Activitat(models.Model):
     titol = models.CharField(max_length=255)
     descripcio = models.TextField()
-    data = models.DateTimeField()
+    data = models.DateField()
+    hora = models.TimeField()
+    adreça = models.CharField(max_length=255, null=True, blank=True)
+    latitud = models.FloatField(null=True, blank=True)
+    longitud = models.FloatField(null=True, blank=True)
     associacio = models.ForeignKey(Associacio, on_delete=models.CASCADE, related_name='activitats')
+    usuari = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='activitats_organitzades')
 
     def __str__(self):
         return self.titol
@@ -27,6 +32,7 @@ class Noticia(models.Model):
     contingut = models.TextField()
     data_publicacio = models.DateTimeField(auto_now_add=True)
     associacio = models.ForeignKey(Associacio, on_delete=models.CASCADE, related_name='noticies')
+    usuari = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='noticies_publicades')
 
     def __str__(self):
         return self.titol

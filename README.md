@@ -24,7 +24,7 @@ Per posar en marxa l'aplicació en un entorn local (des del directori `/var/www/
 source venv/bin/activate
 
 # Iniciar el servidor de desenvolupament
-python manage.py runserver 0.0.0.0:8000
+**python manage.py runserver 0.0.0.0:8000**
 ```
 Després, només caldrà visitar `http://localhost:8000` des del navegador.
 
@@ -86,7 +86,12 @@ L'aplicació compta amb un tauler d'administrador central per gestionar-ho tot.
   - Usuari: `admin`
   - Contrasenya: `admin`
 
-*(Recorda canviar la contrasenya o crear nous superusuaris abans de passar a producció)*.
+- **Usuaris Representants (per a proves):**
+  - Usuari: `representant_1` | Contrasenya: `password123` *(Associació de Defensa 1)*
+  - Usuari: `representant_2` | Contrasenya: `password123` *(Associació de Defensa 2)*
+  - Usuari: `representant_3` | Contrasenya: `password123` *(Associació de Defensa 3)*
+
+*(Recorda canviar les contrasenyes o crear nous usuaris abans de passar a producció)*.
 
 ### 4. Gestió d'Entitats al Mapa (Leaflet)
 Al tauler d'administració `/admin`, pots crear noves instàncies d'**Associació**. Segueix aquests passos per que apareguin al mapa de `/entitats/`:
