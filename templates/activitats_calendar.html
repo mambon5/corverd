@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ca">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Calendari d'Activitats - Coordinadora Verda</title>
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js'></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            display: flex;
+        }
+
+        .sidebar {
+            width: 250px;
+            padding-right: 20px;
+            border-right: 1px solid #ccc;
+            margin-right: 20px;
+        }
+
+        .main-content {
+            flex-grow: 1;
+            max-width: 900px;
+        }
+
+        #calendar {
+            width: 100%;
+        }
+
+        .entity-filter {
+            margin-bottom: 10px;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            text-decoration: none;
+            color: #333;
+        }
+
+        .fc-event {
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="sidebar">
+        <a href="{% url 'index' %}" class="back-link">&larr; Tornar a l'inici</a>
+        <h2>Llegenda / Filtres</h2>
+        <div id="filters">
+            {% for entitat in entitats %}
+            <div class="entity-filter">
+                <label>
+                    <input type="checkbox" class="entity-cb" value="{{ entitat.id }}" checked>
+                    {{ entitat.nom }}
+                </label>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="main-content">
+        <h1 style="text-align: center;">Totes les Activitats</h1>
+        <div id='calendar'></div>
+    </div>
+
+    {{ events_json|json_script:"events-data" }}
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var eventsData = JSON.parse(document.getElementById('events-data').textContent);
+            var calendarEl = document.getElementById('calendar');
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                locale: 'ca',
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                },
+                events: function (fetchInfo, successCallback, failureCallback) {
+                    var checkedEntities = Array.from(document.querySelectorAll('.entity-cb:checked')).map(function (cb) { return cb.value; });
+                    var filteredEvents = eventsData.filter(function (event) {
+                        return checkedEntities.includes(event.entity_id.toString());
+                    });
+                    successCallback(filteredEvents);
+                },
+                eventClick: function (info) {
+                    if (info.event.extendedProps.description) {
+                        alert(info.event.title + '\n\n' + info.event.extendedProps.description);
+                    } else {
+                        alert(info.event.title);
+                    }
+                }
+            });
+            calendar.render();
+
+            var checkboxes = document.querySelectorAll('.entity-cb');
+            checkboxes.forEach(function (cb) {
+                cb.addEventListener('change', function () {
+                    calendar.refetchEvents();
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ca">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Activitats de {{ entitat.nom }} - Coordinadora Verda</title>
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js'></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+        }
+
+        #calendar {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            text-decoration: none;
+            color: #333;
+        }
+
+        .fc-event {
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <a href="{% url 'entitats_list' %}" class="back-link">&larr; Tornar a Entitats</a>
+    <h1 style="text-align: center;">Activitats de {{ entitat.nom }}</h1>
+    <div id='calendar'></div>
+    {{ events_json|json_script:"events-data" }}
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var eventsData = JSON.parse(document.getElementById('events-data').textContent);
+            var calendarEl = document.getElementById('calendar');
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                locale: 'ca',
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                },
+                events: eventsData,
+                eventClick: function (info) {
+                    if (info.event.extendedProps.description) {
+                        alert(info.event.title + '\n\n' + info.event.extendedProps.description);
+                    } else {
+                        alert(info.event.title);
+                    }
+                }
+            });
+            calendar.render();
+        });
+    </script>
+</body>
+
+</html>

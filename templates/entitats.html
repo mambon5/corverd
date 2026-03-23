@@ -1,17 +1,38 @@
 <!DOCTYPE html>
 <html lang="ca">
+
 <head>
     <meta charset="UTF-8">
     <title>Entitats - Coordinadora Verda</title>
     <!-- Leaflet CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <style>
-        body { font-family: Arial, sans-serif; margin: 20px; }
-        .entitat-card { border: 1px solid #ccc; padding: 15px; margin-bottom: 20px; border-radius: 5px; }
-        .map { height: 200px; width: 100%; margin-top: 10px; background-color: #f0f0f0; }
-        .news-list { margin-top: 10px; font-size: 0.9em; }
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        .entitat-card {
+            border: 1px solid #ccc;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+
+        .map {
+            height: 200px;
+            width: 100%;
+            margin-top: 10px;
+            background-color: #f0f0f0;
+        }
+
+        .news-list {
+            margin-top: 10px;
+            font-size: 0.9em;
+        }
     </style>
 </head>
+
 <body>
 
     <h1>Entitats de la Coordinadora Verda</h1>
@@ -23,36 +44,44 @@
         <p><strong>Any de fundació:</strong> {{ entitat.any_fundacio|default:"No especificat" }}</p>
         <p><strong>Zona:</strong> {{ entitat.zona_geografica|default:"Global" }}</p>
         <p>{{ entitat.descripcio|truncatewords:30 }}</p>
-        
+
         <div class="news-list">
             <strong>Últimes notícies:</strong>
             <ul>
                 {% for noticia in entitat.noticies.all|slice:":3" %}
-                    <li><a href="{% url 'noticia_detail' noticia.id %}">{{ noticia.titol }}</a> ({{ noticia.data_publicacio|date:"d/m/Y" }})</li>
+                <li><a href="{% url 'noticia_detail' noticia.id %}">{{ noticia.titol }}</a> ({{
+                    noticia.data_publicacio|date:"d/m/Y" }})</li>
                 {% empty %}
-                    <li>No hi ha notícies recents.</li>
+                <li>No hi ha notícies recents.</li>
                 {% endfor %}
             </ul>
         </div>
 
+        <div style="margin-top: 15px; margin-bottom: 15px;">
+            <a href="{% url 'entitat_activitats' entitat.id %}"
+                style="padding: 10px 15px; background-color: #4CAF50; color: white; text-decoration: none; border-radius: 5px;">Veure
+                Activitats</a>
+        </div>
+
         {% if entitat.latitud and entitat.longitud %}
-        <div id="map-{{ entitat.id }}" class="map" data-lat="{{ entitat.latitud|stringformat:"f" }}" data-lng="{{ entitat.longitud|stringformat:"f" }}" data-nom="{{ entitat.nom }}"></div>
+        <div id="map-{{ entitat.id }}" class="map" data-lat="{{ entitat.latitud|stringformat:" f" }}"
+            data-lng="{{ entitat.longitud|stringformat:" f" }}" data-nom="{{ entitat.nom }}"></div>
         {% endif %}
     </div>
     {% empty %}
-        <p>Encara no hi ha cap entitat registrada.</p>
+    <p>Encara no hi ha cap entitat registrada.</p>
     {% endfor %}
 
     <!-- Leaflet JS -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
+        document.addEventListener("DOMContentLoaded", function () {
             var maps = document.querySelectorAll('.map');
-            maps.forEach(function(mapDiv) {
+            maps.forEach(function (mapDiv) {
                 var lat = parseFloat(mapDiv.getAttribute('data-lat'));
                 var lng = parseFloat(mapDiv.getAttribute('data-lng'));
                 var nom = mapDiv.getAttribute('data-nom');
-                
+
                 if (!isNaN(lat) && !isNaN(lng)) {
                     var map = L.map(mapDiv.id).setView([lat, lng], 13);
                     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -65,4 +94,5 @@
         });
     </script>
 </body>
+
 </html>
