@@ -50,11 +50,12 @@ pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
-### 4. Configurar la Base de Dades MySQL
-Crea una base de dades i un usuari a MySQL:
+### 4. Configurar1. El projecte utilitza MySQL. Necessites crear una base de dades i un usuari.
+Pots fer-ho executant les següents comandes a la teva consola de MySQL (amb l'usuari root):
+
 ```sql
 CREATE DATABASE coordinadoraverda CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-CREATE USER 'corverd_user'@'localhost' IDENTIFIED BY 'coordi123';
+CREATE USER 'corverd_user'@'localhost' IDENTIFIED BY 'la_teva_contrasenya';
 GRANT ALL PRIVILEGES ON coordinadoraverda.* TO 'corverd_user'@'localhost';
 FLUSH PRIVILEGES;
 ```

@@ -10,6 +10,7 @@ from core.models import Associacio, Activitat, Noticia, Comentari
 from django.utils import timezone
 from datetime import timedelta, time
 import random
+import os
 
 def seed():
     # Esborrem dades anteriors per no tenir duplicats o problemes
@@ -34,7 +35,7 @@ def seed():
         # 5 users
         username = f"representant_{i}"
         user, created = User.objects.get_or_create(username=username, defaults={'email': f"{username}@associacio{i}.cat"})
-        user.set_password("password123")
+        user.set_password(os.getenv('SEED_USER_PASSWORD', 'password123'))
         user.is_staff = True
         user.save()
         user.groups.add(reps_group)
