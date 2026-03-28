@@ -10,7 +10,7 @@ Environment="PATH=/var/www/corverd/venv/bin"
 ExecStart=/var/www/corverd/venv/bin/gunicorn \
     --workers 3 \
     --bind unix:/var/www/corverd/corverd.sock \
-    corverd.wsgi:application
+    corverd_project.wsgi:application
 
 [Install]
 WantedBy=multi-user.target
