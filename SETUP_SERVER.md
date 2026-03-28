@@ -40,6 +40,10 @@ Comprovar estat:
 
 sudo systemctl status corverd
 
+potser cal instalar gunicorn:
+
+pip install gunicorn
+
 🌐 2. Configurar Nginx
 
 Instal·lar Nginx:
