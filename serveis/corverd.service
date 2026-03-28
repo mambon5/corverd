@@ -1,0 +1,16 @@
+[Unit]
+Description=Corverd Django App
+After=network.target
+
+[Service]
+User=romanov
+Group=www-data
+WorkingDirectory=/var/www/corverd
+Environment="PATH=/var/www/corverd/venv/bin"
+ExecStart=/var/www/corverd/venv/bin/gunicorn \
+    --workers 3 \
+    --bind unix:/var/www/corverd/corverd.sock \
+    corverd.wsgi:application
+
+[Install]
+WantedBy=multi-user.target
