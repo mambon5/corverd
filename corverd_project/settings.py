@@ -144,5 +144,7 @@ DEBUG = False
 
 ALLOWED_HOSTS = [
     "coordinadoraverda.cat",
-    "www.coordinadoraverda.cat"
+    "www.coordinadoraverda.cat",
+    'localhost', '127.0.0.1', '0.0.0.0',
+    
 ]
