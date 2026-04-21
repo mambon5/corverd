@@ -10,23 +10,30 @@ Aquest projecte ha estat migrat d'una pàgina web estàtica a una aplicació ope
   - `/entitats/`: Llista totes les entitats i mostren la seva informació bàsica, les darreres notícies i un mapa de localització mitjançant **Leaflet**.
   - `/noticia/<id>/`: Pàgina on s'ubica una notícia específica, i on els usuaris registrats poden comentar.
 
-## Guia d'Instal·lació i Execució Local
+## 🚀 Com executar l'aplicació localment
 
-### 1. Requisits
-Tens preparades unes dependències a l'entorn virtual que has d'activar, i la base de dades `coordinadoraverda` ja està lligada i configurada.
+Si ja tens l'entorn configurat, segueix aquests passos per aixecar el servidor de desenvolupament:
 
-### 2. Activació de l'Entorn Virtual i Execució
+1. **Entra al directori del projecte**:
+   ```bash
+   cd /var/www/corverd
+   ```
 
-Per posar en marxa l'aplicació en un entorn local (des del directori `/var/www/corverd`):
+2. **Activa l'entorn virtual**:
+   ```bash
+   source venv/bin/activate
+   ```
 
-```bash
-# Activar l'entorn virtual
-source venv/bin/activate
+3. **Inicia el servidor de Django**:
+   ```bash
+   python manage.py runserver
+   ```
 
-# Iniciar el servidor de desenvolupament
-**python manage.py runserver 0.0.0.0:8000**
-```
-Després, només caldrà visitar `http://localhost:8000` des del navegador.
+L'aplicació estarà disponible a [http://127.0.0.1:8000](http://127.0.0.1:8000).
+
+---
+
+## 🛠️ Guia d'Instal·lació Completa
 
 ## Instal·lació en un nou servidor
 
@@ -50,7 +57,8 @@ pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
-### 4. Configurar1. El projecte utilitza MySQL. Necessites crear una base de dades i un usuari.
+### 4. Configurar la Base de Dades
+El projecte utilitza MySQL. Necessites crear una base de dades i un usuari.
 Pots fer-ho executant les següents comandes a la teva consola de MySQL (amb l'usuari root):
 
 ```sql
