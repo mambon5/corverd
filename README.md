@@ -29,6 +29,9 @@ Si ja tens l'entorn configurat, segueix aquests passos per aixecar el servidor d
    python manage.py runserver
    ```
 
+> [!TIP]
+> Si no es carreguen els estils o imatges localment, assegura't que el fitxer `.env` té `DEBUG=True`. Django no serveix fitxers estàtics automàticament si `DEBUG` és `False`.
+
 L'aplicació estarà disponible a [http://127.0.0.1:8000](http://127.0.0.1:8000).
 
 ---
