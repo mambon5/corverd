@@ -149,8 +149,10 @@ ALLOWED_HOSTS = [
     'localhost', '127.0.0.1', '0.0.0.0',
     
 ]
-
+# per permetre canvis desde django admin:
 CSRF_TRUSTED_ORIGINS = [
     "https://coordinadoraverda.cat",
     "https://www.coordinadoraverda.cat",
 ]
+
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
