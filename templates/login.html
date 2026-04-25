@@ -3736,6 +3736,33 @@
 		</div>
 
 	</nav>
+<!-- WP_MENU_JS_FIX -->
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    var openBtns = document.querySelectorAll('.wp-block-navigation__responsive-container-open');
+    var closeBtns = document.querySelectorAll('.wp-block-navigation__responsive-container-close');
+    var containers = document.querySelectorAll('.wp-block-navigation__responsive-container');
+
+    openBtns.forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            containers.forEach(function(container) {
+                container.classList.add('has-modal-open');
+                container.classList.add('is-menu-open');
+            });
+        });
+    });
+
+    closeBtns.forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            containers.forEach(function(container) {
+                container.classList.remove('has-modal-open');
+                container.classList.remove('is-menu-open');
+            });
+        });
+    });
+});
+</script>
 </body>
+
 
 </html>

@@ -45,6 +45,8 @@ def activitats_calendar(request):
             'adreça': a.adreça,
             'data': a.data.strftime('%d/%m/%Y'),
             'hora': a.hora.strftime('%H:%M'),
+            'latitud': float(a.latitud) if a.latitud else None,
+            'longitud': float(a.longitud) if a.longitud else None,
         })
     return render(request, 'activitats_calendar.html', {'entitats': entitats, 'events_json': events})
 

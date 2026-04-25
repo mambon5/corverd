@@ -149,7 +149,8 @@
         /*# sourceURL=/static/wp-includes/blocks/navigation-link/style.min.css */
     </style>
     <link rel='stylesheet' id='wp-block-navigation-css'
-        href='/static/wp-includes/blocks/navigation/style.min.css?ver=20a391ba6ff6fb196cf672c5e2c2a58d.css' media='all' />
+        href='/static/wp-includes/blocks/navigation/style.min.css?ver=20a391ba6ff6fb196cf672c5e2c2a58d.css'
+        media='all' />
     <style id='wp-block-social-links-inline-css'>
         .wp-block-social-links {
             background: none;
@@ -3670,8 +3671,7 @@
     <link rel="icon" href="/static/wp-content/uploads/2026/01/cropped-cor_verd-1-32x32.png" sizes="32x32" />
     <link rel="icon" href="/static/wp-content/uploads/2026/01/cropped-cor_verd-1-192x192.png" sizes="192x192" />
     <link rel="apple-touch-icon" href="/static/wp-content/uploads/2026/01/cropped-cor_verd-1-180x180.png" />
-    <meta name="msapplication-TileImage"
-        content="/static/wp-content/uploads/2026/01/cropped-cor_verd-1-270x270.png" />
+    <meta name="msapplication-TileImage" content="/static/wp-content/uploads/2026/01/cropped-cor_verd-1-270x270.png" />
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js'></script>
     <style>
         body {
@@ -3936,7 +3936,7 @@
 
                 <div class="sidebar">
                     <a href="{% url 'index' %}" class="back-link">&larr; Tornar a l'inici</a>
-                    <h2>Llegenda / Filtres</h2>
+                    <h5 style="display: inline-block; font-size: 1.2rem; margin-bottom: 10px;">Llegenda / Filtres</h5>
                     <div id="filters">
                         {% for entitat in entitats %}
                         <div class="entity-filter">
@@ -3951,6 +3951,9 @@
 
                 <div class="main-content">
                     <h1 style="text-align: center;">Totes les Activitats</h1>
+                    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+                    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+                    <div id="map" style="height: 400px; margin-bottom: 20px; z-index: 1;"></div>
                     <div id='calendar'></div>
                 </div>
 
@@ -3996,10 +3999,35 @@
                         });
                         calendar.render();
 
+                        // MAP INITIALIZATION
+                        var map = L.map('map').setView([41.3851, 2.1734], 12);
+                        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                            maxZoom: 19,
+                            attribution: '&copy; OpenStreetMap'
+                        }).addTo(map);
+
+                        var markers = [];
+
+                        function updateMap() {
+                            markers.forEach(function (m) { map.removeLayer(m); });
+                            markers = [];
+                            var checkedEntities = Array.from(document.querySelectorAll('.entity-cb:checked')).map(function (cb) { return cb.value; });
+                            eventsData.forEach(function (e) {
+                                if (checkedEntities.includes(e.entity_id.toString()) && e.latitud && e.longitud) {
+                                    var marker = L.marker([e.latitud, e.longitud]).addTo(map)
+                                        .bindPopup("<b>" + e.title + "</b><br>" + (e.adreça ? e.adreça : ''));
+                                    markers.push(marker);
+                                }
+                            });
+                        }
+
+                        updateMap();
+
                         var checkboxes = document.querySelectorAll('.entity-cb');
                         checkboxes.forEach(function (cb) {
                             cb.addEventListener('change', function () {
                                 calendar.refetchEvents();
+                                updateMap();
                             });
                         });
                     });
@@ -4038,7 +4066,8 @@
                                         class="wp-block-image size-large ext-aspect-landscape extendify-image-import wp-duotone-primary-foreground">
                                         <img decoding="async"
                                             src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0OCIgaGVpZ2h0PSI0OCIgZmlsbD0iIzAwMDAwMCIgdmlld0JveD0iMCAwIDI1NiAyNTYiPjxwYXRoIGQ9Ik0xNDAsMTgwYTEyLDEyLDAsMSwxLTEyLTEyQTEyLDEyLDAsMCwxLDE0MCwxODBaTTEyOCw3MmMtMjIuMDYsMC00MCwxNi4xNS00MCwzNnY0YTgsOCwwLDAsMCwxNiwwdi00YzAtMTEsMTAuNzctMjAsMjQtMjBzMjQsOSwyNCwyMC0xMC43NywyMC0yNCwyMGE4LDgsMCwwLDAtOCw4djhhOCw4LDAsMCwwLDE2LDB2LS43MmMxOC4yNC0zLjM1LDMyLTE3LjksMzItMzUuMjhDMTY4LDg4LjE1LDE1MC4wNiw3MiwxMjgsNzJabTEwNCw1NkExMDQsMTA0LDAsMSwxLDEyOCwyNCwxMDQuMTEsMTA0LjExLDAsMCwxLDIzMiwxMjhabS0xNiwwYTg4LDg4LDAsMSwwLTg4LDg4QTg4LjEsODguMSwwLDAsMCwyMTYsMTI4WiI+PC9wYXRoPjwvc3ZnPg=="
-                                            alt="" style="object-fit:cover" /></figure>
+                                            alt="" style="object-fit:cover" />
+                                    </figure>
 
 
 
@@ -4071,7 +4100,8 @@
                                         class="wp-block-image size-large ext-aspect-landscape extendify-image-import wp-duotone-primary-foreground">
                                         <img decoding="async"
                                             src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0OCIgaGVpZ2h0PSI0OCIgZmlsbD0iIzAwMDAwMCIgdmlld0JveD0iMCAwIDI1NiAyNTYiPjxwYXRoIGQ9Ik0xNDAsMTgwYTEyLDEyLDAsMSwxLTEyLTEyQTEyLDEyLDAsMCwxLDE0MCwxODBaTTEyOCw3MmMtMjIuMDYsMC00MCwxNi4xNS00MCwzNnY0YTgsOCwwLDAsMCwxNiwwdi00YzAtMTEsMTAuNzctMjAsMjQtMjBzMjQsOSwyNCwyMC0xMC43NywyMC0yNCwyMGE4LDgsMCwwLDAtOCw4djhhOCw4LDAsMCwwLDE2LDB2LS43MmMxOC4yNC0zLjM1LDMyLTE3LjksMzItMzUuMjhDMTY4LDg4LjE1LDE1MC4wNiw3MiwxMjgsNzJabTEwNCw1NkExMDQsMTA0LDAsMSwxLDEyOCwyNCwxMDQuMTEsMTA0LjExLDAsMCwxLDIzMiwxMjhabS0xNiwwYTg4LDg4LDAsMSwwLTg4LDg4QTg4LjEsODguMSwwLDAsMCwyMTYsMTI4WiI+PC9wYXRoPjwvc3ZnPg=="
-                                            alt="" style="object-fit:cover" /></figure>
+                                            alt="" style="object-fit:cover" />
+                                    </figure>
 
 
 
@@ -4107,7 +4137,8 @@
                                         class="wp-block-image size-large ext-aspect-landscape extendify-image-import wp-duotone-primary-foreground">
                                         <img decoding="async"
                                             src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0OCIgaGVpZ2h0PSI0OCIgZmlsbD0iIzAwMDAwMCIgdmlld0JveD0iMCAwIDI1NiAyNTYiPjxwYXRoIGQ9Ik0xNDAsMTgwYTEyLDEyLDAsMSwxLTEyLTEyQTEyLDEyLDAsMCwxLDE0MCwxODBaTTEyOCw3MmMtMjIuMDYsMC00MCwxNi4xNS00MCwzNnY0YTgsOCwwLDAsMCwxNiwwdi00YzAtMTEsMTAuNzctMjAsMjQtMjBzMjQsOSwyNCwyMC0xMC43NywyMC0yNCwyMGE4LDgsMCwwLDAtOCw4djhhOCw4LDAsMCwwLDE2LDB2LS43MmMxOC4yNC0zLjM1LDMyLTE3LjksMzItMzUuMjhDMTY4LDg4LjE1LDE1MC4wNiw3MiwxMjgsNzJabTEwNCw1NkExMDQsMTA0LDAsMSwxLDEyOCwyNCwxMDQuMTEsMTA0LjExLDAsMCwxLDIzMiwxMjhabS0xNiwwYTg4LDg4LDAsMSwwLTg4LDg4QTg4LjEsODguMSwwLDAsMCwyMTYsMTI4WiI+PC9wYXRoPjwvc3ZnPg=="
-                                            alt="" style="object-fit:cover" /></figure>
+                                            alt="" style="object-fit:cover" />
+                                    </figure>
 
 
 
@@ -4140,7 +4171,8 @@
                                         class="wp-block-image size-large ext-aspect-landscape extendify-image-import wp-duotone-primary-foreground">
                                         <img decoding="async"
                                             src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0OCIgaGVpZ2h0PSI0OCIgZmlsbD0iIzAwMDAwMCIgdmlld0JveD0iMCAwIDI1NiAyNTYiPjxwYXRoIGQ9Ik0xNDAsMTgwYTEyLDEyLDAsMSwxLTEyLTEyQTEyLDEyLDAsMCwxLDE0MCwxODBaTTEyOCw3MmMtMjIuMDYsMC00MCwxNi4xNS00MCwzNnY0YTgsOCwwLDAsMCwxNiwwdi00YzAtMTEsMTAuNzctMjAsMjQtMjBzMjQsOSwyNCwyMC0xMC43NywyMC0yNCwyMGE4LDgsMCwwLDAtOCw4djhhOCw4LDAsMCwwLDE2LDB2LS43MmMxOC4yNC0zLjM1LDMyLTE3LjksMzItMzUuMjhDMTY4LDg4LjE1LDE1MC4wNiw3MiwxMjgsNzJabTEwNCw1NkExMDQsMTA0LDAsMSwxLDEyOCwyNCwxMDQuMTEsMTA0LjExLDAsMCwxLDIzMiwxMjhabS0xNiwwYTg4LDg4LDAsMSwwLTg4LDg4QTg4LjEsODguMSwwLDAsMCwyMTYsMTI4WiI+PC9wYXRoPjwvc3ZnPg=="
-                                            alt="" style="object-fit:cover" /></figure>
+                                            alt="" style="object-fit:cover" />
+                                    </figure>
 
 
 
@@ -4176,7 +4208,8 @@
                                         class="wp-block-image size-large ext-aspect-landscape extendify-image-import wp-duotone-primary-foreground">
                                         <img decoding="async"
                                             src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0OCIgaGVpZ2h0PSI0OCIgZmlsbD0iIzAwMDAwMCIgdmlld0JveD0iMCAwIDI1NiAyNTYiPjxwYXRoIGQ9Ik0xNDAsMTgwYTEyLDEyLDAsMSwxLTEyLTEyQTEyLDEyLDAsMCwxLDE0MCwxODBaTTEyOCw3MmMtMjIuMDYsMC00MCwxNi4xNS00MCwzNnY0YTgsOCwwLDAsMCwxNiwwdi00YzAtMTEsMTAuNzctMjAsMjQtMjBzMjQsOSwyNCwyMC0xMC43NywyMC0yNCwyMGE4LDgsMCwwLDAtOCw4djhhOCw4LDAsMCwwLDE2LDB2LS43MmMxOC4yNC0zLjM1LDMyLTE3LjksMzItMzUuMjhDMTY4LDg4LjE1LDE1MC4wNiw3MiwxMjgsNzJabTEwNCw1NkExMDQsMTA0LDAsMSwxLDEyOCwyNCwxMDQuMTEsMTA0LjExLDAsMCwxLDIzMiwxMjhabS0xNiwwYTg4LDg4LDAsMSwwLTg4LDg4QTg4LjEsODguMSwwLDAsMCwyMTYsMTI4WiI+PC9wYXRoPjwvc3ZnPg=="
-                                            alt="" style="object-fit:cover" /></figure>
+                                            alt="" style="object-fit:cover" />
+                                    </figure>
 
 
 
@@ -4209,7 +4242,8 @@
                                         class="wp-block-image size-large ext-aspect-landscape extendify-image-import wp-duotone-primary-foreground">
                                         <img decoding="async"
                                             src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0OCIgaGVpZ2h0PSI0OCIgZmlsbD0iIzAwMDAwMCIgdmlld0JveD0iMCAwIDI1NiAyNTYiPjxwYXRoIGQ9Ik0xNDAsMTgwYTEyLDEyLDAsMSwxLTEyLTEyQTEyLDEyLDAsMCwxLDE0MCwxODBaTTEyOCw3MmMtMjIuMDYsMC00MCwxNi4xNS00MCwzNnY0YTgsOCwwLDAsMCwxNiwwdi00YzAtMTEsMTAuNzctMjAsMjQtMjBzMjQsOSwyNCwyMC0xMC43NywyMC0yNCwyMGE4LDgsMCwwLDAtOCw4djhhOCw4LDAsMCwwLDE2LDB2LS43MmMxOC4yNC0zLjM1LDMyLTE3LjksMzItMzUuMjhDMTY4LDg4LjE1LDE1MC4wNiw3MiwxMjgsNzJabTEwNCw1NkExMDQsMTA0LDAsMSwxLDEyOCwyNCwxMDQuMTEsMTA0LjExLDAsMCwxLDIzMiwxMjhabS0xNiwwYTg4LDg4LDAsMSwwLTg4LDg4QTg4LjEsODguMSwwLDAsMCwyMTYsMTI4WiI+PC9wYXRoPjwvc3ZnPg=="
-                                            alt="" style="object-fit:cover" /></figure>
+                                            alt="" style="object-fit:cover" />
+                                    </figure>
 
 
 
@@ -4245,7 +4279,8 @@
                                 src="/static/wp-content/uploads/2026/02/5821232445339143446-1024x768.jpg" alt=""
                                 class="wp-image-192" style="aspect-ratio:1;object-fit:cover"
                                 srcset="/static/wp-content/uploads/2026/02/5821232445339143446-1024x768.jpg 1024w, /static/wp-content/uploads/2026/02/5821232445339143446-300x225.jpg 300w, /static/wp-content/uploads/2026/02/5821232445339143446-768x576.jpg 768w, /static/wp-content/uploads/2026/02/5821232445339143446-16x12.jpg 16w, /static/wp-content/uploads/2026/02/5821232445339143446.jpg 1280w"
-                                sizes="(max-width: 1024px) 100vw, 1024px" /></figure>
+                                sizes="(max-width: 1024px) 100vw, 1024px" />
+                        </figure>
                     </div>
 
 
@@ -4302,7 +4337,8 @@
                                     class="wp-block-image aligncenter size-large ext-aspect-landscape extendify-image-import wp-duotone-primary-foreground">
                                     <img decoding="async"
                                         src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0OCIgaGVpZ2h0PSI0OCIgZmlsbD0iIzAwMDAwMCIgdmlld0JveD0iMCAwIDI1NiAyNTYiPjxwYXRoIGQ9Ik0xNzIsNzZhNDQsNDQsMCwxLDAtNDQsNDRBNDQuMDUsNDQuMDUsMCwwLDAsMTcyLDc2Wm0tNDQsMjhhMjgsMjgsMCwxLDEsMjgtMjhBMjgsMjgsMCwwLDEsMTI4LDEwNFptNjAsMjRhNDQsNDQsMCwxLDAsNDQsNDRBNDQuMDUsNDQuMDUsMCwwLDAsMTg4LDEyOFptMCw3MmEyOCwyOCwwLDEsMSwyOC0yOEEyOCwyOCwwLDAsMSwxODgsMjAwWk02OCwxMjhhNDQsNDQsMCwxLDAsNDQsNDRBNDQuMDUsNDQuMDUsMCwwLDAsNjgsMTI4Wm0wLDcyYTI4LDI4LDAsMSwxLDI4LTI4QTI4LDI4LDAsMCwxLDY4LDIwMFoiPjwvcGF0aD48L3N2Zz4="
-                                        alt="" style="object-fit:cover" /></figure>
+                                        alt="" style="object-fit:cover" />
+                                </figure>
 
 
 
@@ -4320,7 +4356,8 @@
                                     <div
                                         class="wp-block-button is-style-ext-preset--button--natural-1--button-1 is-style-ext-preset--button--natural-1--button-1--15">
                                         <a class="wp-block-button__link wp-element-button"
-                                            href="{% url 'recursos' %}">Més informació</a></div>
+                                            href="{% url 'recursos' %}">Més informació</a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -4338,7 +4375,8 @@
                                     class="wp-block-image aligncenter size-large ext-aspect-landscape extendify-image-import wp-duotone-primary-foreground">
                                     <img decoding="async"
                                         src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0OCIgaGVpZ2h0PSI0OCIgZmlsbD0iIzAwMDAwMCIgdmlld0JveD0iMCAwIDI1NiAyNTYiPjxwYXRoIGQ9Ik04MCw0MGE0MCw0MCwwLDEsMCw0MCw0MEE0MCw0MCwwLDAsMCw4MCw0MFptMCw2NGEyNCwyNCwwLDEsMSwyNC0yNEEyNCwyNCwwLDAsMSw4MCwxMDRabTk2LDE2YTQwLDQwLDAsMSwwLTQwLTQwQTQwLDQwLDAsMCwwLDE3NiwxMjBabTAtNjRhMjQsMjQsMCwxLDEtMjQsMjRBMjQsMjQsMCwwLDEsMTc2LDU2Wk04MCwxMzZhNDAsNDAsMCwxLDAsNDAsNDBBNDAsNDAsMCwwLDAsODAsMTM2Wm0wLDY0YTI0LDI0LDAsMSwxLDI0LTI0QTI0LDI0LDAsMCwxLDgwLDIwMFptOTYtNjRhNDAsNDAsMCwxLDAsNDAsNDBBNDAsNDAsMCwwLDAsMTc2LDEzNlptMCw2NGEyNCwyNCwwLDEsMSwyNC0yNEEyNCwyNCwwLDAsMSwxNzYsMjAwWiI+PC9wYXRoPjwvc3ZnPg=="
-                                        alt="" style="object-fit:cover" /></figure>
+                                        alt="" style="object-fit:cover" />
+                                </figure>
 
 
 
@@ -4356,7 +4394,8 @@
                                     <div
                                         class="wp-block-button is-style-ext-preset--button--natural-1--button-1 is-style-ext-preset--button--natural-1--button-1--17">
                                         <a class="wp-block-button__link wp-element-button"
-                                            href="{% url 'recursos' %}">Més informació</a></div>
+                                            href="{% url 'recursos' %}">Més informació</a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -4374,7 +4413,8 @@
                                     class="wp-block-image aligncenter size-large ext-aspect-landscape extendify-image-import wp-duotone-primary-foreground">
                                     <img decoding="async"
                                         src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0OCIgaGVpZ2h0PSI0OCIgZmlsbD0iIzAwMDAwMCIgdmlld0JveD0iMCAwIDI1NiAyNTYiPjxwYXRoIGQ9Ik04MCw0MGE0MCw0MCwwLDEsMCw0MCw0MEE0MCw0MCwwLDAsMCw4MCw0MFptMCw2NGEyNCwyNCwwLDEsMSwyNC0yNEEyNCwyNCwwLDAsMSw4MCwxMDRabTk2LDE2YTQwLDQwLDAsMSwwLTQwLTQwQTQwLDQwLDAsMCwwLDE3NiwxMjBabTAtNjRhMjQsMjQsMCwxLDEtMjQsMjRBMjQsMjQsMCwwLDEsMTc2LDU2Wk04MCwxMzZhNDAsNDAsMCwxLDAsNDAsNDBBNDAsNDAsMCwwLDAsODAsMTM2Wm0wLDY0YTI0LDI0LDAsMSwxLDI0LTI0QTI0LDI0LDAsMCwxLDgwLDIwMFptMTM2LTI0YTgsOCwwLDAsMS04LDhIMTg0djI0YTgsOCwwLDAsMS0xNiwwVjE4NEgxNDRhOCw4LDAsMCwxLDAtMTZoMjRWMTQ0YTgsOCwwLDAsMSwxNiwwdjI0aDI0QTgsOCwwLDAsMSwyMTYsMTc2WiI+PC9wYXRoPjwvc3ZnPg=="
-                                        alt="" style="object-fit:cover" /></figure>
+                                        alt="" style="object-fit:cover" />
+                                </figure>
 
 
 
@@ -4392,7 +4432,8 @@
                                     <div
                                         class="wp-block-button is-style-ext-preset--button--natural-1--button-1 is-style-ext-preset--button--natural-1--button-1--19">
                                         <a class="wp-block-button__link wp-element-button"
-                                            href="{% url 'recursos' %}">Més informació</a></div>
+                                            href="{% url 'recursos' %}">Més informació</a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -4617,7 +4658,8 @@
         <div class="trp-language-switcher-inner">
             <div class="trp-language-item trp-language-item__current" title="Catalan" role="button" tabindex="0"
                 aria-expanded="false" aria-label="Change language" aria-controls="trp-switcher-dropdown-list"
-                data-no-translation><img src="/static/wp-content/plugins/translatepress-multilingual/assets/flags/4x3/ca.svg"
+                data-no-translation><img
+                    src="/static/wp-content/plugins/translatepress-multilingual/assets/flags/4x3/ca.svg"
                     class="trp-flag-image" alt="" role="presentation" loading="lazy" decoding="async" width="18"
                     height="14" /><span class="trp-language-item-name">Catalan</span></div>
             <div class="trp-switcher-dropdown-list" id="trp-switcher-dropdown-list" role="group"
@@ -4626,6 +4668,33 @@
         </div>
 
     </nav>
+    <!-- WP_MENU_JS_FIX -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var openBtns = document.querySelectorAll('.wp-block-navigation__responsive-container-open');
+            var closeBtns = document.querySelectorAll('.wp-block-navigation__responsive-container-close');
+            var containers = document.querySelectorAll('.wp-block-navigation__responsive-container');
+
+            openBtns.forEach(function (btn) {
+                btn.addEventListener('click', function () {
+                    containers.forEach(function (container) {
+                        container.classList.add('has-modal-open');
+                        container.classList.add('is-menu-open');
+                    });
+                });
+            });
+
+            closeBtns.forEach(function (btn) {
+                btn.addEventListener('click', function () {
+                    containers.forEach(function (container) {
+                        container.classList.remove('has-modal-open');
+                        container.classList.remove('is-menu-open');
+                    });
+                });
+            });
+        });
+    </script>
 </body>
+
 
 </html>
