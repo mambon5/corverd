@@ -9,6 +9,7 @@ WorkingDirectory=/var/www/corverd
 Environment="PATH=/var/www/corverd/venv/bin"
 ExecStart=/var/www/corverd/venv/bin/gunicorn \
     --workers 3 \
+    --umask 007 \ 
     --bind unix:/var/www/corverd/corverd.sock \
     corverd_project.wsgi:application
 
