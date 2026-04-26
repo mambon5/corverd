@@ -29,6 +29,7 @@ def entitat_activitats(request, pk):
             'adreça': a.adreça,
             'data': a.data.strftime('%d/%m/%Y'),
             'hora': a.hora.strftime('%H:%M'),
+            'pdf_activitat': a.pdf_activitat.url if a.pdf_activitat else None,
         })
     return render(request, 'entitat_activitats.html', {'entitat': entitat, 'events_json': events})
 
@@ -38,7 +39,7 @@ def activitats_calendar(request):
     events = []
     for a in activitats:
         events.append({
-            'title': f"[{a.associacio.nom}] {a.titol}",
+            'title': f"{a.titol} [{a.associacio.nom}]",
             'start': a.data.strftime('%Y-%m-%d') + 'T' + a.hora.strftime('%H:%M:%S'),
             'description': a.descripcio,
             'entity_id': a.associacio.id,
@@ -47,6 +48,7 @@ def activitats_calendar(request):
             'hora': a.hora.strftime('%H:%M'),
             'latitud': float(a.latitud) if a.latitud else None,
             'longitud': float(a.longitud) if a.longitud else None,
+            'pdf_activitat': a.pdf_activitat.url if a.pdf_activitat else None,
         })
     return render(request, 'activitats_calendar.html', {'entitats': entitats, 'events_json': events})
 
@@ -119,12 +121,15 @@ def crear_activitat(request):
         return redirect('intranet_dashboard')
         
     if request.method == 'POST':
-        form = ActivitatForm(request.POST)
+        form = ActivitatForm(request.POST, request.FILES)
         if form.is_valid():
             activitat = form.save(commit=False)
             activitat.associacio = entitat
             activitat.usuari = request.user
             activitat.save()
+            if form.cleaned_data.get('pdf_activitat'):
+                activitat.pdf_activitat = form.cleaned_data['pdf_activitat']
+                activitat.save()
             return redirect('intranet_dashboard')
     else:
         form = ActivitatForm()
@@ -135,9 +140,12 @@ def editar_activitat(request, pk):
     entitat = Associacio.objects.filter(gerent=request.user).first()
     activitat = get_object_or_404(Activitat, pk=pk, associacio=entitat)
     if request.method == 'POST':
-        form = ActivitatForm(request.POST, instance=activitat)
+        form = ActivitatForm(request.POST, request.FILES, instance=activitat)
         if form.is_valid():
-            form.save()
+            activitat = form.save(commit=False)
+            if form.cleaned_data.get('pdf_activitat'):
+                activitat.pdf_activitat = form.cleaned_data['pdf_activitat']
+            activitat.save()
             return redirect('intranet_dashboard')
     else:
         form = ActivitatForm(instance=activitat)

@@ -3995,6 +3995,11 @@
                                 } else {
                                     alert(details);
                                 }
+                                if (props.pdf_activitat) {
+                                    if (confirm('Aquesta activitat té un PDF informatiu. Vols obrir-lo?')) {
+                                        window.open(props.pdf_activitat, '_blank');
+                                    }
+                                }
                             }
                         });
                         calendar.render();
@@ -4013,8 +4018,12 @@
                             var checkedEntities = Array.from(document.querySelectorAll('.entity-cb:checked')).map(function (cb) { return cb.value; });
                             eventsData.forEach(function (e) {
                                 if (checkedEntities.includes(e.entity_id.toString()) && e.latitud && e.longitud) {
+                                    var popupContent = "<b>" + e.title + "</b><br>" + (e.adreça ? e.adreça : '');
+                                    if (e.pdf_activitat) {
+                                        popupContent += '<br><a href="' + e.pdf_activitat + '" target="_blank" style="display:inline-block; margin-top:5px; font-weight:bold; color:#0693e3;">PDF de l\'activitat</a>';
+                                    }
                                     var marker = L.marker([e.latitud, e.longitud]).addTo(map)
-                                        .bindPopup("<b>" + e.title + "</b><br>" + (e.adreça ? e.adreça : ''));
+                                        .bindPopup(popupContent);
                                     markers.push(marker);
                                 }
                             });

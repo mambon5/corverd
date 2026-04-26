@@ -23,6 +23,7 @@ class Activitat(models.Model):
     longitud = models.FloatField(null=True, blank=True)
     associacio = models.ForeignKey(Associacio, on_delete=models.CASCADE, related_name='activitats')
     usuari = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='activitats_organitzades')
+    pdf_activitat = models.FileField(upload_to='pdfs_activitats/', null=True, blank=True, max_length=255, help_text="PDF explicatiu de l'activitat (màx 2MB)")
 
     def __str__(self):
         return self.titol

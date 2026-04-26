@@ -3240,8 +3240,7 @@
 	<link rel="icon" href="/static/wp-content/uploads/2026/01/cropped-cor_verd-1-32x32.png" sizes="32x32" />
 	<link rel="icon" href="/static/wp-content/uploads/2026/01/cropped-cor_verd-1-192x192.png" sizes="192x192" />
 	<link rel="apple-touch-icon" href="/static/wp-content/uploads/2026/01/cropped-cor_verd-1-180x180.png" />
-	<meta name="msapplication-TileImage"
-		content="/static/wp-content/uploads/2026/01/cropped-cor_verd-1-270x270.png" />
+	<meta name="msapplication-TileImage" content="/static/wp-content/uploads/2026/01/cropped-cor_verd-1-270x270.png" />
 </head>
 
 <body data-rsssl=1
@@ -3732,7 +3731,8 @@
 		<div class="trp-language-switcher-inner">
 			<div class="trp-language-item trp-language-item__current" title="Catalan" role="button" tabindex="0"
 				aria-expanded="false" aria-label="Change language" aria-controls="trp-switcher-dropdown-list"
-				data-no-translation><img src="/static/wp-content/plugins/translatepress-multilingual/assets/flags/4x3/ca.svg"
+				data-no-translation><img
+					src="/static/wp-content/plugins/translatepress-multilingual/assets/flags/4x3/ca.svg"
 					class="trp-flag-image" alt="" role="presentation" loading="lazy" decoding="async" width="18"
 					height="14" /><span class="trp-language-item-name">Catalan</span></div>
 			<div class="trp-switcher-dropdown-list" id="trp-switcher-dropdown-list" role="group"
@@ -3741,33 +3741,107 @@
 		</div>
 
 	</nav>
-<!-- WP_MENU_JS_FIX -->
-<script>
-document.addEventListener("DOMContentLoaded", function() {
-    var openBtns = document.querySelectorAll('.wp-block-navigation__responsive-container-open');
-    var closeBtns = document.querySelectorAll('.wp-block-navigation__responsive-container-close');
-    var containers = document.querySelectorAll('.wp-block-navigation__responsive-container');
+	<!-- WP_MENU_JS_FIX -->
+	<script>
+		document.addEventListener("DOMContentLoaded", function () {
+			var openBtns = document.querySelectorAll('.wp-block-navigation__responsive-container-open');
+			var closeBtns = document.querySelectorAll('.wp-block-navigation__responsive-container-close');
+			var containers = document.querySelectorAll('.wp-block-navigation__responsive-container');
 
-    openBtns.forEach(function(btn) {
-        btn.addEventListener('click', function() {
-            containers.forEach(function(container) {
-                container.classList.add('has-modal-open');
-                container.classList.add('is-menu-open');
-            });
-        });
-    });
+			openBtns.forEach(function (btn) {
+				btn.addEventListener('click', function () {
+					containers.forEach(function (container) {
+						container.classList.add('has-modal-open');
+						container.classList.add('is-menu-open');
+					});
+				});
+			});
 
-    closeBtns.forEach(function(btn) {
-        btn.addEventListener('click', function() {
-            containers.forEach(function(container) {
-                container.classList.remove('has-modal-open');
-                container.classList.remove('is-menu-open');
-            });
-        });
-    });
-});
-</script>
+			closeBtns.forEach(function (btn) {
+				btn.addEventListener('click', function () {
+					containers.forEach(function (container) {
+						container.classList.remove('has-modal-open');
+						container.classList.remove('is-menu-open');
+					});
+				});
+			});
+		});
+	</script>
 </body>
+<script>
+	document.addEventListener("DOMContentLoaded", function () {
+		var adrecaInput = document.getElementById('id_adreça') || document.querySelector('input[name="adreça"]');
+		var latInput = document.getElementById('id_latitud') || document.querySelector('input[name="latitud"]');
+		var lngInput = document.getElementById('id_longitud') || document.querySelector('input[name="longitud"]');
 
+		if (!adrecaInput) return;
+
+		// crear dropdown
+		var dropdown = document.createElement("div");
+		dropdown.style.position = "absolute";
+		dropdown.style.background = "white";
+		dropdown.style.border = "1px solid #ccc";
+		dropdown.style.width = adrecaInput.offsetWidth + "px";
+		dropdown.style.zIndex = "9999";
+		dropdown.style.maxHeight = "200px";
+		dropdown.style.overflowY = "auto";
+
+		adrecaInput.parentNode.style.position = "relative";
+		adrecaInput.parentNode.appendChild(dropdown);
+
+		let timeout = null;
+
+		adrecaInput.addEventListener("input", function () {
+			clearTimeout(timeout);
+
+			const query = adrecaInput.value;
+			if (query.length < 3) {
+				dropdown.innerHTML = "";
+				return;
+			}
+
+			timeout = setTimeout(async () => {
+				const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=5`);
+				const data = await res.json();
+
+				dropdown.innerHTML = "";
+
+				data.forEach(place => {
+					var item = document.createElement("div");
+					item.style.padding = "8px";
+					item.style.cursor = "pointer";
+					item.style.borderBottom = "1px solid #eee";
+					item.textContent = place.display_name;
+
+					item.addEventListener("mouseover", () => item.style.background = "#f0f0f0");
+					item.addEventListener("mouseout", () => item.style.background = "white");
+
+					item.onclick = function () {
+						adrecaInput.value = place.display_name;
+						if (latInput) latInput.value = place.lat;
+						if (lngInput) lngInput.value = place.lon;
+						dropdown.innerHTML = "";
+					};
+
+					dropdown.appendChild(item);
+				});
+			}, 300); // debounce
+		});
+
+		// evitar submit amb enter
+		adrecaInput.addEventListener('keydown', function (e) {
+			if (e.key === 'Enter') {
+				e.preventDefault();
+			}
+		});
+
+		// tancar dropdown si cliques fora
+		document.addEventListener("click", function (e) {
+			if (!adrecaInput.contains(e.target)) {
+				dropdown.innerHTML = "";
+			}
+		});
+	});
+</script>
 
 </html>
