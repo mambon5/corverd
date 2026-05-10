@@ -3710,6 +3710,154 @@
         .fc-event {
             cursor: pointer;
         }
+
+        /* Premium Modal Styles */
+        .event-modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(8px);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+            animation: modalFadeIn 0.3s ease-out;
+        }
+
+        .event-modal {
+            background: #ffffff;
+            border-radius: 24px;
+            padding: 40px;
+            max-width: 650px;
+            width: 90%;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            position: relative;
+            max-height: 90vh;
+            overflow-y: auto;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .event-modal h2 {
+            color: #1a5c1a;
+            margin-top: 0;
+            font-size: 2rem;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 20px;
+        }
+
+        .event-modal .event-info {
+            display: grid;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .event-modal .info-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            font-size: 1.1rem;
+            color: #444;
+        }
+
+        .event-modal .info-item .icon {
+            font-size: 1.3rem;
+            min-width: 24px;
+        }
+
+        .event-modal .event-description {
+            background: #f8faf8;
+            padding: 20px;
+            border-radius: 16px;
+            margin: 25px 0;
+            line-height: 1.7;
+            color: #333;
+            border-left: 4px solid #4caf50;
+        }
+
+        .event-modal .modal-footer {
+            margin-top: 35px;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            border-top: 1px solid #eee;
+            padding-top: 25px;
+        }
+
+        .event-modal .btn {
+            padding: 14px 28px;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .event-modal .btn-close {
+            background: #f3f4f6;
+            color: #4b5563;
+        }
+
+        .event-modal .btn-close:hover {
+            background: #e5e7eb;
+        }
+
+        .event-modal .btn-maps {
+            background: #1a5c1a;
+            color: white;
+        }
+
+        .event-modal .btn-maps:hover {
+            background: #144614;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(26, 92, 26, 0.2);
+        }
+
+        .event-modal .btn-pdf {
+            background: #cf2e2e;
+            color: white;
+        }
+
+        .event-modal .btn-pdf:hover {
+            background: #b12828;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(207, 46, 46, 0.2);
+        }
+
+        .event-modal .close-x {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 24px;
+            cursor: pointer;
+            color: #999;
+            transition: color 0.2s;
+        }
+
+        .event-modal .close-x:hover {
+            color: #333;
+        }
     </style>
 </head>
 
@@ -3919,17 +4067,6 @@
             class="wp-block-group is-layout-flow wp-container-core-group-is-layout-a501e74d wp-block-group-is-layout-flow"
             style="margin-top:0px;margin-bottom:0px">
 
-            <div class="wp-block-group alignfull has-tertiary-background-color has-background is-content-justification-center is-nowrap is-layout-flex wp-container-core-group-is-layout-295f2bcf wp-block-group-is-layout-flex"
-                style="margin-top:0;margin-bottom:0;padding-top:24px;padding-bottom:24px">
-                <div class="wp-block-group alignwide is-style-ext-preset--group--natural-1--item-card-1--align-start has-global-padding is-layout-constrained wp-container-core-group-is-layout-639b5052 wp-block-group-is-layout-constrained is-style-ext-preset--group--natural-1--item-card-1--align-start--3"
-                    style="padding-top:0;padding-right:0;padding-bottom:0;padding-left:0">
-                    <div class="wp-block-group alignwide has-global-padding is-layout-constrained wp-container-core-group-is-layout-69d51f3d wp-block-group-is-layout-constrained"
-                        style="padding-top:12px;padding-right:var(--wp--preset--spacing--50);padding-bottom:12px;padding-left:var(--wp--preset--spacing--50)">
-                        <h1 style="font-size:clamp(15.747px, 0.984rem + ((1vw - 3.2px) * 0.86), 24px);"
-                            class="has-text-align-center wp-block-post-title">FAQ</h1>
-                    </div>
-                </div>
-            </div>
 
             <div
                 class="entry-content wp-block-post-content has-global-padding is-layout-constrained wp-block-post-content-is-layout-constrained">
@@ -3957,6 +4094,43 @@
                     <div id='calendar'></div>
                 </div>
 
+                <!-- Activity Details Modal -->
+                <div id="eventModalOverlay" class="event-modal-overlay">
+                    <div class="event-modal">
+                        <span class="close-x" onclick="closeEventModal()">&times;</span>
+                        <h2 id="modalTitle">Títol de l'activitat</h2>
+
+                        <div class="event-info">
+                            <div class="info-item">
+                                <span class="icon">📅</span>
+                                <span id="modalDate">Data</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="icon">⏰</span>
+                                <span id="modalTime">Hora</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="icon">📍</span>
+                                <span id="modalAddress">Ubicació</span>
+                            </div>
+                        </div>
+
+                        <div id="modalDescription" class="event-description">
+                            Descripció de l'activitat aquí...
+                        </div>
+
+                        <div class="modal-footer">
+                            <a id="btnMaps" href="#" target="_blank" class="btn btn-maps">
+                                <span>🗺️</span> Veure al Mapa
+                            </a>
+                            <a id="btnPdf" href="#" target="_blank" class="btn btn-pdf" style="display: none;">
+                                <span>📄</span> Obrir PDF
+                            </a>
+                            <button onclick="closeEventModal()" class="btn btn-close">Tancar</button>
+                        </div>
+                    </div>
+                </div>
+
                 {{ events_json|json_script:"events-data" }}
                 <script>
                     document.addEventListener('DOMContentLoaded', function () {
@@ -3980,28 +4154,44 @@
                             eventClick: function (info) {
                                 var ev = info.event;
                                 var props = ev.extendedProps;
-                                var details = ev.title + '\n\n';
-                                if (props.description) details += props.description + '\n\n';
-                                if (props.data && props.hora) {
-                                    details += 'Data i Hora: ' + props.data + ' a les ' + props.hora + '\n';
-                                }
+
+                                document.getElementById('modalTitle').innerText = ev.title;
+                                document.getElementById('modalDate').innerText = props.data || '';
+                                document.getElementById('modalTime').innerText = props.hora || '';
+                                document.getElementById('modalAddress').innerText = props.adreça || 'Adreça no disponible';
+                                document.getElementById('modalDescription').innerText = props.description || 'Sense descripció.';
+
+                                var btnMaps = document.getElementById('btnMaps');
                                 if (props.adreça) {
-                                    details += 'Lloc: ' + props.adreça + '\n';
-                                }
-                                if (props.adreça) {
-                                    if (confirm(details + '\n\nVols obrir la ubicació a Google Maps?')) {
-                                        window.open('https://maps.google.com/?q=' + encodeURIComponent(props.adreça), '_blank');
-                                    }
+                                    btnMaps.href = 'https://maps.google.com/?q=' + encodeURIComponent(props.adreça);
+                                    btnMaps.style.display = 'inline-flex';
                                 } else {
-                                    alert(details);
+                                    btnMaps.style.display = 'none';
                                 }
+
+                                var btnPdf = document.getElementById('btnPdf');
                                 if (props.pdf_activitat) {
-                                    if (confirm('Aquesta activitat té un PDF informatiu. Vols obrir-lo?')) {
-                                        window.open(props.pdf_activitat, '_blank');
-                                    }
+                                    btnPdf.href = props.pdf_activitat;
+                                    btnPdf.style.display = 'inline-flex';
+                                } else {
+                                    btnPdf.style.display = 'none';
                                 }
+
+                                document.getElementById('eventModalOverlay').style.display = 'flex';
                             }
                         });
+
+                        window.closeEventModal = function () {
+                            document.getElementById('eventModalOverlay').style.display = 'none';
+                        };
+
+                        // Close modal on click outside
+                        window.onclick = function (event) {
+                            var overlay = document.getElementById('eventModalOverlay');
+                            if (event.target == overlay) {
+                                closeEventModal();
+                            }
+                        };
                         calendar.render();
 
                         // MAP INITIALIZATION
@@ -4042,538 +4232,135 @@
                 </script>
 
             </div>
-            <div class="wp-block-group alignfull is-style-ext-preset--group--natural-1--section has-background-background-color has-background has-global-padding is-layout-constrained wp-container-core-group-is-layout-e955bbaf wp-block-group-is-layout-constrained"
-                id="pmf"
-                style="margin-top:0;margin-bottom:0;padding-top:var(--wp--preset--spacing--70);padding-bottom:var(--wp--preset--spacing--70)">
+        </main>
+
+        <footer class="wp-block-template-part">
+            <div class="wp-block-group alignfull is-style-ext-preset--group--natural-1--footer-1 has-global-padding is-layout-constrained wp-block-group-is-layout-constrained"
+                style="padding-top:var(--wp--preset--spacing--60);padding-bottom:var(--wp--preset--spacing--60)">
                 <div
-                    class="wp-block-group alignwide is-vertical is-layout-flex wp-container-core-group-is-layout-c35747d5 wp-block-group-is-layout-flex">
-                    <div
-                        class="wp-block-group has-global-padding is-layout-constrained wp-container-core-group-is-layout-2287c683 wp-block-group-is-layout-constrained">
-                        <h2 class="wp-block-heading">Coordinem Accions per un Entorn Verd</h2>
-
-
-
-                        <p>Aquí respondem les consultes més habituals per facilitar la vostra participació i informació
-                            sobre la plataforma.</p>
-                    </div>
-                </div>
-
-
-
-                <div
-                    class="wp-block-columns alignwide is-layout-flex wp-container-core-columns-is-layout-08c01c1c wp-block-columns-is-layout-flex">
-                    <div
-                        class="wp-block-column is-layout-flow wp-container-core-column-is-layout-119bc444 wp-block-column-is-layout-flow">
-                        <div
-                            class="wp-block-group is-style-ext-preset--group--natural-1--item-card-1--align-start has-global-padding is-layout-constrained wp-block-group-is-layout-constrained is-style-ext-preset--group--natural-1--item-card-1--align-start--5">
-                            <div
-                                class="wp-block-group is-style-default has-global-padding is-layout-constrained wp-block-group-is-layout-constrained">
-                                <div class="wp-block-group is-nowrap is-layout-flex wp-container-core-group-is-layout-64fa2afa wp-block-group-is-layout-flex"
-                                    style="padding-top:0;padding-right:0;padding-bottom:0;padding-left:0">
-                                    <figure
-                                        class="wp-block-image size-large ext-aspect-landscape extendify-image-import wp-duotone-primary-foreground">
-                                        <img decoding="async"
-                                            src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0OCIgaGVpZ2h0PSI0OCIgZmlsbD0iIzAwMDAwMCIgdmlld0JveD0iMCAwIDI1NiAyNTYiPjxwYXRoIGQ9Ik0xNDAsMTgwYTEyLDEyLDAsMSwxLTEyLTEyQTEyLDEyLDAsMCwxLDE0MCwxODBaTTEyOCw3MmMtMjIuMDYsMC00MCwxNi4xNS00MCwzNnY0YTgsOCwwLDAsMCwxNiwwdi00YzAtMTEsMTAuNzctMjAsMjQtMjBzMjQsOSwyNCwyMC0xMC43NywyMC0yNCwyMGE4LDgsMCwwLDAtOCw4djhhOCw4LDAsMCwwLDE2LDB2LS43MmMxOC4yNC0zLjM1LDMyLTE3LjksMzItMzUuMjhDMTY4LDg4LjE1LDE1MC4wNiw3MiwxMjgsNzJabTEwNCw1NkExMDQsMTA0LDAsMSwxLDEyOCwyNCwxMDQuMTEsMTA0LjExLDAsMCwxLDIzMiwxMjhabS0xNiwwYTg4LDg4LDAsMSwwLTg4LDg4QTg4LjEsODguMSwwLDAsMCwyMTYsMTI4WiI+PC9wYXRoPjwvc3ZnPg=="
-                                            alt="" style="object-fit:cover" />
-                                    </figure>
-
-
-
-                                    <div class="wp-block-group wp-container-content-958eb9dc has-global-padding is-layout-constrained wp-container-core-group-is-layout-c06d165c wp-block-group-is-layout-constrained"
-                                        style="padding-top:0;padding-right:0;padding-bottom:0;padding-left:0">
-                                        <h3 class="wp-block-heading">Què és Coordinadora Verda i quin és el seu
-                                            propòsit?</h3>
-
-
-
-                                        <p>Coordinadora Verda és una plataforma que uneix entitats i moviments per
-                                            protegir i millorar els espais verds a Barcelona i rodalies.</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-
-
-                    <div
-                        class="wp-block-column is-layout-flow wp-container-core-column-is-layout-119bc444 wp-block-column-is-layout-flow">
-                        <div
-                            class="wp-block-group is-style-ext-preset--group--natural-1--item-card-1--align-start has-global-padding is-layout-constrained wp-block-group-is-layout-constrained is-style-ext-preset--group--natural-1--item-card-1--align-start--6">
-                            <div
-                                class="wp-block-group is-style-default has-global-padding is-layout-constrained wp-block-group-is-layout-constrained">
-                                <div class="wp-block-group is-nowrap is-layout-flex wp-container-core-group-is-layout-64fa2afa wp-block-group-is-layout-flex"
-                                    style="padding-top:0;padding-right:0;padding-bottom:0;padding-left:0">
-                                    <figure
-                                        class="wp-block-image size-large ext-aspect-landscape extendify-image-import wp-duotone-primary-foreground">
-                                        <img decoding="async"
-                                            src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0OCIgaGVpZ2h0PSI0OCIgZmlsbD0iIzAwMDAwMCIgdmlld0JveD0iMCAwIDI1NiAyNTYiPjxwYXRoIGQ9Ik0xNDAsMTgwYTEyLDEyLDAsMSwxLTEyLTEyQTEyLDEyLDAsMCwxLDE0MCwxODBaTTEyOCw3MmMtMjIuMDYsMC00MCwxNi4xNS00MCwzNnY0YTgsOCwwLDAsMCwxNiwwdi00YzAtMTEsMTAuNzctMjAsMjQtMjBzMjQsOSwyNCwyMC0xMC43NywyMC0yNCwyMGE4LDgsMCwwLDAtOCw4djhhOCw4LDAsMCwwLDE2LDB2LS43MmMxOC4yNC0zLjM1LDMyLTE3LjksMzItMzUuMjhDMTY4LDg4LjE1LDE1MC4wNiw3MiwxMjgsNzJabTEwNCw1NkExMDQsMTA0LDAsMSwxLDEyOCwyNCwxMDQuMTEsMTA0LjExLDAsMCwxLDIzMiwxMjhabS0xNiwwYTg4LDg4LDAsMSwwLTg4LDg4QTg4LjEsODguMSwwLDAsMCwyMTYsMTI4WiI+PC9wYXRoPjwvc3ZnPg=="
-                                            alt="" style="object-fit:cover" />
-                                    </figure>
-
-
-
-                                    <div class="wp-block-group wp-container-content-958eb9dc has-global-padding is-layout-constrained wp-container-core-group-is-layout-c06d165c wp-block-group-is-layout-constrained"
-                                        style="padding-top:0;padding-right:0;padding-bottom:0;padding-left:0">
-                                        <h3 class="wp-block-heading">Com puc participar en les activitats de la
-                                            Coordinadora Verda?</h3>
-
-
-
-                                        <p>Podeu unir-vos a les reunions, col·laborar en projectes i estar informats a
-                                            través dels nostres canals de comunicació.</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-
-
-                <div class="wp-block-columns alignwide is-layout-flex wp-container-core-columns-is-layout-967d05ff wp-block-columns-is-layout-flex"
-                    style="margin-top:var(--wp--preset--spacing--40)">
-                    <div
-                        class="wp-block-column is-layout-flow wp-container-core-column-is-layout-119bc444 wp-block-column-is-layout-flow">
-                        <div
-                            class="wp-block-group is-style-ext-preset--group--natural-1--item-card-1--align-start has-global-padding is-layout-constrained wp-block-group-is-layout-constrained is-style-ext-preset--group--natural-1--item-card-1--align-start--7">
-                            <div
-                                class="wp-block-group is-style-default has-global-padding is-layout-constrained wp-block-group-is-layout-constrained">
-                                <div class="wp-block-group is-nowrap is-layout-flex wp-container-core-group-is-layout-64fa2afa wp-block-group-is-layout-flex"
-                                    style="padding-top:0;padding-right:0;padding-bottom:0;padding-left:0">
-                                    <figure
-                                        class="wp-block-image size-large ext-aspect-landscape extendify-image-import wp-duotone-primary-foreground">
-                                        <img decoding="async"
-                                            src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0OCIgaGVpZ2h0PSI0OCIgZmlsbD0iIzAwMDAwMCIgdmlld0JveD0iMCAwIDI1NiAyNTYiPjxwYXRoIGQ9Ik0xNDAsMTgwYTEyLDEyLDAsMSwxLTEyLTEyQTEyLDEyLDAsMCwxLDE0MCwxODBaTTEyOCw3MmMtMjIuMDYsMC00MCwxNi4xNS00MCwzNnY0YTgsOCwwLDAsMCwxNiwwdi00YzAtMTEsMTAuNzctMjAsMjQtMjBzMjQsOSwyNCwyMC0xMC43NywyMC0yNCwyMGE4LDgsMCwwLDAtOCw4djhhOCw4LDAsMCwwLDE2LDB2LS43MmMxOC4yNC0zLjM1LDMyLTE3LjksMzItMzUuMjhDMTY4LDg4LjE1LDE1MC4wNiw3MiwxMjgsNzJabTEwNCw1NkExMDQsMTA0LDAsMSwxLDEyOCwyNCwxMDQuMTEsMTA0LjExLDAsMCwxLDIzMiwxMjhabS0xNiwwYTg4LDg4LDAsMSwwLTg4LDg4QTg4LjEsODguMSwwLDAsMCwyMTYsMTI4WiI+PC9wYXRoPjwvc3ZnPg=="
-                                            alt="" style="object-fit:cover" />
-                                    </figure>
-
-
-
-                                    <div class="wp-block-group wp-container-content-958eb9dc has-global-padding is-layout-constrained wp-container-core-group-is-layout-c06d165c wp-block-group-is-layout-constrained"
-                                        style="padding-top:0;padding-right:0;padding-bottom:0;padding-left:0">
-                                        <h3 class="wp-block-heading">Quines polítiques mediambientals promou la
-                                            plataforma?</h3>
-
-
-
-                                        <p>Impulsem iniciatives per ampliar zones verdes, protegir espais rurals i
-                                            millorar la qualitat de vida urbana i metropolitana.</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-
-
-                    <div
-                        class="wp-block-column is-layout-flow wp-container-core-column-is-layout-119bc444 wp-block-column-is-layout-flow">
-                        <div
-                            class="wp-block-group is-style-ext-preset--group--natural-1--item-card-1--align-start has-global-padding is-layout-constrained wp-block-group-is-layout-constrained is-style-ext-preset--group--natural-1--item-card-1--align-start--8">
-                            <div
-                                class="wp-block-group is-style-default has-global-padding is-layout-constrained wp-block-group-is-layout-constrained">
-                                <div class="wp-block-group is-nowrap is-layout-flex wp-container-core-group-is-layout-64fa2afa wp-block-group-is-layout-flex"
-                                    style="padding-top:0;padding-right:0;padding-bottom:0;padding-left:0">
-                                    <figure
-                                        class="wp-block-image size-large ext-aspect-landscape extendify-image-import wp-duotone-primary-foreground">
-                                        <img decoding="async"
-                                            src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0OCIgaGVpZ2h0PSI0OCIgZmlsbD0iIzAwMDAwMCIgdmlld0JveD0iMCAwIDI1NiAyNTYiPjxwYXRoIGQ9Ik0xNDAsMTgwYTEyLDEyLDAsMSwxLTEyLTEyQTEyLDEyLDAsMCwxLDE0MCwxODBaTTEyOCw3MmMtMjIuMDYsMC00MCwxNi4xNS00MCwzNnY0YTgsOCwwLDAsMCwxNiwwdi00YzAtMTEsMTAuNzctMjAsMjQtMjBzMjQsOSwyNCwyMC0xMC43NywyMC0yNCwyMGE4LDgsMCwwLDAtOCw4djhhOCw4LDAsMCwwLDE2LDB2LS43MmMxOC4yNC0zLjM1LDMyLTE3LjksMzItMzUuMjhDMTY4LDg4LjE1LDE1MC4wNiw3MiwxMjgsNzJabTEwNCw1NkExMDQsMTA0LDAsMSwxLDEyOCwyNCwxMDQuMTEsMTA0LjExLDAsMCwxLDIzMiwxMjhabS0xNiwwYTg4LDg4LDAsMSwwLTg4LDg4QTg4LjEsODguMSwwLDAsMCwyMTYsMTI4WiI+PC9wYXRoPjwvc3ZnPg=="
-                                            alt="" style="object-fit:cover" />
-                                    </figure>
-
-
-
-                                    <div class="wp-block-group wp-container-content-958eb9dc has-global-padding is-layout-constrained wp-container-core-group-is-layout-c06d165c wp-block-group-is-layout-constrained"
-                                        style="padding-top:0;padding-right:0;padding-bottom:0;padding-left:0">
-                                        <h3 class="wp-block-heading">Quines entitats formen part de la Coordinadora
-                                            Verda?</h3>
-
-
-
-                                        <p>Agrupem associacions, col·lectius i moviments veïnals dedicats a la
-                                            conservació i defensa del medi ambient local.</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-
-
-                <div class="wp-block-columns alignwide is-layout-flex wp-container-core-columns-is-layout-967d05ff wp-block-columns-is-layout-flex"
-                    style="margin-top:var(--wp--preset--spacing--40)">
-                    <div
-                        class="wp-block-column is-layout-flow wp-container-core-column-is-layout-119bc444 wp-block-column-is-layout-flow">
-                        <div
-                            class="wp-block-group is-style-ext-preset--group--natural-1--item-card-1--align-start has-global-padding is-layout-constrained wp-block-group-is-layout-constrained is-style-ext-preset--group--natural-1--item-card-1--align-start--9">
-                            <div
-                                class="wp-block-group is-style-default has-global-padding is-layout-constrained wp-block-group-is-layout-constrained">
-                                <div class="wp-block-group is-nowrap is-layout-flex wp-container-core-group-is-layout-64fa2afa wp-block-group-is-layout-flex"
-                                    style="padding-top:0;padding-right:0;padding-bottom:0;padding-left:0">
-                                    <figure
-                                        class="wp-block-image size-large ext-aspect-landscape extendify-image-import wp-duotone-primary-foreground">
-                                        <img decoding="async"
-                                            src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0OCIgaGVpZ2h0PSI0OCIgZmlsbD0iIzAwMDAwMCIgdmlld0JveD0iMCAwIDI1NiAyNTYiPjxwYXRoIGQ9Ik0xNDAsMTgwYTEyLDEyLDAsMSwxLTEyLTEyQTEyLDEyLDAsMCwxLDE0MCwxODBaTTEyOCw3MmMtMjIuMDYsMC00MCwxNi4xNS00MCwzNnY0YTgsOCwwLDAsMCwxNiwwdi00YzAtMTEsMTAuNzctMjAsMjQtMjBzMjQsOSwyNCwyMC0xMC43NywyMC0yNCwyMGE4LDgsMCwwLDAtOCw4djhhOCw4LDAsMCwwLDE2LDB2LS43MmMxOC4yNC0zLjM1LDMyLTE3LjksMzItMzUuMjhDMTY4LDg4LjE1LDE1MC4wNiw3MiwxMjgsNzJabTEwNCw1NkExMDQsMTA0LDAsMSwxLDEyOCwyNCwxMDQuMTEsMTA0LjExLDAsMCwxLDIzMiwxMjhabS0xNiwwYTg4LDg4LDAsMSwwLTg4LDg4QTg4LjEsODguMSwwLDAsMCwyMTYsMTI4WiI+PC9wYXRoPjwvc3ZnPg=="
-                                            alt="" style="object-fit:cover" />
-                                    </figure>
-
-
-
-                                    <div class="wp-block-group wp-container-content-958eb9dc has-global-padding is-layout-constrained wp-container-core-group-is-layout-c06d165c wp-block-group-is-layout-constrained"
-                                        style="padding-top:0;padding-right:0;padding-bottom:0;padding-left:0">
-                                        <h3 class="wp-block-heading">Com es pot comunicar una nova proposta o problema
-                                            ambiental?</h3>
-
-
-
-                                        <p>Podeu contactar-nos via formulari del web o assistint a les sessions de
-                                            coordinació per compartir idees i inquietuds.</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-
-
-                    <div
-                        class="wp-block-column is-layout-flow wp-container-core-column-is-layout-119bc444 wp-block-column-is-layout-flow">
-                        <div
-                            class="wp-block-group is-style-ext-preset--group--natural-1--item-card-1--align-start has-global-padding is-layout-constrained wp-block-group-is-layout-constrained is-style-ext-preset--group--natural-1--item-card-1--align-start--10">
-                            <div
-                                class="wp-block-group is-style-default has-global-padding is-layout-constrained wp-block-group-is-layout-constrained">
-                                <div class="wp-block-group is-nowrap is-layout-flex wp-container-core-group-is-layout-64fa2afa wp-block-group-is-layout-flex"
-                                    style="padding-top:0;padding-right:0;padding-bottom:0;padding-left:0">
-                                    <figure
-                                        class="wp-block-image size-large ext-aspect-landscape extendify-image-import wp-duotone-primary-foreground">
-                                        <img decoding="async"
-                                            src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0OCIgaGVpZ2h0PSI0OCIgZmlsbD0iIzAwMDAwMCIgdmlld0JveD0iMCAwIDI1NiAyNTYiPjxwYXRoIGQ9Ik0xNDAsMTgwYTEyLDEyLDAsMSwxLTEyLTEyQTEyLDEyLDAsMCwxLDE0MCwxODBaTTEyOCw3MmMtMjIuMDYsMC00MCwxNi4xNS00MCwzNnY0YTgsOCwwLDAsMCwxNiwwdi00YzAtMTEsMTAuNzctMjAsMjQtMjBzMjQsOSwyNCwyMC0xMC43NywyMC0yNCwyMGE4LDgsMCwwLDAtOCw4djhhOCw4LDAsMCwwLDE2LDB2LS43MmMxOC4yNC0zLjM1LDMyLTE3LjksMzItMzUuMjhDMTY4LDg4LjE1LDE1MC4wNiw3MiwxMjgsNzJabTEwNCw1NkExMDQsMTA0LDAsMSwxLDEyOCwyNCwxMDQuMTEsMTA0LjExLDAsMCwxLDIzMiwxMjhabS0xNiwwYTg4LDg4LDAsMSwwLTg4LDg4QTg4LjEsODguMSwwLDAsMCwyMTYsMTI4WiI+PC9wYXRoPjwvc3ZnPg=="
-                                            alt="" style="object-fit:cover" />
-                                    </figure>
-
-
-
-                                    <div class="wp-block-group wp-container-content-958eb9dc has-global-padding is-layout-constrained wp-container-core-group-is-layout-c06d165c wp-block-group-is-layout-constrained"
-                                        style="padding-top:0;padding-right:0;padding-bottom:0;padding-left:0">
-                                        <h3 class="wp-block-heading">Quina és la cobertura geogràfica de les accions de
-                                            la plataforma?</h3>
-
-
-
-                                        <p>Les nostres accions se centren a Barcelona ciutat i l&#8217;àrea
-                                            metropolitana, incloent les comarques properes.</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-
-
-            <div class="wp-block-group alignfull is-style-ext-preset--group--natural-1--section has-tertiary-background-color has-background has-global-padding is-layout-constrained wp-block-group-is-layout-constrained"
-                id="sobre-nosaltres"
-                style="margin-top:0;margin-bottom:0;padding-top:var(--wp--preset--spacing--70);padding-bottom:var(--wp--preset--spacing--70)">
-                <div
-                    class="wp-block-columns alignwide are-vertically-aligned-center is-layout-flex wp-container-core-columns-is-layout-174606dc wp-block-columns-is-layout-flex">
-                    <div
-                        class="wp-block-column is-vertically-aligned-center is-layout-flow wp-block-column-is-layout-flow">
-                        <figure
-                            class="wp-block-image size-large is-style-ext-preset--image--natural-1--image-1--content-right extendify-image-import is-style-ext-preset--image--natural-1--image-1--content-right--12">
-                            <img decoding="async" width="1024" height="768"
-                                src="/static/wp-content/uploads/2026/02/5821232445339143446-1024x768.jpg" alt=""
-                                class="wp-image-192" style="aspect-ratio:1;object-fit:cover"
-                                srcset="/static/wp-content/uploads/2026/02/5821232445339143446-1024x768.jpg 1024w, /static/wp-content/uploads/2026/02/5821232445339143446-300x225.jpg 300w, /static/wp-content/uploads/2026/02/5821232445339143446-768x576.jpg 768w, /static/wp-content/uploads/2026/02/5821232445339143446-16x12.jpg 16w, /static/wp-content/uploads/2026/02/5821232445339143446.jpg 1280w"
-                                sizes="(max-width: 1024px) 100vw, 1024px" />
-                        </figure>
-                    </div>
-
-
-
-                    <div
-                        class="wp-block-column is-vertically-aligned-center is-layout-flow wp-block-column-is-layout-flow">
-                        <div
-                            class="wp-block-group alignwide is-vertical is-layout-flex wp-container-core-group-is-layout-c35747d5 wp-block-group-is-layout-flex">
-                            <div
-                                class="wp-block-group has-global-padding is-layout-constrained wp-container-core-group-is-layout-dd32767c wp-block-group-is-layout-constrained">
-                                <h2 class="wp-block-heading">Coordinadora Verda a Barcelona</h2>
-
-
-
-                                <p>Coordinadora Verda és una plataforma que uneix entitats i col·lectius per protegir i
-                                    ampliar els espais verds, promovent polítiques sostenibles per a millorar la
-                                    qualitat de vida a la ciutat.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-
-
-            <div class="wp-block-group alignfull is-style-ext-preset--group--natural-1--section has-background-background-color has-background has-global-padding is-layout-constrained wp-container-core-group-is-layout-e955bbaf wp-block-group-is-layout-constrained"
-                id="recursos"
-                style="margin-top:0;margin-bottom:0;padding-top:var(--wp--preset--spacing--70);padding-bottom:var(--wp--preset--spacing--70)">
-                <div
-                    class="wp-block-group alignwide is-vertical is-content-justification-center is-layout-flex wp-container-core-group-is-layout-c9ee0c5a wp-block-group-is-layout-flex">
-                    <div
-                        class="wp-block-group has-global-padding is-layout-constrained wp-container-core-group-is-layout-5e05634a wp-block-group-is-layout-constrained">
-                        <h2 class="wp-block-heading has-text-align-center">Coordinem Accions per un Entorn Més Verd a
-                            Barcelona</h2>
-
-
-
-                        <p class="has-text-align-center">Aquí trobaràs recursos essencials per impulsar la protecció i
-                            millora dels espais naturals urbans.</p>
-                    </div>
-                </div>
-
-
-
-                <div
-                    class="wp-block-columns alignwide is-layout-flex wp-container-core-columns-is-layout-08c01c1c wp-block-columns-is-layout-flex">
-                    <div
-                        class="wp-block-column is-vertically-aligned-stretch is-layout-flow wp-container-core-column-is-layout-f5bb311e wp-block-column-is-layout-flow">
-                        <div
-                            class="wp-block-group is-style-ext-preset--group--natural-1--item-card-1--align-center has-global-padding is-layout-constrained wp-block-group-is-layout-constrained is-style-ext-preset--group--natural-1--item-card-1--align-center--14">
-                            <div
-                                class="wp-block-group is-style-default has-global-padding is-layout-constrained wp-block-group-is-layout-constrained">
-                                <figure
-                                    class="wp-block-image aligncenter size-large ext-aspect-landscape extendify-image-import wp-duotone-primary-foreground">
-                                    <img decoding="async"
-                                        src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0OCIgaGVpZ2h0PSI0OCIgZmlsbD0iIzAwMDAwMCIgdmlld0JveD0iMCAwIDI1NiAyNTYiPjxwYXRoIGQ9Ik0xNzIsNzZhNDQsNDQsMCwxLDAtNDQsNDRBNDQuMDUsNDQuMDUsMCwwLDAsMTcyLDc2Wm0tNDQsMjhhMjgsMjgsMCwxLDEsMjgtMjhBMjgsMjgsMCwwLDEsMTI4LDEwNFptNjAsMjRhNDQsNDQsMCwxLDAsNDQsNDRBNDQuMDUsNDQuMDUsMCwwLDAsMTg4LDEyOFptMCw3MmEyOCwyOCwwLDEsMSwyOC0yOEEyOCwyOCwwLDAsMSwxODgsMjAwWk02OCwxMjhhNDQsNDQsMCwxLDAsNDQsNDRBNDQuMDUsNDQuMDUsMCwwLDAsNjgsMTI4Wm0wLDcyYTI4LDI4LDAsMSwxLDI4LTI4QTI4LDI4LDAsMCwxLDY4LDIwMFoiPjwvcGF0aD48L3N2Zz4="
-                                        alt="" style="object-fit:cover" />
-                                </figure>
-
-
-
-                                <h3 class="wp-block-heading has-text-align-center">Què és Coordinadora Verda?</h3>
-
-
-
-                                <p class="has-text-align-center">Descobreix com la nostra plataforma uneix esforços per
-                                    conservar i ampliar zones verdes.</p>
-
-
-
-                                <div
-                                    class="wp-block-buttons is-content-justification-center is-layout-flex wp-container-core-buttons-is-layout-a89b3969 wp-block-buttons-is-layout-flex">
-                                    <div
-                                        class="wp-block-button is-style-ext-preset--button--natural-1--button-1 is-style-ext-preset--button--natural-1--button-1--15">
-                                        <a class="wp-block-button__link wp-element-button"
-                                            href="{% url 'recursos' %}">Més informació</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-
-
-                    <div
-                        class="wp-block-column is-vertically-aligned-stretch is-layout-flow wp-container-core-column-is-layout-f5bb311e wp-block-column-is-layout-flow">
-                        <div
-                            class="wp-block-group is-style-ext-preset--group--natural-1--item-card-1--align-center has-global-padding is-layout-constrained wp-block-group-is-layout-constrained is-style-ext-preset--group--natural-1--item-card-1--align-center--16">
-                            <div
-                                class="wp-block-group is-style-default has-global-padding is-layout-constrained wp-block-group-is-layout-constrained">
-                                <figure
-                                    class="wp-block-image aligncenter size-large ext-aspect-landscape extendify-image-import wp-duotone-primary-foreground">
-                                    <img decoding="async"
-                                        src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0OCIgaGVpZ2h0PSI0OCIgZmlsbD0iIzAwMDAwMCIgdmlld0JveD0iMCAwIDI1NiAyNTYiPjxwYXRoIGQ9Ik04MCw0MGE0MCw0MCwwLDEsMCw0MCw0MEE0MCw0MCwwLDAsMCw4MCw0MFptMCw2NGEyNCwyNCwwLDEsMSwyNC0yNEEyNCwyNCwwLDAsMSw4MCwxMDRabTk2LDE2YTQwLDQwLDAsMSwwLTQwLTQwQTQwLDQwLDAsMCwwLDE3NiwxMjBabTAtNjRhMjQsMjQsMCwxLDEtMjQsMjRBMjQsMjQsMCwwLDEsMTc2LDU2Wk04MCwxMzZhNDAsNDAsMCwxLDAsNDAsNDBBNDAsNDAsMCwwLDAsODAsMTM2Wm0wLDY0YTI0LDI0LDAsMSwxLDI0LTI0QTI0LDI0LDAsMCwxLDgwLDIwMFptOTYtNjRhNDAsNDAsMCwxLDAsNDAsNDBBNDAsNDAsMCwwLDAsMTc2LDEzNlptMCw2NGEyNCwyNCwwLDEsMSwyNC0yNEEyNCwyNCwwLDAsMSwxNzYsMjAwWiI+PC9wYXRoPjwvc3ZnPg=="
-                                        alt="" style="object-fit:cover" />
-                                </figure>
-
-
-
-                                <h3 class="wp-block-heading has-text-align-center">Com participar-hi?</h3>
-
-
-
-                                <p class="has-text-align-center">Coneix les formes de col·laborar i contribuir a les
-                                    iniciatives verdes locals.</p>
-
-
-
-                                <div
-                                    class="wp-block-buttons is-content-justification-center is-layout-flex wp-container-core-buttons-is-layout-a89b3969 wp-block-buttons-is-layout-flex">
-                                    <div
-                                        class="wp-block-button is-style-ext-preset--button--natural-1--button-1 is-style-ext-preset--button--natural-1--button-1--17">
-                                        <a class="wp-block-button__link wp-element-button"
-                                            href="{% url 'recursos' %}">Més informació</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-
-
-                    <div
-                        class="wp-block-column is-vertically-aligned-stretch is-layout-flow wp-container-core-column-is-layout-f5bb311e wp-block-column-is-layout-flow">
-                        <div
-                            class="wp-block-group is-style-ext-preset--group--natural-1--item-card-1--align-center has-global-padding is-layout-constrained wp-block-group-is-layout-constrained is-style-ext-preset--group--natural-1--item-card-1--align-center--18">
-                            <div
-                                class="wp-block-group is-style-default has-global-padding is-layout-constrained wp-block-group-is-layout-constrained">
-                                <figure
-                                    class="wp-block-image aligncenter size-large ext-aspect-landscape extendify-image-import wp-duotone-primary-foreground">
-                                    <img decoding="async"
-                                        src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0OCIgaGVpZ2h0PSI0OCIgZmlsbD0iIzAwMDAwMCIgdmlld0JveD0iMCAwIDI1NiAyNTYiPjxwYXRoIGQ9Ik04MCw0MGE0MCw0MCwwLDEsMCw0MCw0MEE0MCw0MCwwLDAsMCw4MCw0MFptMCw2NGEyNCwyNCwwLDEsMSwyNC0yNEEyNCwyNCwwLDAsMSw4MCwxMDRabTk2LDE2YTQwLDQwLDAsMSwwLTQwLTQwQTQwLDQwLDAsMCwwLDE3NiwxMjBabTAtNjRhMjQsMjQsMCwxLDEtMjQsMjRBMjQsMjQsMCwwLDEsMTc2LDU2Wk04MCwxMzZhNDAsNDAsMCwxLDAsNDAsNDBBNDAsNDAsMCwwLDAsODAsMTM2Wm0wLDY0YTI0LDI0LDAsMSwxLDI0LTI0QTI0LDI0LDAsMCwxLDgwLDIwMFptMTM2LTI0YTgsOCwwLDAsMS04LDhIMTg0djI0YTgsOCwwLDAsMS0xNiwwVjE4NEgxNDRhOCw4LDAsMCwxLDAtMTZoMjRWMTQ0YTgsOCwwLDAsMSwxNiwwdjI0aDI0QTgsOCwwLDAsMSwyMTYsMTc2WiI+PC9wYXRoPjwvc3ZnPg=="
-                                        alt="" style="object-fit:cover" />
-                                </figure>
-
-
-
-                                <h3 class="wp-block-heading has-text-align-center">Impacte i Resultats</h3>
-
-
-
-                                <p class="has-text-align-center">Consulta els projectes i polítiques que hem influït per
-                                    millorar el medi ambient.</p>
-
-
-
-                                <div
-                                    class="wp-block-buttons is-content-justification-center is-layout-flex wp-container-core-buttons-is-layout-a89b3969 wp-block-buttons-is-layout-flex">
-                                    <div
-                                        class="wp-block-button is-style-ext-preset--button--natural-1--button-1 is-style-ext-preset--button--natural-1--button-1--19">
-                                        <a class="wp-block-button__link wp-element-button"
-                                            href="{% url 'recursos' %}">Més informació</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-    </div>
-    </main>
-
-    <footer class="wp-block-template-part">
-        <div class="wp-block-group alignfull is-style-ext-preset--group--natural-1--footer-1 has-global-padding is-layout-constrained wp-block-group-is-layout-constrained"
-            style="padding-top:var(--wp--preset--spacing--60);padding-bottom:var(--wp--preset--spacing--60)">
-            <div
-                class="wp-block-group is-layout-flow wp-container-core-group-is-layout-f5bb311e wp-block-group-is-layout-flow">
-                <ul
-                    class="wp-block-social-links has-normal-icon-size has-icon-color is-style-logos-only is-content-justification-center is-layout-flex wp-container-core-social-links-is-layout-b20f1b96 wp-block-social-links-is-layout-flex">
-                    <li style="color:#0B0620;"
-                        class="wp-social-link wp-social-link-instagram has-foreground-color wp-block-social-link"><a
-                            href="https://www.instagram.com/" class="wp-block-social-link-anchor"><svg width="24"
-                                height="24" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg"
-                                aria-hidden="true" focusable="false">
-                                <path
-                                    d="M12,4.622c2.403,0,2.688,0.009,3.637,0.052c0.877,0.04,1.354,0.187,1.671,0.31c0.42,0.163,0.72,0.358,1.035,0.673 c0.315,0.315,0.51,0.615,0.673,1.035c0.123,0.317,0.27,0.794,0.31,1.671c0.043,0.949,0.052,1.234,0.052,3.637 s-0.009,2.688-0.052,3.637c-0.04,0.877-0.187,1.354-0.31,1.671c-0.163,0.42-0.358,0.72-0.673,1.035 c-0.315,0.315-0.615,0.51-1.035,0.673c-0.317,0.123-0.794,0.27-1.671,0.31c-0.949,0.043-1.233,0.052-3.637,0.052 s-2.688-0.009-3.637-0.052c-0.877-0.04-1.354-0.187-1.671-0.31c-0.42-0.163-0.72-0.358-1.035-0.673 c-0.315-0.315-0.51-0.615-0.673-1.035c-0.123-0.317-0.27-0.794-0.31-1.671C4.631,14.688,4.622,14.403,4.622,12 s0.009-2.688,0.052-3.637c0.04-0.877,0.187-1.354,0.31-1.671c0.163-0.42,0.358-0.72,0.673-1.035 c0.315-0.315,0.615-0.51,1.035-0.673c0.317-0.123,0.794-0.27,1.671-0.31C9.312,4.631,9.597,4.622,12,4.622 M12,3 C9.556,3,9.249,3.01,8.289,3.054C7.331,3.098,6.677,3.25,6.105,3.472C5.513,3.702,5.011,4.01,4.511,4.511 c-0.5,0.5-0.808,1.002-1.038,1.594C3.25,6.677,3.098,7.331,3.054,8.289C3.01,9.249,3,9.556,3,12c0,2.444,0.01,2.751,0.054,3.711 c0.044,0.958,0.196,1.612,0.418,2.185c0.23,0.592,0.538,1.094,1.038,1.594c0.5,0.5,1.002,0.808,1.594,1.038 c0.572,0.222,1.227,0.375,2.185,0.418C9.249,20.99,9.556,21,12,21s2.751-0.01,3.711-0.054c0.958-0.044,1.612-0.196,2.185-0.418 c0.592-0.23,1.094-0.538,1.594-1.038c0.5-0.5,0.808-1.002,1.038-1.594c0.222-0.572,0.375-1.227,0.418-2.185 C20.99,14.751,21,14.444,21,12s-0.01-2.751-0.054-3.711c-0.044-0.958-0.196-1.612-0.418-2.185c-0.23-0.592-0.538-1.094-1.038-1.594 c-0.5-0.5-1.002-0.808-1.594-1.038c-0.572-0.222-1.227-0.375-2.185-0.418C14.751,3.01,14.444,3,12,3L12,3z M12,7.378 c-2.552,0-4.622,2.069-4.622,4.622S9.448,16.622,12,16.622s4.622-2.069,4.622-4.622S14.552,7.378,12,7.378z M12,15 c-1.657,0-3-1.343-3-3s1.343-3,3-3s3,1.343,3,3S13.657,15,12,15z M16.804,6.116c-0.596,0-1.08,0.484-1.08,1.08 s0.484,1.08,1.08,1.08c0.596,0,1.08-0.484,1.08-1.08S17.401,6.116,16.804,6.116z">
-                                </path>
-                            </svg><span class="wp-block-social-link-label screen-reader-text">Instagram</span></a></li>
-
-                    <li style="color:#0B0620;"
-                        class="wp-social-link wp-social-link-facebook has-foreground-color wp-block-social-link"><a
-                            href="https://www.facebook.com/" class="wp-block-social-link-anchor"><svg width="24"
-                                height="24" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg"
-                                aria-hidden="true" focusable="false">
-                                <path
-                                    d="M12 2C6.5 2 2 6.5 2 12c0 5 3.7 9.1 8.4 9.9v-7H7.9V12h2.5V9.8c0-2.5 1.5-3.9 3.8-3.9 1.1 0 2.2.2 2.2.2v2.5h-1.3c-1.2 0-1.6.8-1.6 1.6V12h2.8l-.4 2.9h-2.3v7C18.3 21.1 22 17 22 12c0-5.5-4.5-10-10-10z">
-                                </path>
-                            </svg><span class="wp-block-social-link-label screen-reader-text">Facebook</span></a></li>
-
-                    <li style="color:#0B0620;"
-                        class="wp-social-link wp-social-link-x has-foreground-color wp-block-social-link"><a
-                            href="https://x.com/" class="wp-block-social-link-anchor"><svg width="24" height="24"
-                                viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"
-                                focusable="false">
-                                <path
-                                    d="M13.982 10.622 20.54 3h-1.554l-5.693 6.618L8.745 3H3.5l6.876 10.007L3.5 21h1.554l6.012-6.989L15.868 21h5.245l-7.131-10.378Zm-2.128 2.474-.697-.997-5.543-7.93H8l4.474 6.4.697.996 5.815 8.318h-2.387l-4.745-6.787Z" />
-                            </svg><span class="wp-block-social-link-label screen-reader-text">X</span></a></li>
-                </ul>
-
-
-                <p style="font-style:normal;font-weight:400;"
-                    class="has-text-align-center wp-block-site-title has-medium-font-size"><a href="{% url 'index' %}"
-                        target="_self" rel="home">Coordinadora Verda</a></p>
-
-                <footer class="wp-block-template-part">
-                    <div class="wp-block-group alignfull has-global-padding is-layout-constrained wp-block-group-is-layout-constrained"
-                        style="padding-top:var(--wp--preset--spacing--30);padding-bottom:var(--wp--preset--spacing--30)">
-                        <header class="wp-block-template-part">
-                            <footer class="wp-block-template-part">
-                                <footer
-                                    class="wp-block-group has-background-background-color has-background is-style-ext-preset--group--natural-1--footer-1 has-global-padding is-layout-constrained wp-container-core-group-is-layout-715834bd wp-block-group-is-layout-constrained"
-                                    style="padding-top:var(--wp--preset--spacing--50);padding-bottom:var(--wp--preset--spacing--30)">
-
-                                    <div
-                                        class="wp-block-group ext-animate--on is-content-justification-center is-nowrap is-layout-flex wp-container-core-group-is-layout-88a738ca wp-block-group-is-layout-flex">
-                                        <div class="is-default-size wp-block-site-logo"><a href="{% url 'index' %}"
-                                                class="custom-logo-link" rel="home"><img loading="lazy" width="308"
-                                                    height="277" src="/static/wp-content/uploads/2026/01/cor_verd.png"
-                                                    class="custom-logo" alt="Coordinadora Verda" decoding="async"
-                                                    srcset="/static/wp-content/uploads/2026/01/cor_verd.png 308w, /static/wp-content/uploads/2026/01/cor_verd-300x270.png 300w, /static/wp-content/uploads/2026/01/cor_verd-13x12.png 13w"
-                                                    sizes="auto, (max-width: 308px) 100vw, 308px" /></a></div>
-                                    </div>
-
-
-
-                                    <div class="wp-block-group ext-animate--on alignwide is-content-justification-space-between is-layout-flex wp-container-core-group-is-layout-c975671c wp-block-group-is-layout-flex"
-                                        style="border-top-color:#cccccca6;border-top-width:1px;margin-top:var(--wp--preset--spacing--50);padding-top:var(--wp--preset--spacing--30)">
-                                        <h1 style="font-style:normal;font-weight:400;"
-                                            class="wp-block-site-title has-small-font-size"><a href="{% url 'index' %}"
-                                                target="_self" rel="home">Coordinadora Verda</a></h1>
-
-
-                                        <ul
-                                            class="wp-block-social-links has-small-icon-size has-icon-color is-style-logos-only ext-justify-start tablet:ext-justify-end is-content-justification-right is-nowrap is-layout-flex wp-container-core-social-links-is-layout-72308760 wp-block-social-links-is-layout-flex">
-                                            <li style="color:var(--wp--preset--color--foreground);"
-                                                class="wp-social-link wp-social-link-instagram has-foreground-color wp-block-social-link">
-                                                <a href="https://www.instagram.com/"
-                                                    class="wp-block-social-link-anchor"><svg width="24" height="24"
-                                                        viewBox="0 0 24 24" version="1.1"
-                                                        xmlns="http://www.w3.org/2000/svg" aria-hidden="true"
-                                                        focusable="false">
-                                                        <path
-                                                            d="M12,4.622c2.403,0,2.688,0.009,3.637,0.052c0.877,0.04,1.354,0.187,1.671,0.31c0.42,0.163,0.72,0.358,1.035,0.673 c0.315,0.315,0.51,0.615,0.673,1.035c0.123,0.317,0.27,0.794,0.31,1.671c0.043,0.949,0.052,1.234,0.052,3.637 s-0.009,2.688-0.052,3.637c-0.04,0.877-0.187,1.354-0.31,1.671c-0.163,0.42-0.358,0.72-0.673,1.035 c-0.315,0.315-0.615,0.51-1.035,0.673c-0.317,0.123-0.794,0.27-1.671,0.31c-0.949,0.043-1.233,0.052-3.637,0.052 s-2.688-0.009-3.637-0.052c-0.877-0.04-1.354-0.187-1.671-0.31c-0.42-0.163-0.72-0.358-1.035-0.673 c-0.315-0.315-0.51-0.615-0.673-1.035c-0.123-0.317-0.27-0.794-0.31-1.671C4.631,14.688,4.622,14.403,4.622,12 s0.009-2.688,0.052-3.637c0.04-0.877,0.187-1.354,0.31-1.671c0.163-0.42,0.358-0.72,0.673-1.035 c0.315-0.315,0.615-0.51,1.035-0.673c0.317-0.123,0.794-0.27,1.671-0.31C9.312,4.631,9.597,4.622,12,4.622 M12,3 C9.556,3,9.249,3.01,8.289,3.054C7.331,3.098,6.677,3.25,6.105,3.472C5.513,3.702,5.011,4.01,4.511,4.511 c-0.5,0.5-0.808,1.002-1.038,1.594C3.25,6.677,3.098,7.331,3.054,8.289C3.01,9.249,3,9.556,3,12c0,2.444,0.01,2.751,0.054,3.711 c0.044,0.958,0.196,1.612,0.418,2.185c0.23,0.592,0.538,1.094,1.038,1.594c0.5,0.5,1.002,0.808,1.594,1.038 c0.572,0.222,1.227,0.375,2.185,0.418C9.249,20.99,9.556,21,12,21s2.751-0.01,3.711-0.054c0.958-0.044,1.612-0.196,2.185-0.418 c0.592-0.23,1.094-0.538,1.594-1.038c0.5-0.5,0.808-1.002,1.038-1.594c0.222-0.572,0.375-1.227,0.418-2.185 C20.99,14.751,21,14.444,21,12s-0.01-2.751-0.054-3.711c-0.044-0.958-0.196-1.612-0.418-2.185c-0.23-0.592-0.538-1.094-1.038-1.594 c-0.5-0.5-1.002-0.808-1.594-1.038c-0.572-0.222-1.227-0.375-2.185-0.418C14.751,3.01,14.444,3,12,3L12,3z M12,7.378 c-2.552,0-4.622,2.069-4.622,4.622S9.448,16.622,12,16.622s4.622-2.069,4.622-4.622S14.552,7.378,12,7.378z M12,15 c-1.657,0-3-1.343-3-3s1.343-3,3-3s3,1.343,3,3S13.657,15,12,15z M16.804,6.116c-0.596,0-1.08,0.484-1.08,1.08 s0.484,1.08,1.08,1.08c0.596,0,1.08-0.484,1.08-1.08S17.401,6.116,16.804,6.116z">
-                                                        </path>
-                                                    </svg><span
-                                                        class="wp-block-social-link-label screen-reader-text">Instagram</span></a>
-                                            </li>
-
-                                            <li style="color:var(--wp--preset--color--foreground);"
-                                                class="wp-social-link wp-social-link-facebook has-foreground-color wp-block-social-link">
-                                                <a href="https://www.facebook.com/"
-                                                    class="wp-block-social-link-anchor"><svg width="24" height="24"
-                                                        viewBox="0 0 24 24" version="1.1"
-                                                        xmlns="http://www.w3.org/2000/svg" aria-hidden="true"
-                                                        focusable="false">
-                                                        <path
-                                                            d="M12 2C6.5 2 2 6.5 2 12c0 5 3.7 9.1 8.4 9.9v-7H7.9V12h2.5V9.8c0-2.5 1.5-3.9 3.8-3.9 1.1 0 2.2.2 2.2.2v2.5h-1.3c-1.2 0-1.6.8-1.6 1.6V12h2.8l-.4 2.9h-2.3v7C18.3 21.1 22 17 22 12c0-5.5-4.5-10-10-10z">
-                                                        </path>
-                                                    </svg><span
-                                                        class="wp-block-social-link-label screen-reader-text">Facebook</span></a>
-                                            </li>
-
-                                            <li style="color:var(--wp--preset--color--foreground);"
-                                                class="wp-social-link wp-social-link-x has-foreground-color wp-block-social-link">
-                                                <a href="https://x.com/" class="wp-block-social-link-anchor"><svg
-                                                        width="24" height="24" viewBox="0 0 24 24" version="1.1"
-                                                        xmlns="http://www.w3.org/2000/svg" aria-hidden="true"
-                                                        focusable="false">
-                                                        <path
-                                                            d="M13.982 10.622 20.54 3h-1.554l-5.693 6.618L8.745 3H3.5l6.876 10.007L3.5 21h1.554l6.012-6.989L15.868 21h5.245l-7.131-10.378Zm-2.128 2.474-.697-.997-5.543-7.93H8l4.474 6.4.697.996 5.815 8.318h-2.387l-4.745-6.787Z" />
-                                                    </svg><span
-                                                        class="wp-block-social-link-label screen-reader-text">X</span></a>
-                                            </li>
-                                        </ul>
-
-                                    </div>
-
+                    class="wp-block-group is-layout-flow wp-container-core-group-is-layout-f5bb311e wp-block-group-is-layout-flow">
+                    <ul
+                        class="wp-block-social-links has-normal-icon-size has-icon-color is-style-logos-only is-content-justification-center is-layout-flex wp-container-core-social-links-is-layout-b20f1b96 wp-block-social-links-is-layout-flex">
+                        <li style="color:#0B0620;"
+                            class="wp-social-link wp-social-link-instagram has-foreground-color wp-block-social-link"><a
+                                href="https://www.instagram.com/" class="wp-block-social-link-anchor"><svg width="24"
+                                    height="24" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                                    aria-hidden="true" focusable="false">
+                                    <path
+                                        d="M12,4.622c2.403,0,2.688,0.009,3.637,0.052c0.877,0.04,1.354,0.187,1.671,0.31c0.42,0.163,0.72,0.358,1.035,0.673 c0.315,0.315,0.51,0.615,0.673,1.035c0.123,0.317,0.27,0.794,0.31,1.671c0.043,0.949,0.052,1.234,0.052,3.637 s-0.009,2.688-0.052,3.637c-0.04,0.877-0.187,1.354-0.31,1.671c-0.163,0.42-0.358,0.72-0.673,1.035 c-0.315,0.315-0.615,0.51-1.035,0.673c-0.317,0.123-0.794,0.27-1.671,0.31c-0.949,0.043-1.233,0.052-3.637,0.052 s-2.688-0.009-3.637-0.052c-0.877-0.04-1.354-0.187-1.671-0.31c-0.42-0.163-0.72-0.358-1.035-0.673 c-0.315-0.315-0.51-0.615-0.673-1.035c-0.123-0.317-0.27-0.794-0.31-1.671C4.631,14.688,4.622,14.403,4.622,12 s0.009-2.688,0.052-3.637c0.04-0.877,0.187-1.354,0.31-1.671c0.163-0.42,0.358-0.72,0.673-1.035 c0.315-0.315,0.615-0.51,1.035-0.673c0.317-0.123,0.794-0.27,1.671-0.31C9.312,4.631,9.597,4.622,12,4.622 M12,3 C9.556,3,9.249,3.01,8.289,3.054C7.331,3.098,6.677,3.25,6.105,3.472C5.513,3.702,5.011,4.01,4.511,4.511 c-0.5,0.5-0.808,1.002-1.038,1.594C3.25,6.677,3.098,7.331,3.054,8.289C3.01,9.249,3,9.556,3,12c0,2.444,0.01,2.751,0.054,3.711 c0.044,0.958,0.196,1.612,0.418,2.185c0.23,0.592,0.538,1.094,1.038,1.594c0.5,0.5,1.002,0.808,1.594,1.038 c0.572,0.222,1.227,0.375,2.185,0.418C9.249,20.99,9.556,21,12,21s2.751-0.01,3.711-0.054c0.958-0.044,1.612-0.196,2.185-0.418 c0.592-0.23,1.094-0.538,1.594-1.038c0.5-0.5,0.808-1.002,1.038-1.594c0.222-0.572,0.375-1.227,0.418-2.185 C20.99,14.751,21,14.444,21,12s-0.01-2.751-0.054-3.711c-0.044-0.958-0.196-1.612-0.418-2.185c-0.23-0.592-0.538-1.094-1.038-1.594 c-0.5-0.5-1.002-0.808-1.594-1.038c-0.572-0.222-1.227-0.375-2.185-0.418C14.751,3.01,14.444,3,12,3L12,3z M12,7.378 c-2.552,0-4.622,2.069-4.622,4.622S9.448,16.622,12,16.622s4.622-2.069,4.622-4.622S14.552,7.378,12,7.378z M12,15 c-1.657,0-3-1.343-3-3s1.343-3,3-3s3,1.343,3,3S13.657,15,12,15z M16.804,6.116c-0.596,0-1.08,0.484-1.08,1.08 s0.484,1.08,1.08,1.08c0.596,0,1.08-0.484,1.08-1.08S17.401,6.116,16.804,6.116z">
+                                    </path>
+                                </svg><span class="wp-block-social-link-label screen-reader-text">Instagram</span></a>
+                        </li>
+
+                        <li style="color:#0B0620;"
+                            class="wp-social-link wp-social-link-facebook has-foreground-color wp-block-social-link"><a
+                                href="https://www.facebook.com/" class="wp-block-social-link-anchor"><svg width="24"
+                                    height="24" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                                    aria-hidden="true" focusable="false">
+                                    <path
+                                        d="M12 2C6.5 2 2 6.5 2 12c0 5 3.7 9.1 8.4 9.9v-7H7.9V12h2.5V9.8c0-2.5 1.5-3.9 3.8-3.9 1.1 0 2.2.2 2.2.2v2.5h-1.3c-1.2 0-1.6.8-1.6 1.6V12h2.8l-.4 2.9h-2.3v7C18.3 21.1 22 17 22 12c0-5.5-4.5-10-10-10z">
+                                    </path>
+                                </svg><span class="wp-block-social-link-label screen-reader-text">Facebook</span></a>
+                        </li>
+
+                        <li style="color:#0B0620;"
+                            class="wp-social-link wp-social-link-x has-foreground-color wp-block-social-link"><a
+                                href="https://x.com/" class="wp-block-social-link-anchor"><svg width="24" height="24"
+                                    viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                                    aria-hidden="true" focusable="false">
+                                    <path
+                                        d="M13.982 10.622 20.54 3h-1.554l-5.693 6.618L8.745 3H3.5l6.876 10.007L3.5 21h1.554l6.012-6.989L15.868 21h5.245l-7.131-10.378Zm-2.128 2.474-.697-.997-5.543-7.93H8l4.474 6.4.697.996 5.815 8.318h-2.387l-4.745-6.787Z" />
+                                </svg><span class="wp-block-social-link-label screen-reader-text">X</span></a></li>
+                    </ul>
+
+
+                    <p style="font-style:normal;font-weight:400;"
+                        class="has-text-align-center wp-block-site-title has-medium-font-size"><a
+                            href="{% url 'index' %}" target="_self" rel="home">Coordinadora Verda</a></p>
+
+                    <footer class="wp-block-template-part">
+                        <div class="wp-block-group alignfull has-global-padding is-layout-constrained wp-block-group-is-layout-constrained"
+                            style="padding-top:var(--wp--preset--spacing--30);padding-bottom:var(--wp--preset--spacing--30)">
+                            <header class="wp-block-template-part">
+                                <footer class="wp-block-template-part">
+                                    <footer
+                                        class="wp-block-group has-background-background-color has-background is-style-ext-preset--group--natural-1--footer-1 has-global-padding is-layout-constrained wp-container-core-group-is-layout-715834bd wp-block-group-is-layout-constrained"
+                                        style="padding-top:var(--wp--preset--spacing--50);padding-bottom:var(--wp--preset--spacing--30)">
+
+                                        <div
+                                            class="wp-block-group ext-animate--on is-content-justification-center is-nowrap is-layout-flex wp-container-core-group-is-layout-88a738ca wp-block-group-is-layout-flex">
+                                            <div class="is-default-size wp-block-site-logo"><a href="{% url 'index' %}"
+                                                    class="custom-logo-link" rel="home"><img loading="lazy" width="308"
+                                                        height="277"
+                                                        src="/static/wp-content/uploads/2026/01/cor_verd.png"
+                                                        class="custom-logo" alt="Coordinadora Verda" decoding="async"
+                                                        srcset="/static/wp-content/uploads/2026/01/cor_verd.png 308w, /static/wp-content/uploads/2026/01/cor_verd-300x270.png 300w, /static/wp-content/uploads/2026/01/cor_verd-13x12.png 13w"
+                                                        sizes="auto, (max-width: 308px) 100vw, 308px" /></a></div>
+                                        </div>
+
+
+
+                                        <div class="wp-block-group ext-animate--on alignwide is-content-justification-space-between is-layout-flex wp-container-core-group-is-layout-c975671c wp-block-group-is-layout-flex"
+                                            style="border-top-color:#cccccca6;border-top-width:1px;margin-top:var(--wp--preset--spacing--50);padding-top:var(--wp--preset--spacing--30)">
+                                            <h1 style="font-style:normal;font-weight:400;"
+                                                class="wp-block-site-title has-small-font-size"><a
+                                                    href="{% url 'index' %}" target="_self" rel="home">Coordinadora
+                                                    Verda</a></h1>
+
+
+                                            <ul
+                                                class="wp-block-social-links has-small-icon-size has-icon-color is-style-logos-only ext-justify-start tablet:ext-justify-end is-content-justification-right is-nowrap is-layout-flex wp-container-core-social-links-is-layout-72308760 wp-block-social-links-is-layout-flex">
+                                                <li style="color:var(--wp--preset--color--foreground);"
+                                                    class="wp-social-link wp-social-link-instagram has-foreground-color wp-block-social-link">
+                                                    <a href="https://www.instagram.com/"
+                                                        class="wp-block-social-link-anchor"><svg width="24" height="24"
+                                                            viewBox="0 0 24 24" version="1.1"
+                                                            xmlns="http://www.w3.org/2000/svg" aria-hidden="true"
+                                                            focusable="false">
+                                                            <path
+                                                                d="M12,4.622c2.403,0,2.688,0.009,3.637,0.052c0.877,0.04,1.354,0.187,1.671,0.31c0.42,0.163,0.72,0.358,1.035,0.673 c0.315,0.315,0.51,0.615,0.673,1.035c0.123,0.317,0.27,0.794,0.31,1.671c0.043,0.949,0.052,1.234,0.052,3.637 s-0.009,2.688-0.052,3.637c-0.04,0.877-0.187,1.354-0.31,1.671c-0.163,0.42-0.358,0.72-0.673,1.035 c-0.315,0.315-0.615,0.51-1.035,0.673c-0.317,0.123-0.794,0.27-1.671,0.31c-0.949,0.043-1.233,0.052-3.637,0.052 s-2.688-0.009-3.637-0.052c-0.877-0.04-1.354-0.187-1.671-0.31c-0.42-0.163-0.72-0.358-1.035-0.673 c-0.315-0.315-0.51-0.615-0.673-1.035c-0.123-0.317-0.27-0.794-0.31-1.671C4.631,14.688,4.622,14.403,4.622,12 s0.009-2.688,0.052-3.637c0.04-0.877,0.187-1.354,0.31-1.671c0.163-0.42,0.358-0.72,0.673-1.035 c0.315-0.315,0.615-0.51,1.035-0.673c0.317-0.123,0.794-0.27,1.671-0.31C9.312,4.631,9.597,4.622,12,4.622 M12,3 C9.556,3,9.249,3.01,8.289,3.054C7.331,3.098,6.677,3.25,6.105,3.472C5.513,3.702,5.011,4.01,4.511,4.511 c-0.5,0.5-0.808,1.002-1.038,1.594C3.25,6.677,3.098,7.331,3.054,8.289C3.01,9.249,3,9.556,3,12c0,2.444,0.01,2.751,0.054,3.711 c0.044,0.958,0.196,1.612,0.418,2.185c0.23,0.592,0.538,1.094,1.038,1.594c0.5,0.5,1.002,0.808,1.594,1.038 c0.572,0.222,1.227,0.375,2.185,0.418C9.249,20.99,9.556,21,12,21s2.751-0.01,3.711-0.054c0.958-0.044,1.612-0.196,2.185-0.418 c0.592-0.23,1.094-0.538,1.594-1.038c0.5-0.5,0.808-1.002,1.038-1.594c0.222-0.572,0.375-1.227,0.418-2.185 C20.99,14.751,21,14.444,21,12s-0.01-2.751-0.054-3.711c-0.044-0.958-0.196-1.612-0.418-2.185c-0.23-0.592-0.538-1.094-1.038-1.594 c-0.5-0.5-1.002-0.808-1.594-1.038c-0.572-0.222-1.227-0.375-2.185-0.418C14.751,3.01,14.444,3,12,3L12,3z M12,7.378 c-2.552,0-4.622,2.069-4.622,4.622S9.448,16.622,12,16.622s4.622-2.069,4.622-4.622S14.552,7.378,12,7.378z M12,15 c-1.657,0-3-1.343-3-3s1.343-3,3-3s3,1.343,3,3S13.657,15,12,15z M16.804,6.116c-0.596,0-1.08,0.484-1.08,1.08 s0.484,1.08,1.08,1.08c0.596,0,1.08-0.484,1.08-1.08S17.401,6.116,16.804,6.116z">
+                                                            </path>
+                                                        </svg><span
+                                                            class="wp-block-social-link-label screen-reader-text">Instagram</span></a>
+                                                </li>
+
+                                                <li style="color:var(--wp--preset--color--foreground);"
+                                                    class="wp-social-link wp-social-link-facebook has-foreground-color wp-block-social-link">
+                                                    <a href="https://www.facebook.com/"
+                                                        class="wp-block-social-link-anchor"><svg width="24" height="24"
+                                                            viewBox="0 0 24 24" version="1.1"
+                                                            xmlns="http://www.w3.org/2000/svg" aria-hidden="true"
+                                                            focusable="false">
+                                                            <path
+                                                                d="M12 2C6.5 2 2 6.5 2 12c0 5 3.7 9.1 8.4 9.9v-7H7.9V12h2.5V9.8c0-2.5 1.5-3.9 3.8-3.9 1.1 0 2.2.2 2.2.2v2.5h-1.3c-1.2 0-1.6.8-1.6 1.6V12h2.8l-.4 2.9h-2.3v7C18.3 21.1 22 17 22 12c0-5.5-4.5-10-10-10z">
+                                                            </path>
+                                                        </svg><span
+                                                            class="wp-block-social-link-label screen-reader-text">Facebook</span></a>
+                                                </li>
+
+                                                <li style="color:var(--wp--preset--color--foreground);"
+                                                    class="wp-social-link wp-social-link-x has-foreground-color wp-block-social-link">
+                                                    <a href="https://x.com/" class="wp-block-social-link-anchor"><svg
+                                                            width="24" height="24" viewBox="0 0 24 24" version="1.1"
+                                                            xmlns="http://www.w3.org/2000/svg" aria-hidden="true"
+                                                            focusable="false">
+                                                            <path
+                                                                d="M13.982 10.622 20.54 3h-1.554l-5.693 6.618L8.745 3H3.5l6.876 10.007L3.5 21h1.554l6.012-6.989L15.868 21h5.245l-7.131-10.378Zm-2.128 2.474-.697-.997-5.543-7.93H8l4.474 6.4.697.996 5.815 8.318h-2.387l-4.745-6.787Z" />
+                                                        </svg><span
+                                                            class="wp-block-social-link-label screen-reader-text">X</span></a>
+                                                </li>
+                                            </ul>
+
+                                        </div>
+
+                                    </footer>
                                 </footer>
-                            </footer>
-                        </header>
-                    </div>
-                </footer>
+                            </header>
+                        </div>
+                    </footer>
+                </div>
             </div>
-        </div>
-    </footer>
+        </footer>
     </div>
     <template id="tp-language" data-tp-language="ca"></template>
     <script type="speculationrules">
