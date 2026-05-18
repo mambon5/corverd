@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
-from .models import Associacio, Noticia, Comentari, Activitat
+from .models import Associacio, Noticia, Comentari, Activitat, AdhesioEntitat, AdhesioPersona
 from .forms import AssociacioForm, ActivitatForm
 import json
 
@@ -13,9 +13,35 @@ def custom_logout(request):
     return redirect('index')
 
 def entitats_list(request):
-    entitats = Associacio.objects.all()
-    # Puc afegir les ultimes noticies de cadascuna
+    entitats = Associacio.objects.all().order_by('nom')
     return render(request, 'entitats.html', {'entitats': entitats})
+
+def entitats_adherides_view(request):
+    entitats = AdhesioEntitat.objects.all().order_by('nom')
+    return render(request, 'entitats_adherides.html', {'entitats': entitats})
+
+def adhesio_manifest_view(request):
+    if request.method == 'POST':
+        tipus = request.POST.get('tipus_adhesio')
+        if tipus == 'entitat':
+            AdhesioEntitat.objects.create(
+                nom=request.POST.get('nom'),
+                lluita_o_objectiu=request.POST.get('lluita_o_objectiu'),
+                contacte=request.POST.get('contacte'),
+                web=request.POST.get('web')
+            )
+        elif tipus == 'persona':
+            AdhesioPersona.objects.create(
+                nom=request.POST.get('nom'),
+                cognoms=request.POST.get('cognoms'),
+                any_naixement=request.POST.get('any_naixement'),
+                codi_postal=request.POST.get('codi_postal'),
+                email=request.POST.get('email'),
+                professio=request.POST.get('professio'),
+                comentari=request.POST.get('comentari')
+            )
+        return render(request, 'adhesio.html', {'success': True})
+    return render(request, 'adhesio.html')
 
 def entitat_activitats(request, pk):
     entitat = get_object_or_404(Associacio, pk=pk)

@@ -259,43 +259,7 @@ var CHARITABLE_SESSION = {"ajaxurl":"https://coordinadoraverda.cat/wp-admin/admi
 
         
                 <div class="wp-block-group is-nowrap is-layout-flex wp-container-core-group-is-layout-6c531013 wp-block-group-is-layout-flex">
-                    <nav class="is-responsive items-justified-right wp-block-navigation is-content-justification-right is-layout-flex wp-container-core-navigation-is-layout-f665d2b5 wp-block-navigation-is-layout-flex" aria-label="Navegació de la capçalera" 
-		 data-wp-interactive="core/navigation" data-wp-context='{"overlayOpenedBy":{"click":false,"hover":false,"focus":false},"type":"overlay","roleAttribute":"","ariaLabel":"Men\u00fa"}'><button aria-haspopup="dialog" aria-label="Obre el menú" class="wp-block-navigation__responsive-container-open" 
-				data-wp-on--click="actions.openMenuOnClick"
-				data-wp-on--keydown="actions.handleMenuKeydown"
-			><svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M5 5v1.5h14V5H5z"></path><path d="M5 12.8h14v-1.5H5v1.5z"></path><path d="M5 19h14v-1.5H5V19z"></path></svg></button>
-				<div class="wp-block-navigation__responsive-container  has-text-color has-foreground-color has-background has-background-background-color"  id="modal-2" 
-				data-wp-class--has-modal-open="state.isMenuOpen"
-				data-wp-class--is-menu-open="state.isMenuOpen"
-				data-wp-watch="callbacks.initMenu"
-				data-wp-on--keydown="actions.handleMenuKeydown"
-				data-wp-on--focusout="actions.handleMenuFocusout"
-				tabindex="-1"
-			>
-					<div class="wp-block-navigation__responsive-close" tabindex="-1">
-						<div class="wp-block-navigation__responsive-dialog" 
-				data-wp-bind--aria-modal="state.ariaModal"
-				data-wp-bind--aria-label="state.ariaLabel"
-				data-wp-bind--role="state.roleAttribute"
-			>
-							<button aria-label="Tanca el menú" class="wp-block-navigation__responsive-container-close" 
-				data-wp-on--click="actions.closeMenuOnClick"
-			><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false"><path d="m13.06 12 6.47-6.47-1.06-1.06L12 10.94 5.53 4.47 4.47 5.53 10.94 12l-6.47 6.47 1.06 1.06L12 13.06l6.47 6.47 1.06-1.06L13.06 12Z"></path></svg></button>
-							<div class="wp-block-navigation__responsive-container-content" 
-				data-wp-watch="callbacks.focusFirstElement"
-			 id="modal-2-content">
-								<ul class="wp-block-navigation__container is-responsive items-justified-right wp-block-navigation"><li class=" wp-block-navigation-item wp-block-navigation-link"><a class="wp-block-navigation-item__content"  href="{% url 'manifest' %}"><span class="wp-block-navigation-item__label">Manifest</span></a></li><li class=" wp-block-navigation-item wp-block-navigation-link"><a class="wp-block-navigation-item__content"  href="{% url 'sobre' %}"><span class="wp-block-navigation-item__label">Sobre</span></a></li><li class=" wp-block-navigation-item wp-block-navigation-link"><a class="wp-block-navigation-item__content"  href="{% url 'testimonis' %}"><span class="wp-block-navigation-item__label">Testimonis</span></a></li><li class=" wp-block-navigation-item wp-block-navigation-link"><a class="wp-block-navigation-item__content" href="{% url 'entitats_list' %}"><span class="wp-block-navigation-item__label">Entitats</span></a></li><li class=" wp-block-navigation-item wp-block-navigation-link"><a class="wp-block-navigation-item__content" href="{% url 'activitats_calendar' %}"><span class="wp-block-navigation-item__label">Activitats</span></a></li><li class=" wp-block-navigation-item current-menu-item wp-block-navigation-link"><a class="wp-block-navigation-item__content"  href="{% url 'contacte' %}" aria-current="page"><span class="wp-block-navigation-item__label">Contacte</span></a></li>
-{% if user.is_authenticated %}
-<li class=" wp-block-navigation-item wp-block-navigation-link"><a class="wp-block-navigation-item__content"  href="{% url 'intranet_dashboard' %}"><span class="wp-block-navigation-item__label">Intranet</span></a></li>
-<li class=" wp-block-navigation-item wp-block-navigation-link"><a class="wp-block-navigation-item__content"  href="{% url 'logout' %}"><span class="wp-block-navigation-item__label">Sortir</span></a></li>
-{% else %}
-<li class=" wp-block-navigation-item wp-block-navigation-link"><a class="wp-block-navigation-item__content"  href="{% url 'login' %}"><span class="wp-block-navigation-item__label">Entrar</span></a></li>
-{% endif %}
-<li data-wp-context="{ &quot;submenuOpenedBy&quot;: { &quot;click&quot;: false, &quot;hover&quot;: false, &quot;focus&quot;: false }, &quot;type&quot;: &quot;submenu&quot;, &quot;modal&quot;: null, &quot;previousFocus&quot;: null }" data-wp-interactive="core/navigation" data-wp-on--focusout="actions.handleMenuFocusout" data-wp-on--keydown="actions.handleMenuKeydown" data-wp-on--mouseenter="actions.openMenuOnHover" data-wp-on--mouseleave="actions.closeMenuOnHover" data-wp-watch="callbacks.initMenu" tabindex="-1" class="wp-block-navigation-item has-child open-on-hover-click wp-block-navigation-submenu"><a class="wp-block-navigation-item__content" href="#" onclick="return false;"><span class="wp-block-navigation-item__label">Més opcions</span></a><button data-wp-bind--aria-expanded="state.isMenuOpen" data-wp-on--click="actions.toggleMenuOnClick" aria-label="Submenú de Més opcions" class="wp-block-navigation__submenu-icon wp-block-navigation-submenu__toggle" ><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true" focusable="false"><path d="M1.50002 4L6.00002 8L10.5 4" stroke-width="1.5"></path></svg></button><ul data-wp-on--focus="actions.openMenuOnFocus" class="wp-block-navigation__submenu-container has-text-color has-foreground-color has-background has-background-background-color wp-block-navigation-submenu"><li class=" wp-block-navigation-item wp-block-navigation-link"><a class="wp-block-navigation-item__content"  href="{% url 'faq' %}"><span class="wp-block-navigation-item__label">FAQ</span></a></li><li class=" wp-block-navigation-item wp-block-navigation-link"><a class="wp-block-navigation-item__content"  href="{% url 'recursos' %}"><span class="wp-block-navigation-item__label">Recursos</span></a></li><li class=" wp-block-navigation-item wp-block-navigation-link"><a class="wp-block-navigation-item__content"  href="{% url 'serveis' %}"><span class="wp-block-navigation-item__label">Serveis</span></a></li></ul></li></ul>
-							</div>
-						</div>
-					</div>
-				</div></nav>
+                    {% include 'nav.html' %}
                 </div>
         
      
@@ -324,24 +288,25 @@ var CHARITABLE_SESSION = {"ajaxurl":"https://coordinadoraverda.cat/wp-admin/admi
 
 			<div class="entry-content wp-block-post-content has-global-padding is-layout-constrained wp-block-post-content-is-layout-constrained">
 <div class="wp-block-group alignfull is-style-ext-preset--group--natural-1--section has-background-background-color has-background has-global-padding is-layout-constrained wp-block-group-is-layout-constrained" id="contacte" style="margin-top:0;margin-bottom:0;padding-top:var(--wp--preset--spacing--70);padding-bottom:var(--wp--preset--spacing--70)">
-<div class="wp-block-media-text alignwide is-stacked-on-mobile is-image-fill-element extendify-image-import is-style-ext-preset--media-text--natural-1--card-1 has-tertiary-background-color has-background is-style-ext-preset--media-text--natural-1--card-1--5" style="grid-template-columns:48% auto"><figure class="wp-block-media-text__media"><img decoding="async" width="1024" height="768" src="/static/wp-content/uploads/2026/02/photo_5821232445339143421_y-1024x768.jpg" alt="" class="wp-image-169 size-full" style="object-position:50% 50%" srcset="/static/wp-content/uploads/2026/02/photo_5821232445339143421_y-1024x768.jpg 1024w, /static/wp-content/uploads/2026/02/photo_5821232445339143421_y-300x225.jpg 300w, /static/wp-content/uploads/2026/02/photo_5821232445339143421_y-768x576.jpg 768w, /static/wp-content/uploads/2026/02/photo_5821232445339143421_y-16x12.jpg 16w, /static/wp-content/uploads/2026/02/photo_5821232445339143421_y.jpg 1280w" sizes="(max-width: 1024px) 100vw, 1024px" /></figure><div class="wp-block-media-text__content">
-<div class="wp-block-group alignwide has-global-padding is-layout-constrained wp-container-core-group-is-layout-48493932 wp-block-group-is-layout-constrained" style="padding-top:var(--wp--preset--spacing--55);padding-right:var(--wp--preset--spacing--55);padding-bottom:var(--wp--preset--spacing--55);padding-left:var(--wp--preset--spacing--55)"><div class="wpforms-container wpforms-block wpforms-block-406c62bf-d413-4f54-9e34-6ea96a36e1dd wpforms-render-modern" id="wpforms-29"><form id="wpforms-form-29" class="wpforms-validate wpforms-form wpforms-ajax-form" data-formid="29" method="post" enctype="multipart/form-data" action="contacte.html" data-token="d5eb927f29cc3db9b3a961241370f8bd" data-token-time="1773189964"><noscript class="wpforms-error-noscript">Activeu el JavaScript al navegador per a poder completar el formulari.</noscript><div id="wpforms-error-noscript" style="display: none;">Activeu el JavaScript al navegador per a poder completar el formulari.</div><div class="wpforms-field-container"><div id="wpforms-29-field_1-container" class="wpforms-field wpforms-field-name" data-field-id="1"><label class="wpforms-field-label" for="wpforms-29-field_1">Nom <span class="wpforms-required-label" aria-hidden="true">*</span></label><input type="text" id="wpforms-29-field_1" class="wpforms-field-large wpforms-field-required" name="wpforms[fields][1]" aria-errormessage="wpforms-29-field_1-error" required></div><div id="wpforms-29-field_2-container" class="wpforms-field wpforms-field-email" data-field-id="2"><label class="wpforms-field-label" for="wpforms-29-field_2">Correu electrònic <span class="wpforms-required-label" aria-hidden="true">*</span></label><input type="email" id="wpforms-29-field_2" class="wpforms-field-large wpforms-field-required" name="wpforms[fields][2]" spellcheck="false" aria-errormessage="wpforms-29-field_2-error" required></div>		<div id="wpforms-29-field_5-container"
-			class="wpforms-field wpforms-field-text"
-			data-field-type="text"
-			data-field-id="5"
-			>
-			<label class="wpforms-field-label" for="wpforms-29-field_5" >Nom Correu Missatge</label>
-			<input type="text" id="wpforms-29-field_5" class="wpforms-field-medium" name="wpforms[fields][5]" >
+	
+	<div style="text-align: center; max-width: 600px; margin: 0 auto; background: #fff; padding: 40px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+		<h2 style="color: #2c5e31; margin-bottom: 20px;">Dades de Contacte</h2>
+		<p style="font-size: 1.2em; margin-bottom: 15px;">
+			<strong>Correu electrònic:</strong> <br>
+			<a href="mailto:contacte@coordinadoraverda.cat">contacte@coordinadoraverda.cat</a>
+		</p>
+		<p style="font-size: 1.2em; margin-bottom: 30px;">
+			<strong>Pàgina Web:</strong> <br>
+			<a href="https://www.coordinadoraverda.cat" target="_blank">www.coordinadoraverda.cat</a>
+		</p>
+		
+		<div style="margin-top: 40px; padding-top: 30px; border-top: 1px solid #eee;">
+			<h3 style="color: #1a4020;">Vols formar part de la Coordinadora Verda?</h3>
+			<p>Uneix-te al nostre manifest com a persona individual o com a entitat i ajuda'ns a defensar el patrimoni verd de Barcelona.</p>
+			<a href="{% url 'adhesio' %}" style="display: inline-block; background-color: #4CAF50; color: white; padding: 12px 25px; text-decoration: none; border-radius: 5px; font-weight: bold; margin-top: 15px;">Formulari d'integració a la CV</a>
 		</div>
-		<div id="wpforms-29-field_3-container" class="wpforms-field wpforms-field-text" data-field-id="3"><label class="wpforms-field-label" for="wpforms-29-field_3">Assumpte</label><input type="text" id="wpforms-29-field_3" class="wpforms-field-large" name="wpforms[fields][3]" aria-errormessage="wpforms-29-field_3-error" ></div><div id="wpforms-29-field_4-container" class="wpforms-field wpforms-field-textarea" data-field-id="4"><label class="wpforms-field-label" for="wpforms-29-field_4">Missatge <span class="wpforms-required-label" aria-hidden="true">*</span></label><textarea id="wpforms-29-field_4" class="wpforms-field-large wpforms-field-required" name="wpforms[fields][4]" aria-errormessage="wpforms-29-field_4-error" required></textarea></div><script>
-				( function() {
-					const style = document.createElement( 'style' );
-					style.appendChild( document.createTextNode( '#wpforms-29-field_5-container { position: absolute !important; overflow: hidden !important; display: inline !important; height: 1px !important; width: 1px !important; z-index: -1000 !important; padding: 0 !important; } #wpforms-29-field_5-container input { visibility: hidden; } #wpforms-conversational-form-page #wpforms-29-field_5-container label { counter-increment: none; }' ) );
-					document.head.appendChild( style );
-					document.currentScript?.remove();
-				} )();
-			</script></div><!-- .wpforms-field-container --><div class="wpforms-submit-container" ><input type="hidden" name="wpforms[id]" value="29"><input type="hidden" name="page_title" value="Contacte"><input type="hidden" name="page_url" value="https://coordinadoraverda.cat/contacte/"><input type="hidden" name="url_referer" value="https://coordinadoraverda.cat/"><input type="hidden" name="page_id" value="35"><input type="hidden" name="wpforms[post_id]" value="35"><button type="submit" name="wpforms[submit]" id="wpforms-submit-29" class="wpforms-submit" data-alt-text="S&#039;està enviant..." data-submit-text="Envia" aria-live="assertive" value="wpforms-submit">Envia</button><img decoding="async" src="/static/wp-content/plugins/wpforms-lite/assets/images/submit-spin.svg" class="wpforms-submit-spinner" style="display: none;" width="26" height="26" alt="S&#039;està carregant"></div></form></div>  <!-- .wpforms-container --></div>
-</div></div>
+	</div>
+
 </div>
 </div>
 		</main>

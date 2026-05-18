@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="ca">
+<head>
+    <meta charset="UTF-8" />
+    <title>Entitats adherides al manifest - Coordinadora Verda</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+        body { font-family: sans-serif; background: #f9f9f9; color: #333; margin: 0; padding: 0; }
+        .container { max-width: 1000px; margin: 0 auto; padding: 40px 20px; }
+        h1 { color: #2c5e31; text-align: center; }
+        .adherides-list { list-style: none; padding: 0; margin-top: 30px; }
+        .adherides-item { background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 20px; margin-bottom: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .adherides-item h2 { margin-top: 0; font-size: 1.4em; color: #1a4020; }
+        .adherides-item p { margin: 5px 0; }
+        .adherides-item .label { font-weight: bold; color: #555; }
+        .btn-adhereix { display: block; width: max-content; margin: 30px auto; background: #4CAF50; color: #fff; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: bold; }
+        .btn-adhereix:hover { background: #45a049; }
+    </style>
+</head>
+<body>
+    
+    {% include 'nav.html' %}
+
+    <div class="container">
+        <h1>Entitats adherides al manifest de la CV</h1>
+        <p style="text-align: center; font-size: 1.1em; max-width: 700px; margin: 0 auto;">Hem d’intentar que n’hi hagi moltes! Aquestes són les entitats i col·lectius que ja s'han sumat a la nostra lluita pel patrimoni verd.</p>
+
+        <a href="{% url 'adhesio' %}" class="btn-adhereix">¿Vols adherir-te al manifest?</a>
+
+        <ul class="adherides-list">
+            {% for entitat in entitats %}
+            <li class="adherides-item">
+                <h2>{{ entitat.nom }}</h2>
+                <p><span class="label">Lluita o objectiu:</span> {{ entitat.lluita_o_objectiu }}</p>
+                <p><span class="label">Contacte:</span> <a href="mailto:{{ entitat.contacte }}">{{ entitat.contacte }}</a></p>
+                {% if entitat.web %}
+                <p><span class="label">Web:</span> <a href="{{ entitat.web }}" target="_blank">{{ entitat.web }}</a></p>
+                {% endif %}
+            </li>
+            {% empty %}
+            <li class="adherides-item" style="text-align: center; padding: 40px;">
+                <p>Encara no hi ha entitats adherides. Sigues la primera!</p>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>

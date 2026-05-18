@@ -9,6 +9,11 @@ class Associacio(models.Model):
     latitud = models.FloatField(null=True, blank=True)
     longitud = models.FloatField(null=True, blank=True)
     gerent = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='associacions_administrades')
+    adreça = models.CharField(max_length=255, null=True, blank=True)
+    web = models.URLField(max_length=255, null=True, blank=True)
+    correu = models.EmailField(max_length=255, null=True, blank=True)
+    foto = models.ImageField(upload_to='fotos_associacions/', null=True, blank=True)
+    descripcio_curta = models.CharField(max_length=150, null=True, blank=True, help_text="Breu descripció (màxim 10 paraules)")
 
     def __str__(self):
         return self.nom
@@ -46,3 +51,26 @@ class Comentari(models.Model):
 
     def __str__(self):
         return f"Comentari de {self.usuari.username} a {self.noticia.titol}"
+
+class AdhesioEntitat(models.Model):
+    nom = models.CharField(max_length=255)
+    lluita_o_objectiu = models.CharField(max_length=255)
+    contacte = models.EmailField(max_length=255)
+    web = models.URLField(max_length=255, null=True, blank=True)
+    data_adhesio = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.nom
+
+class AdhesioPersona(models.Model):
+    nom = models.CharField(max_length=100)
+    cognoms = models.CharField(max_length=150)
+    any_naixement = models.IntegerField()
+    codi_postal = models.CharField(max_length=10)
+    email = models.EmailField(max_length=255)
+    professio = models.CharField(max_length=150, null=True, blank=True)
+    comentari = models.TextField(null=True, blank=True)
+    data_adhesio = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.nom} {self.cognoms}"
