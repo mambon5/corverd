@@ -22,6 +22,7 @@ urlpatterns = [
     path('serveis/', views.serveis, name='serveis'),
     path('blog/', views.blog, name='blog'),
     path('contacte/', views.contacte, name='contacte'),
+    path('proteccio-dades/', views.proteccio_dades, name='proteccio_dades'),
     path('intranet/', views.intranet_dashboard, name='intranet_dashboard'),
     path('intranet/entitat/<int:pk>/editar/', views.editar_entitat, name='editar_entitat'),
     path('intranet/activitat/nova/', views.crear_activitat, name='crear_activitat'),

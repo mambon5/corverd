@@ -102,9 +102,8 @@ def serveis(request):
 def blog(request):
     return render(request, 'blog.html')
 
-def contacte(request):
-    # En el futur podria gestionar un formulari aquí
-    return render(request, 'contacte.html')
+def proteccio_dades(request):
+    return render(request, 'proteccio_dades.html')
 
 @login_required
 def intranet_dashboard(request):
@@ -206,21 +205,36 @@ def contacte(request):
         email = request.POST.get('email')
         descripcio = request.POST.get('descripcio')
 
-        subject = f"Nou contacte de {nom_representant} ({nom_entitat})"
-        message = f"Nom representant: {nom_representant}\nNom entitat: {nom_entitat}\nCorreu: {email}\n\nDescripció:\n{descripcio}"
+        subject_admin = f"Nou contacte de {nom_representant} ({nom_entitat})"
+        message_admin = f"Nom representant: {nom_representant}\nNom entitat: {nom_entitat}\nCorreu: {email}\n\nDescripció:\n{descripcio}"
         
+        subject_user = "Confirmació de recepció - Coordinadora Verda"
+        message_user = f"Hola {nom_representant},\n\nHem rebut correctament el teu missatge a la Coordinadora en Defensa del Patrimoni Verd. Ens posarem en contacte amb tu al més aviat possible.\n\nDetalls del missatge enviat:\nEntitat: {nom_entitat}\nMissatge:\n{descripcio}\n\nAtentament,\nCoordinadora en Defensa del Patrimoni Verd"
+
+        # Envia correu a la coordinadora
         try:
-            # Envia correu a la coordinadora i al remitent
             send_mail(
-                subject,
-                message,
+                subject_admin,
+                message_admin,
                 settings.DEFAULT_FROM_EMAIL,
-                ['contacte@coordinadoraverda.cat', email],
+                ['contacte@coordinadoraverda.cat'],
+                fail_silently=True,
+            )
+        except Exception:
+            pass
+
+        # Envia correu de confirmació al remitent
+        try:
+            send_mail(
+                subject_user,
+                message_user,
+                settings.DEFAULT_FROM_EMAIL,
+                [email],
                 fail_silently=False,
             )
             messages.success(request, "El missatge s'ha enviat correctament.")
         except Exception as e:
-            messages.error(request, f"Error en enviar el missatge: {str(e)}")
+            messages.error(request, f"Error en enviar el correu de confirmació al remitent: {str(e)}")
             
         return render(request, 'contacte.html', {'success': True})
         
