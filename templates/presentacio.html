@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="ca">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>La presentació de la CV - Coordinadora Verda</title>
+    <link rel='stylesheet' href='/static/wp-content/themes/extendable/style.css' media='all' />
+    <style>
+        :root {
+            --wp--preset--color--background: #EDFAE5;
+            --wp--preset--color--foreground: #2D5544;
+        }
+
+        body {
+            background-color: var(--wp--preset--color--background);
+            color: var(--wp--preset--color--foreground);
+            font-family: "Inter", sans-serif;
+        }
+
+        .content-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 60px 20px;
+            line-height: 1.6;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 40px;
+            color: #2B5544;
+        }
+    </style>
+</head>
+
+<body class="wp-site-blocks">
+    {% include 'nav.html' %}
+
+    <main class="wp-site-blocks">
+        <div class="content-container">
+            <h1>La presentació de la CV</h1>
+            <div class="entry-content">
+                <p><strong>Comunicat presentació CV:</strong> Estem treballant per oferir-vos la darrera versió d'aquest
+                    document en tots els idiomes.</p>
+                <p><strong>Nota de premsa:</strong> Ben aviat tindreu disponible la nota de premsa oficial de la
+                    Coordinadora Verda.</p>
+                <p><strong>Dossier de presentació:</strong> Podeu sol·licitar el dossier complet a través dels nostres
+                    canals de contacte mentre actualitzem aquesta secció.</p>
+            </div>
+        </div>
+    </main>
+
+    {% include 'footer.html' %}
+</body>
+
+</html>

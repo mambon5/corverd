@@ -4,6 +4,10 @@ from django.contrib.auth import logout
 from .models import Associacio, Noticia, Comentari, Activitat, AdhesioEntitat, AdhesioPersona
 from .forms import AssociacioForm, ActivitatForm
 import json
+from django.core.mail import send_mail
+from django.conf import settings
+from django.contrib import messages
+
 
 def index(request):
     return render(request, 'inici.html')
@@ -18,7 +22,12 @@ def entitats_list(request):
 
 def entitats_adherides_view(request):
     entitats = AdhesioEntitat.objects.all().order_by('nom')
-    return render(request, 'entitats_adherides.html', {'entitats': entitats})
+    persones = AdhesioPersona.objects.all().order_by('nom')
+    return render(request, 'entitats_adherides.html', {
+        'entitats': entitats,
+        'persones': persones,
+        'titol_pagina': 'Adhesions al manifest'
+    })
 
 def adhesio_manifest_view(request):
     if request.method == 'POST':
@@ -41,41 +50,21 @@ def adhesio_manifest_view(request):
                 comentari=request.POST.get('comentari')
             )
         return render(request, 'adhesio.html', {'success': True})
-    return render(request, 'adhesio.html')
+    
+    # Range of years from 1890 to current year
+    years_range = range(2026, 1889, -1)
+    return render(request, 'adhesio.html', {'years_range': years_range})
 
 def entitat_activitats(request, pk):
     entitat = get_object_or_404(Associacio, pk=pk)
-    activitats = entitat.activitats.all()
+    # Calendari i mapa d'activitats ha d'estar buit per ara
     events = []
-    for a in activitats:
-        events.append({
-            'title': a.titol,
-            'start': a.data.strftime('%Y-%m-%d') + 'T' + a.hora.strftime('%H:%M:%S'),
-            'description': a.descripcio,
-            'adreça': a.adreça,
-            'data': a.data.strftime('%d/%m/%Y'),
-            'hora': a.hora.strftime('%H:%M'),
-            'pdf_activitat': a.pdf_activitat.url if a.pdf_activitat else None,
-        })
     return render(request, 'entitat_activitats.html', {'entitat': entitat, 'events_json': events})
 
 def activitats_calendar(request):
     entitats = Associacio.objects.all()
-    activitats = Activitat.objects.all()
+    # Calendari i mapa d'activitats ha d'estar buit per ara
     events = []
-    for a in activitats:
-        events.append({
-            'title': f"{a.titol} [{a.associacio.nom}]",
-            'start': a.data.strftime('%Y-%m-%d') + 'T' + a.hora.strftime('%H:%M:%S'),
-            'description': a.descripcio,
-            'entity_id': a.associacio.id,
-            'adreça': a.adreça,
-            'data': a.data.strftime('%d/%m/%Y'),
-            'hora': a.hora.strftime('%H:%M'),
-            'latitud': float(a.latitud) if a.latitud else None,
-            'longitud': float(a.longitud) if a.longitud else None,
-            'pdf_activitat': a.pdf_activitat.url if a.pdf_activitat else None,
-        })
     return render(request, 'activitats_calendar.html', {'entitats': entitats, 'events_json': events})
 
 def noticia_detail(request, pk):
@@ -183,3 +172,57 @@ def esborrar_activitat(request, pk):
     activitat = get_object_or_404(Activitat, pk=pk, associacio=entitat)
     activitat.delete()
     return redirect('intranet_dashboard')
+
+def mapa_entitats_view(request):
+    entitats = Associacio.objects.all().order_by('nom')
+    entitats_json = []
+    for e in entitats:
+        entitats_json.append({
+            'id': e.id,
+            'nom': e.nom,
+            'descripcio': e.descripcio,
+            'latitud': float(e.latitud) if e.latitud else None,
+            'longitud': float(e.longitud) if e.longitud else None,
+            'web': e.web,
+        })
+    return render(request, 'mapa_entitats.html', {
+        'entitats': entitats,
+        'entitats_json': json.dumps(entitats_json)
+    })
+
+def historia_view(request):
+    return render(request, 'historia.html')
+
+def presentacio_view(request):
+    return render(request, 'presentacio.html')
+
+def organitzacio_view(request):
+    return render(request, 'organitzacio.html')
+
+def contacte(request):
+    if request.method == 'POST':
+        nom_representant = request.POST.get('nom_representant')
+        nom_entitat = request.POST.get('nom_entitat')
+        email = request.POST.get('email')
+        descripcio = request.POST.get('descripcio')
+
+        subject = f"Nou contacte de {nom_representant} ({nom_entitat})"
+        message = f"Nom representant: {nom_representant}\nNom entitat: {nom_entitat}\nCorreu: {email}\n\nDescripció:\n{descripcio}"
+        
+        try:
+            # Envia correu a la coordinadora i al remitent
+            send_mail(
+                subject,
+                message,
+                settings.DEFAULT_FROM_EMAIL,
+                ['contacte@coordinadoraverda.cat', email],
+                fail_silently=False,
+            )
+            messages.success(request, "El missatge s'ha enviat correctament.")
+        except Exception as e:
+            messages.error(request, f"Error en enviar el missatge: {str(e)}")
+            
+        return render(request, 'contacte.html', {'success': True})
+        
+    return render(request, 'contacte.html')
+

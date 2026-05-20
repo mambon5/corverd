@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="ca">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Com ens organitzem? - Coordinadora Verda</title>
+    <link rel='stylesheet' href='/static/wp-content/themes/extendable/style.css' media='all' />
+    <style>
+        :root {
+            --wp--preset--color--background: #EDFAE5;
+            --wp--preset--color--foreground: #2D5544;
+        }
+
+        body {
+            background-color: var(--wp--preset--color--background);
+            color: var(--wp--preset--color--foreground);
+            font-family: "Inter", sans-serif;
+        }
+
+        .content-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 60px 20px;
+            line-height: 1.6;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 40px;
+            color: #2B5544;
+        }
+    </style>
+</head>
+
+<body class="wp-site-blocks">
+    {% include 'nav.html' %}
+
+    <main class="wp-site-blocks">
+        <div class="content-container">
+            <h1>Com ens organitzem?</h1>
+            <div class="entry-content">
+                <p>La Coordinadora en Defensa del Patrimoni Verd s’organitza de la següent manera:</p>
+                <ul>
+                    <li><strong>Assemblees generals ordinàries mensuals:</strong> Es realitzen un dissabte al mes en un
+                        espai de lluita. Les assemblees estan formades pels representants de les entitats i col·lectius
+                        i de ciutadans compromesos en la lluita de la CV a nivell personal, sempre que formin part d’un
+                        grup de treball i/o comissió de la CV. Després de l’Assemblea s’organitza un dinar i una
+                        passejada per a conèixer l’espai de lluita.</li>
+                    <li><strong>Grups de treball i comissions:</strong> Són els encarregats de portar a terme la
+                        logística, les activitats, els projectes i els objectius. Són autònoms i es reuneixen segons les
+                        seves pròpies necessitats, ja sigui presencialment o online.</li>
+                </ul>
+            </div>
+        </div>
+    </main>
+
+    {% include 'footer.html' %}
+</body>
+
+</html>

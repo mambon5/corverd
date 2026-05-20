@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="ca" prefix="og: https://ogp.me/ns#">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Mapa de les Entitats - Coordinadora Verda</title>
+
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+
+    <!-- Site Styles -->
+    <link rel='stylesheet' id='wp-block-navigation-css' href='/static/wp-includes/blocks/navigation/style.min.css'
+        media='all' />
+    <link rel='stylesheet' id='extendable-style-css' href='/static/wp-content/themes/extendable/style.css'
+        media='all' />
+
+    <style>
+        :root {
+            --wp--preset--color--background: #EDFAE5;
+            --wp--preset--color--foreground: #2D5544;
+            --wp--preset--color--primary: #2B5544;
+            --wp--preset--color--tertiary: #DBECCD;
+        }
+
+        body {
+            background-color: var(--wp--preset--color--background);
+            color: var(--wp--preset--color--foreground);
+            font-family: "Inter", sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .map-container {
+            display: flex;
+            flex-direction: row;
+            height: calc(100vh - 200px);
+            min-height: 500px;
+            margin: 20px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        #map {
+            flex-grow: 1;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .filter-sidebar {
+            width: 350px;
+            background-color: #fff;
+            padding: 25px;
+            overflow-y: auto;
+            z-index: 2;
+            border-left: 1px solid #eee;
+        }
+
+        @media (max-width: 768px) {
+            .map-container {
+                flex-direction: column;
+                height: auto;
+                margin: 10px;
+            }
+
+            .filter-sidebar {
+                width: 100%;
+                height: 350px;
+                border-left: none;
+                border-top: 1px solid #eee;
+            }
+
+            #map {
+                height: 450px;
+            }
+        }
+
+        .filter-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            font-weight: bold;
+            color: var(--wp--preset--color--primary);
+            border-bottom: 3px solid var(--wp--preset--color--primary);
+            padding-bottom: 10px;
+        }
+
+        .entity-filter-item {
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px;
+            border-radius: 6px;
+            transition: background 0.2s;
+        }
+
+        .entity-filter-item:hover {
+            background-color: var(--wp--preset--color--tertiary);
+        }
+
+        .entity-checkbox {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: var(--wp--preset--color--primary);
+        }
+
+        .entity-name {
+            font-size: 0.95rem;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .page-header {
+            padding: 40px 20px 20px;
+            text-align: center;
+        }
+
+        .page-header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            color: var(--wp--preset--color--primary);
+        }
+
+        .btn-controls {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+    </style>
+</head>
+
+<body class="wp-site-blocks">
+    {% include 'nav.html' %}
+
+    <main>
+        <div class="page-header">
+            <h1 class="wp-block-site-title">Mapa de les Entitats</h1>
+        </div>
+
+        <div class="map-container">
+            <div id="map"></div>
+
+            <div class="filter-sidebar">
+                <div class="filter-title">Entitats</div>
+                <div id="entity-filters">
+                    {% for entitat in entitats %}
+                    <div class="entity-filter-item">
+                        <input type="checkbox" id="entity-{{ entitat.id }}" class="entity-checkbox"
+                            value="{{ entitat.id }}" checked>
+                        <label for="entity-{{ entitat.id }}" class="entity-name">{{ entitat.nom }}</label>
+                    </div>
+                    {% endfor %}
+                </div>
+                <div class="btn-controls">
+                    <button id="select-all" class="wp-element-button"
+                        style="flex: 1; padding: 10px; font-size: 0.9rem;">Totes</button>
+                    <button id="deselect-all" class="wp-element-button"
+                        style="flex: 1; padding: 10px; font-size: 0.9rem; background-color: #666;">Cap</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    {% include 'footer.html' %}
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var entitatsData = {{ entitats_json| safe
+        }};
+
+        // Initialization: focus on Barcelona region
+        var map = L.map('map').setView([41.3851, 2.1734], 12);
+
+        // ArcGIS World Street Map tiles (corrected URL)
+        L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
+            attribution: '&copy; Esri & contributors'
+        }).addTo(map);
+
+        var markers = {};
+
+        function updateMarkers() {
+            var checkedIds = Array.from(document.querySelectorAll('.entity-checkbox:checked')).map(cb => cb.value);
+
+            entitatsData.forEach(function (e) {
+                if (checkedIds.includes(e.id.toString()) && e.latitud && e.longitud) {
+                    if (!markers[e.id]) {
+                        var popupContent = "<div style='font-family: Inter, sans-serif; padding: 5px;'>" +
+                            "<b style='font-size: 1.1rem; color: #2B5544;'>" + e.nom + "</b><br>" +
+                            "<p style='margin: 10px 0;'>" + (e.descripcio ? e.descripcio.substring(0, 150) + '...' : '') + "</p>";
+                        if (e.web) {
+                            popupContent += "<a href='" + e.web + "' target='_blank' style='display:inline-block; background: #2B5544; color: white; padding: 5px 12px; border-radius: 4px; text-decoration: none; font-size: 0.8rem;'>Visitar Web</a>";
+                        }
+                        popupContent += "</div>";
+                        markers[e.id] = L.marker([e.latitud, e.longitud]).addTo(map).bindPopup(popupContent);
+                    }
+                } else {
+                    if (markers[e.id]) {
+                        map.removeLayer(markers[e.id]);
+                        delete markers[e.id];
+                    }
+                }
+            });
+        }
+
+        updateMarkers();
+
+        document.querySelectorAll('.entity-checkbox').forEach(function (cb) {
+            cb.addEventListener('change', updateMarkers);
+        });
+
+        document.getElementById('select-all').addEventListener('click', function () {
+            document.querySelectorAll('.entity-checkbox').forEach(cb => cb.checked = true);
+            updateMarkers();
+        });
+
+        document.getElementById('deselect-all').addEventListener('click', function () {
+            document.querySelectorAll('.entity-checkbox').forEach(cb => cb.checked = false);
+            updateMarkers();
+        });
+        });
+    </script>
+</body>
+
+</html>
