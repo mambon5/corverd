@@ -3674,9 +3674,9 @@
     <meta name="msapplication-TileImage" content="/static/wp-content/uploads/2026/01/cropped-cor_verd-1-270x270.png" />
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js'></script>
     <style>
-        body {
+        .calendar-layout-container {
             font-family: Arial, sans-serif;
-            margin: 40px;
+            margin: 20px 0;
             display: flex;
         }
 
@@ -3941,7 +3941,8 @@
             <div
                 class="entry-content wp-block-post-content has-global-padding is-layout-constrained wp-block-post-content-is-layout-constrained">
 
-                <div class="sidebar">
+                <div class="calendar-layout-container">
+                    <div class="sidebar">
                     <a href="{% url 'index' %}" class="back-link">&larr; Tornar a l'inici</a>
                     <h5 style="display: inline-block; font-size: 1.2rem; margin-bottom: 10px;">Llegenda / Filtres</h5>
                     <div id="filters">
@@ -3962,6 +3963,7 @@
                     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
                     <div id="map" style="height: 400px; margin-bottom: 20px; z-index: 1;"></div>
                     <div id='calendar'></div>
+                </div>
                 </div>
 
                 <!-- Activity Details Modal -->

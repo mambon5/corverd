@@ -1,186 +1,192 @@
-<!DOCTYPE html>
-<html dir="ltr" lang="ca" prefix="og: https://ogp.me/ns#">
+{% extends 'base_layout.html' %}
 
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Mapa de les Entitats - Coordinadora Verda</title>
+{% block title %}Mapa de les Entitats - Coordinadora Verda{% endblock %}
 
-    <!-- Leaflet CSS -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+{% block extra_css %}
+<!-- Leaflet CSS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+<style>
+    .map-container {
+        display: flex;
+        flex-direction: row;
+        height: calc(100vh - 250px);
+        min-height: 550px;
+        margin: 20px 0;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        border: 1px solid rgba(0, 0, 0, 0.05);
+    }
 
-    <!-- Site Styles -->
-    <link rel='stylesheet' id='wp-block-navigation-css' href='/static/wp-includes/blocks/navigation/style.min.css'
-        media='all' />
-    <link rel='stylesheet' id='extendable-style-css' href='/static/wp-content/themes/extendable/style.css'
-        media='all' />
+    #map {
+        flex-grow: 1;
+        height: 100%;
+        z-index: 1;
+    }
 
-    <style>
-        :root {
-            --wp--preset--color--background: #EDFAE5;
-            --wp--preset--color--foreground: #2D5544;
-            --wp--preset--color--primary: #2B5544;
-            --wp--preset--color--tertiary: #DBECCD;
-        }
+    .filter-sidebar {
+        width: 320px;
+        background-color: #fff;
+        padding: 25px;
+        overflow-y: auto;
+        z-index: 2;
+        border-left: 1px solid #1438520d;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
 
-        body {
-            background-color: var(--wp--preset--color--background);
-            color: var(--wp--preset--color--foreground);
-            font-family: "Inter", sans-serif;
-            margin: 0;
-            padding: 0;
-        }
-
+    @media (max-width: 768px) {
         .map-container {
-            display: flex;
-            flex-direction: row;
-            height: calc(100vh - 200px);
-            min-height: 500px;
-            margin: 20px;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        #map {
-            flex-grow: 1;
-            height: 100%;
-            z-index: 1;
+            flex-direction: column;
+            height: auto;
+            margin: 10px 0;
         }
 
         .filter-sidebar {
-            width: 350px;
-            background-color: #fff;
-            padding: 25px;
-            overflow-y: auto;
-            z-index: 2;
-            border-left: 1px solid #eee;
+            width: 100%;
+            height: 350px;
+            border-left: none;
+            border-top: 1px solid #1438520d;
         }
 
-        @media (max-width: 768px) {
-            .map-container {
-                flex-direction: column;
-                height: auto;
-                margin: 10px;
-            }
-
-            .filter-sidebar {
-                width: 100%;
-                height: 350px;
-                border-left: none;
-                border-top: 1px solid #eee;
-            }
-
-            #map {
-                height: 450px;
-            }
+        #map {
+            height: 400px;
         }
+    }
 
-        .filter-title {
-            font-size: 1.5rem;
-            margin-bottom: 20px;
-            font-weight: bold;
-            color: var(--wp--preset--color--primary);
-            border-bottom: 3px solid var(--wp--preset--color--primary);
-            padding-bottom: 10px;
-        }
+    .filter-title {
+        font-size: 1.35rem;
+        margin-bottom: 20px;
+        font-weight: 750;
+        color: #113D2A;
+        border-bottom: 2px solid #2B5544;
+        padding-bottom: 10px;
+    }
 
-        .entity-filter-item {
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 8px;
-            border-radius: 6px;
-            transition: background 0.2s;
-        }
+    .entity-filter-item {
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 8px 12px;
+        border-radius: 8px;
+        transition: all 0.2s;
+    }
 
-        .entity-filter-item:hover {
-            background-color: var(--wp--preset--color--tertiary);
-        }
+    .entity-filter-item:hover {
+        background-color: #DBECCD80;
+    }
 
-        .entity-checkbox {
-            width: 18px;
-            height: 18px;
-            cursor: pointer;
-            accent-color: var(--wp--preset--color--primary);
-        }
+    .entity-checkbox {
+        width: 18px;
+        height: 18px;
+        cursor: pointer;
+        accent-color: #2B5544;
+    }
 
-        .entity-name {
-            font-size: 0.95rem;
-            cursor: pointer;
-            font-weight: 500;
-        }
+    .entity-name {
+        font-size: 0.95rem;
+        cursor: pointer;
+        font-weight: 600;
+        color: #2D5544;
+    }
 
-        .page-header {
-            padding: 40px 20px 20px;
-            text-align: center;
-        }
+    .btn-controls {
+        display: flex;
+        gap: 10px;
+        margin-top: 20px;
+        padding-top: 20px;
+        border-top: 1px solid #1438520d;
+    }
 
-        .page-header h1 {
-            margin: 0;
-            font-size: 2.5rem;
-            color: var(--wp--preset--color--primary);
-        }
+    .btn-control {
+        flex: 1;
+        padding: 10px;
+        font-size: 0.9rem;
+        font-weight: bold;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background-color 0.2s;
+    }
 
-        .btn-controls {
-            display: flex;
-            gap: 10px;
-            margin-top: 20px;
-            padding-top: 20px;
-            border-top: 1px solid #eee;
-        }
-    </style>
-</head>
+    .btn-all {
+        background-color: #2B5544;
+        color: white;
+    }
 
-<body class="wp-site-blocks">
-    {% include 'nav.html' %}
+    .btn-all:hover {
+        background-color: #1a382c;
+    }
 
-    <main>
-        <div class="page-header">
-            <h1 class="wp-block-site-title">Mapa de les Entitats</h1>
-        </div>
+    .btn-none {
+        background-color: #f3f4f6;
+        color: #4b5563;
+    }
 
-        <div class="map-container">
-            <div id="map"></div>
+    .btn-none:hover {
+        background-color: #e5e7eb;
+    }
+</style>
+{% endblock %}
 
-            <div class="filter-sidebar">
-                <div class="filter-title">Entitats</div>
-                <div id="entity-filters">
-                    {% for entitat in entitats %}
-                    <div class="entity-filter-item">
-                        <input type="checkbox" id="entity-{{ entitat.id }}" class="entity-checkbox"
-                            value="{{ entitat.id }}" checked>
-                        <label for="entity-{{ entitat.id }}" class="entity-name">{{ entitat.nom }}</label>
+{% block page_title %}Mapa de les Entitats{% endblock %}
+
+{% block content %}
+<div class="wp-block-group alignfull is-style-ext-preset--group--natural-1--section has-background-background-color has-background has-global-padding is-layout-constrained wp-block-group-is-layout-constrained"
+	style="margin-top:0;margin-bottom:0;padding-top:var(--wp--preset--spacing--30);padding-bottom:var(--wp--preset--spacing--50)">
+	<div
+		class="wp-block-group alignwide is-vertical is-content-justification-center is-layout-flex wp-container-core-group-is-layout-c9ee0c5a wp-block-group-is-layout-flex">
+		<div
+			class="wp-block-group has-global-padding is-layout-constrained wp-container-core-group-is-layout-5e05634a wp-block-group-is-layout-constrained">
+			<div style="max-width: 1000px; margin: 0 auto;">
+                <p style="text-align: center; font-size: 1.15rem; max-width: 700px; margin: 0 auto 20px auto; color: #4D6835;">
+                    Visualitza la ubicació i zones d'actuació de totes les entitats i col·lectius que formen part de la Coordinadora.
+                </p>
+
+                <div class="map-container">
+                    <div id="map"></div>
+
+                    <div class="filter-sidebar">
+                        <div>
+                            <div class="filter-title">Entitats</div>
+                            <div id="entity-filters">
+                                {% for entitat in entitats %}
+                                <div class="entity-filter-item">
+                                    <input type="checkbox" id="entity-{{ entitat.id }}" class="entity-checkbox"
+                                        value="{{ entitat.id }}" checked>
+                                    <label for="entity-{{ entitat.id }}" class="entity-name">{{ entitat.nom }}</label>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="btn-controls">
+                            <button id="select-all" class="btn-control btn-all">Totes</button>
+                            <button id="deselect-all" class="btn-control btn-none">Cap</button>
+                        </div>
                     </div>
-                    {% endfor %}
-                </div>
-                <div class="btn-controls">
-                    <button id="select-all" class="wp-element-button"
-                        style="flex: 1; padding: 10px; font-size: 0.9rem;">Totes</button>
-                    <button id="deselect-all" class="wp-element-button"
-                        style="flex: 1; padding: 10px; font-size: 0.9rem; background-color: #666;">Cap</button>
                 </div>
             </div>
-        </div>
-    </main>
+		</div>
+	</div>
+</div>
+{% endblock %}
 
-    {% include 'footer.html' %}
+{% block extra_js %}
+<!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 
-    <!-- Leaflet JS -->
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            var entitatsData = {{ entitats_json| safe
-        }};
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var entitatsData = {{ entitats_json|safe }};
 
         // Initialization: focus on Barcelona region
         var map = L.map('map').setView([41.3851, 2.1734], 12);
 
-        // ArcGIS World Street Map tiles (corrected URL)
+        // ArcGIS World Street Map tiles
         L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
             attribution: '&copy; Esri & contributors'
         }).addTo(map);
@@ -195,9 +201,9 @@
                     if (!markers[e.id]) {
                         var popupContent = "<div style='font-family: Inter, sans-serif; padding: 5px;'>" +
                             "<b style='font-size: 1.1rem; color: #2B5544;'>" + e.nom + "</b><br>" +
-                            "<p style='margin: 10px 0;'>" + (e.descripcio ? e.descripcio.substring(0, 150) + '...' : '') + "</p>";
+                            "<p style='margin: 10px 0; font-size: 0.9rem; line-height: 1.4; color: #555;'>" + (e.descripcio ? e.descripcio.substring(0, 150) + '...' : '') + "</p>";
                         if (e.web) {
-                            popupContent += "<a href='" + e.web + "' target='_blank' style='display:inline-block; background: #2B5544; color: white; padding: 5px 12px; border-radius: 4px; text-decoration: none; font-size: 0.8rem;'>Visitar Web</a>";
+                            popupContent += "<a href='" + e.web + "' target='_blank' style='display:inline-block; background: #2B5544; color: white; padding: 6px 12px; border-radius: 6px; text-decoration: none; font-size: 0.8rem; font-weight: 600;'>Visitar Web</a>";
                         }
                         popupContent += "</div>";
                         markers[e.id] = L.marker([e.latitud, e.longitud]).addTo(map).bindPopup(popupContent);
@@ -226,8 +232,6 @@
             document.querySelectorAll('.entity-checkbox').forEach(cb => cb.checked = false);
             updateMarkers();
         });
-        });
-    </script>
-</body>
-
-</html>
+    });
+</script>
+{% endblock %}
