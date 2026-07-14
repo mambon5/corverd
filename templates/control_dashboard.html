@@ -1,0 +1,306 @@
+{% extends "base_layout.html" %}
+
+{% block title %}Panell de Control - Gestor Web{% endblock %}
+
+{% block content %}
+<main class="wp-block-group"
+    style="padding-top:var(--wp--preset--spacing--50);padding-bottom:var(--wp--preset--spacing--50)">
+    <div class="wp-block-group alignwide">
+
+        {% if messages %}
+        {% for message in messages %}
+        <div
+            style="padding: 15px; margin-bottom: 20px; border-radius: 4px; color: #fff; background-color: {% if message.tags == 'success' %}#28a745{% else %}#dc3545{% endif %};">
+            {{ message }}
+        </div>
+        {% endfor %}
+        {% endif %}
+
+        {% if not is_gestor %}
+        <!-- Formulari de Login per al Gestor -->
+        <h2 class="wp-block-heading has-text-align-center" style="margin-bottom: 30px;">Accés Gestor Web</h2>
+        <div
+            style="max-width: 500px; margin: 0 auto; background: #f9f9f9; padding: 30px; border-radius: 8px; border: 1px solid #ddd;">
+            <form method="post" action="{% url 'control_dashboard' %}">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="login">
+
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; font-weight: bold; margin-bottom: 5px;">Usuari del Gestor</label>
+                    <input type="text" name="username" required class="wpforms-field-large"
+                        style="padding:10px; border:1px solid #ccc; width:100%; border-radius:4px;">
+                </div>
+
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; font-weight: bold; margin-bottom: 5px;">Contrasenya</label>
+                    <input type="password" name="password" required class="wpforms-field-large"
+                        style="padding:10px; border:1px solid #ccc; width:100%; border-radius:4px;">
+                </div>
+
+                <button type="submit"
+                    style="background-color: #4CAF50; color: white; padding: 12px 20px; border: none; border-radius: 4px; cursor: pointer; width: 100%; font-size: 16px; font-weight: bold;">Accedir
+                    al Panell</button>
+            </form>
+        </div>
+
+        {% else %}
+        <!-- Panell d'Administració (Dashboard) -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+            <h2 class="wp-block-heading">Panell de Control Web</h2>
+            <a href="?logout=true" style="color: #dc3545; font-weight: bold; text-decoration: underline;">Tancar
+                Sessió</a>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
+
+            <!-- Columna 1: Crear Usuari -->
+            <div style="background: #f9f9f9; padding: 30px; border-radius: 8px; border: 1px solid #ddd;">
+                <h3 style="margin-bottom: 20px; border-bottom: 2px solid #4CAF50; padding-bottom: 10px;">Crear Nou
+                    Usuari</h3>
+                <p style="font-size: 14px; margin-bottom: 20px;">Crea usuaris per donar-los accés a la plataforma. Si
+                    vols que puguin administrar una associació, marca la casella d'administrador.</p>
+
+                <form method="post" action="{% url 'control_dashboard' %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="crear_usuari">
+
+                    <!-- 1. Errors globals del formulari (Ex: l'usuari ja existeix o contrasenyes no vàlides) -->
+                    {% if form_user.non_field_errors %}
+                    <div
+                        style="background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; padding: 12px; border-radius: 4px; margin-bottom: 20px; font-size: 14px; font-weight: bold;">
+                        {% for error in form_user.non_field_errors %}
+                        <p style="margin: 0;">❌ {{ error }}</p>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+
+                    <!-- 2. Camps del formulari amb els seus respectius errors individuals -->
+                    {% for field in form_user %}
+                    <div style="margin-bottom: 20px;">
+                        <label
+                            style="display: block; font-weight: bold; margin-bottom: 5px; color: {% if field.errors %}#dc3545{% else %}inherit{% endif %};">
+                            {{ field.label }}
+                        </label>
+
+                        <!-- Contenidor que permetrà posar l'ull a la dreta si és una contrasenya -->
+                        <div class="django-field-wrapper"
+                            style="position: relative; width: 100%; {% if field.errors %}border: 1px solid #dc3545; border-radius: 4px; display: inline-block;{% endif %}">
+                            {{ field }}
+
+                            <!-- Si el widget és de tipus password, hi injectem el botó visualment -->
+                            {% if field.field.widget.input_type == 'password' %}
+                            <button type="button" class="toggle-password"
+                                style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; font-size: 16px; padding: 5px; z-index: 10;">
+                                👁️
+                            </button>
+                            {% endif %}
+                        </div>
+
+                        {% if field.errors %}
+                        {% for error in field.errors %}
+                        <div style="color: #dc3545; font-size: 13px; margin-top: 5px; font-weight: bold;">
+                            🔺 {{ error }}
+                        </div>
+                        {% endfor %}
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+
+                    <button type="submit"
+                        style="background-color: #4CAF50; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; width: 100%; font-weight: bold;">Crear
+                        Usuari</button>
+                </form>
+            </div>
+
+            <!-- Columna 2: Crear Associació -->
+            <div style="background: #f9f9f9; padding: 30px; border-radius: 8px; border: 1px solid #ddd;">
+                <h3 style="margin-bottom: 20px; border-bottom: 2px solid #0056b3; padding-bottom: 10px;">Crear Nova
+                    Associació</h3>
+                <p style="font-size: 14px; margin-bottom: 20px;">Registra una nova entitat. És obligatori vincular-la a
+                    un usuari amb rol d'administrador creat prèviament.</p>
+
+                {% if not admins_exist %}
+                <div
+                    style="padding: 15px; background-color: #fff3cd; color: #856404; border: 1px solid #ffeeba; border-radius: 4px; margin-bottom: 20px;">
+                    <strong>Atenció:</strong> No hi ha cap usuari amb rol d'administrador creat al sistema. Primer has
+                    de crear un usuari i marcar la casella "És administrador" per poder crear una associació.
+                </div>
+                {% else %}
+                <form method="post" action="{% url 'control_dashboard' %}" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="crear_associacio">
+
+                    {% for field in form_assoc %}
+                    <div style="margin-bottom: 20px;" data-field-name="{{ field.name }}">
+                        <label style="display: block; font-weight: bold; margin-bottom: 5px;">
+                            {{ field.label }}
+                            {% if field.name == 'adreça' or field.name == 'adreca' %}
+                            <!-- Botons d'acció per a l'adreça -->
+                            <button type="button" id="btn-geolocalitzar"
+                                style="margin-left: 10px; padding: 4px 10px; background: #6c757d; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: bold;">
+                                📍 Buscar Coordenades
+                            </button>
+                            <button type="button" id="btn-comprovar"
+                                style="margin-left: 5px; padding: 4px 10px; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: bold; display: none;">
+                                🗺️ Comprova Coordenades
+                            </button>
+                            {% endif %}
+                        </label>
+                        {{ field }}
+
+                        {% if field.name == 'adreça' or field.name == 'adreca' %}
+                        <!-- Advertència sota el camp d'adreça -->
+                        <div
+                            style="color: #856404; background-color: #fff3cd; border: 1px solid #ffeeba; padding: 6px 10px; font-size: 13px; border-radius: 4px; margin-top: 5px; font-weight: 5px;">
+                            ⚠️ Escriu exactament la direcció, o la latitud i longitud trobades poden ser errònies!
+                        </div>
+                        {% endif %}
+
+                        {% if field.errors %}
+                        <div style="color: red; font-size: 12px; margin-top: 5px;">{{ field.errors }}</div>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+
+                    <button type="submit"
+                        style="background-color: #0056b3; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; width: 100%; font-weight: bold;">Crear
+                        Associació</button>
+                </form>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</main>
+
+<!-- Lògica de geolocalització gratuïta, mapes i confirmació -->
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const btnBuscar = document.getElementById("btn-geolocalitzar");
+        const btnComprovar = document.getElementById("btn-comprovar");
+        const adrecaInput = document.querySelector('[data-field-name="adreça"] input, [data-field-name="adreca"] input, #id_adreça, #id_adreca');
+        const latInput = document.querySelector('[data-field-name="latitud"] input, #id_latitud');
+        const lngInput = document.querySelector('[data-field-name="longitud"] input, #id_longitud');
+
+        let mapWindowOpened = false;
+
+        if (!btnBuscar || !adrecaInput) return;
+
+        // 1. Funció per buscar coordenades a OpenStreetMap
+        async function buscarCoordenades() {
+            const query = adrecaInput.value.trim();
+            if (!query) {
+                alert("Si us plau, escriu una adreça primer.");
+                return;
+            }
+
+            btnBuscar.innerText = "🔍 Buscant...";
+            btnBuscar.disabled = true;
+
+            const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=1`;
+
+            try {
+                const response = await fetch(url, { headers: { "User-Agent": "CorVerd-App-Django" } });
+                const data = await response.json();
+
+                if (data && data.length > 0) {
+                    const resultat = data[0];
+                    if (latInput) latInput.value = resultat.lat;
+                    if (lngInput) lngInput.value = resultat.lon;
+
+                    // Mostrem el botó de comprovar a Google Maps ja que tenim coordenades reals
+                    if (btnComprovar) btnComprovar.style.display = "inline-block";
+                    console.log(`Coordenades trobades: Lat ${resultat.lat}, Lng ${resultat.lon}`);
+                } else {
+                    alert("No s'ha trobat cap localització per aquesta adreça. Revisa si està ben escrita.");
+                    if (btnComprovar) btnComprovar.style.display = "none";
+                }
+            } catch (error) {
+                console.error("Error en connectar amb OpenStreetMap:", error);
+                alert("Hi ha hagut un error en la cerca.");
+            } finally {
+                btnBuscar.innerText = "📍 Buscar Coordenades";
+                btnBuscar.disabled = false;
+            }
+        }
+
+        // 2. Obrir Google Maps en pestanya nova basat en les coordenades obtingudes
+        if (btnComprovar) {
+            btnComprovar.addEventListener("click", () => {
+                const lat = latInput ? latInput.value : '';
+                const lng = lngInput ? lngInput.value : '';
+
+                if (!lat || !lng) {
+                    alert("Primer has de buscar les coordenades d'una adreça vàlida.");
+                    return;
+                }
+
+                // Obrim el mapa centrat exactament en la latitud i longitud obtingudes
+                const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`;
+                window.open(googleMapsUrl, "_blank");
+
+                // Marquem que s'ha obert la finestra del mapa per fer la pregunta en tornar
+                mapWindowOpened = true;
+            });
+        }
+
+        // 3. Detectar quan l'usuari torna al formulari des de Google Maps
+        window.addEventListener("focus", () => {
+            if (mapWindowOpened) {
+                // Resetegem el marcador immediatament perquè no es torni a disparar en bucle
+                mapWindowOpened = false;
+
+                // Deixem un marge de mig segon (500ms) perquè l'usuari s'instal·li visualment a la pestanya abans del prompt
+                setTimeout(() => {
+                    const esCorrecte = confirm("Són correctes les coordenades que has vist a Google Maps?");
+
+                    if (!esCorrecte) {
+                        // Si clica "No", es borren tots els camps per tornar-ho a provar
+                        if (adrecaInput) adrecaInput.value = "";
+                        if (latInput) latInput.value = "";
+                        if (lngInput) lngInput.value = "";
+                        if (btnComprovar) btnComprovar.style.display = "none";
+
+                        alert("Camps esborrats. Torna a introduir l'adreça detalladament.");
+                        if (adrecaInput) adrecaInput.focus();
+                    }
+                }, 500);
+            }
+        });
+
+        // Escoltadors d'esdeveniments ordinaris per a la cerca
+        btnBuscar.addEventListener("click", buscarCoordenades);
+        adrecaInput.addEventListener("keydown", (e) => {
+            if (e.key === "Enter") {
+                e.preventDefault();
+                buscarCoordenades();
+            }
+        });
+    });
+
+
+    // 4. Lògica per mostrar / ocultar la contrasenya de forma dinàmica
+    const btnsTogglePassword = document.querySelectorAll('.toggle-password');
+
+    btnsTogglePassword.forEach(btn => {
+        // Busquem l'input que té just al costat (dins del mateix wrapper)
+        const passwordInput = btn.parentElement.querySelector('input');
+
+        if (passwordInput) {
+            // Afegim una mica de padding a la dreta de l'input perquè el text llarg no es col·loqui sota l'ull
+            passwordInput.style.paddingRight = "40px";
+
+            btn.addEventListener('click', () => {
+                // Commutem el tipus d'input entre password i text
+                if (passwordInput.type === 'password') {
+                    passwordInput.type = 'text';
+                    btn.innerText = '🙈'; // Canvia la icona a mico tancant els ulls
+                } else {
+                    passwordInput.type = 'password';
+                    btn.innerText = '👁️';  // Torna a la icona de l'ull obert
+                }
+            });
+        }
+    });
+</script>
+{% endblock %}

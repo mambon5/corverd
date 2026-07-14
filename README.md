@@ -110,6 +110,13 @@ Al tauler d'administració `/admin`, pots crear noves instàncies d'**Associaci�
 1. Completa el camp **Latitud** i **Longitud** de l'Entitat (Exemple per Barcelona centre: Lat=41.3879, Lng=2.1699).
 2. L'entitat apareixerà llavors llistada a `/entitats/` amb el seu pin corresponent al visor Leaflet.
 
+### 5. Panell de Control Personalitzat (Gestor Web)
+A més de l'administració central de Django, hi ha un panell simplificat i estilitzat per a la creació d'entitats i usuaris, accessible per als gestors del web.
 
+- **URL:** `http://localhost:8000/control/`
+- **Autenticació:** Es fa servir les credencials guardades a l'arxiu `.env` amb les variables `gestor_web` i `gestor_contrasenya`.
+- **Funcionalitats:**
+  - Crear usuaris i assignar-los el rol d'administrador d'una associació (gerent).
+  - Crear noves associacions i vincular-les a un administrador existent. Aquest pas és obligatori.
 
 

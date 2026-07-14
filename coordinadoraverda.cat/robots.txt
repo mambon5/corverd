@@ -1,6 +1,0 @@
-User-agent: *
-Disallow: /wp-admin/
-Allow: /wp-admin/admin-ajax.php
-
-Sitemap: https://coordinadoraverda.cat/sitemap.xml
-Sitemap: https://coordinadoraverda.cat/sitemap.rss

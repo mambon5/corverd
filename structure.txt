@@ -1,0 +1,138 @@
+.
+├── backend
+│   ├── core
+│   │   ├── admin.py
+│   │   ├── apps.py
+│   │   ├── forms.py
+│   │   ├── __init__.py
+│   │   ├── management
+│   │   │   ├── commands
+│   │   │   │   ├── delete_old_pdfs.py
+│   │   │   │   └── __init__.py
+│   │   │   └── __init__.py
+│   │   ├── migrations
+│   │   │   ├── 0001_initial.py
+│   │   │   ├── 0002_rename_admin_associacio_gerent_activitat_adreça_and_more.py
+│   │   │   ├── 0003_activitat_pdf_activitat.py
+│   │   │   ├── 0004_adhesioentitat_adhesiopersona_associacio_adreça_and_more.py
+│   │   │   └── __init__.py
+│   │   ├── models.py
+│   │   ├── tests.py
+│   │   ├── urls.py
+│   │   └── views.py
+│   └── corverd_project
+│       ├── asgi.py
+│       ├── __init__.py
+│       ├── settings.py
+│       ├── urls.py
+│       └── wsgi.py
+├── config_server
+│   ├── corverd_FIXED.conf
+│   ├── corverd.service
+│   ├── vhcordverd_wsgi.config
+│   ├── vhostcorverd_abril_2026.config
+│   └── vhostcorverd.config
+├── continguts.md
+├── .env
+├── .env.example
+├── .gitignore
+├── LICENSE
+├── manage.py
+├── media
+│   └── pdfs_activitats
+│       ├── justificant_carta_pagament1_627eur_ha3CQP5.pdf
+│       └── justificant_carta_pagament1_627eur.pdf
+├── README.md
+├── requirements.txt
+├── scripts
+│   ├── add_entrar_nav.py
+│   ├── add_menu_js.py
+│   ├── fix_mes_opcions.py
+│   ├── fix_paths.py
+│   ├── fix_paths_url.py
+│   ├── fix_srcset_paths.py
+│   ├── replace_nav.py
+│   └── seed.py
+├── SETUP_SERVER.md
+├── static
+│   ├── wp-content
+│   │   ├── plugins
+│   │   │   ├── charitable
+│   │   │   │   └── assets
+│   │   │   ├── translatepress-multilingual
+│   │   │   │   └── assets
+│   │   │   └── wpforms-lite
+│   │   │       └── assets
+│   │   ├── themes
+│   │   │   └── extendable
+│   │   │       ├── assets
+│   │   │       └── style.css
+│   │   └── uploads
+│   │       ├── 2026
+│   │       │   ├── 01
+│   │       │   └── 02
+│   │       └── fonts
+│   │           ├── sora-latin-100-normal.woff2
+│   │           ├── sora-latin-200-normal.woff2
+│   │           ├── sora-latin-300-normal.woff2
+│   │           ├── sora-latin-400-normal.woff2
+│   │           ├── sora-latin-500-normal.woff2
+│   │           ├── sora-latin-600-normal.woff2
+│   │           ├── sora-latin-700-normal.woff2
+│   │           ├── sora-latin-800-normal.woff2
+│   │           ├── sora-latin-ext-100-normal.woff2
+│   │           ├── sora-latin-ext-200-normal.woff2
+│   │           ├── sora-latin-ext-300-normal.woff2
+│   │           ├── sora-latin-ext-400-normal.woff2
+│   │           ├── sora-latin-ext-500-normal.woff2
+│   │           ├── sora-latin-ext-600-normal.woff2
+│   │           ├── sora-latin-ext-700-normal.woff2
+│   │           └── sora-latin-ext-800-normal.woff2
+│   └── wp-includes
+│       ├── blocks
+│       │   ├── gallery
+│       │   │   └── style.min.css
+│       │   └── navigation
+│       │       └── style.min.css
+│       ├── css
+│       │   └── dashicons.min.css
+│       ├── fonts
+│       │   ├── dashicons.eot
+│       │   └── dashicons.ttf
+│       └── js
+│           ├── comment-reply.min.js
+│           └── jquery
+│               ├── jquery-migrate.min.js
+│               └── jquery.min.js
+├── structure.txt
+└── templates
+    ├── activitats_calendar.html
+    ├── adhesio.html
+    ├── base_layout.html
+    ├── blog.html
+    ├── contacte.html
+    ├── entitat_activitats.html
+    ├── entitats_adherides.html
+    ├── entitats.html
+    ├── faq.html
+    ├── footer.html
+    ├── historia.html
+    ├── index.html
+    ├── inici.html
+    ├── intranet
+    │   ├── dashboard.html
+    │   └── formulari.html
+    ├── login.html
+    ├── manifest.html
+    ├── mapa_entitats.html
+    ├── nav.html
+    ├── noticia_detail.html
+    ├── organitzacio.html
+    ├── presentacio.html
+    ├── proteccio_dades.html
+    ├── recursos.html
+    ├── serveis.html
+    ├── sobre.html
+    └── testimonis.html
+
+38 directories, 98 files
