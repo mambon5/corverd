@@ -58,14 +58,42 @@ def adhesio_manifest_view(request):
 
 def entitat_activitats(request, pk):
     entitat = get_object_or_404(Associacio, pk=pk)
-    # Calendari i mapa d'activitats ha d'estar buit per ara
+    activitats = Activitat.objects.filter(associacio=entitat)
     events = []
+    for act in activitats:
+        event = {
+            'title': act.titol,
+            'start': act.data.isoformat() + ('T' + act.hora.strftime('%H:%M:%S') if act.hora else ''),
+            'entity_id': act.associacio_id,
+            'description': act.descripcio,
+            'data': act.data.strftime('%d/%m/%Y'),
+            'hora': act.hora.strftime('%H:%M') if act.hora else '',
+            'adreça': act.adreça or '',
+            'latitud': act.latitud,
+            'longitud': act.longitud,
+            'pdf_activitat': act.pdf_activitat.url if act.pdf_activitat else None,
+        }
+        events.append(event)
     return render(request, 'entitat_activitats.html', {'entitat': entitat, 'events_json': events})
 
 def activitats_calendar(request):
     entitats = Associacio.objects.all()
-    # Calendari i mapa d'activitats ha d'estar buit per ara
+    activitats = Activitat.objects.select_related('associacio').all()
     events = []
+    for act in activitats:
+        event = {
+            'title': act.titol,
+            'start': act.data.isoformat() + ('T' + act.hora.strftime('%H:%M:%S') if act.hora else ''),
+            'entity_id': act.associacio_id,
+            'description': act.descripcio,
+            'data': act.data.strftime('%d/%m/%Y'),
+            'hora': act.hora.strftime('%H:%M') if act.hora else '',
+            'adreça': act.adreça or '',
+            'latitud': act.latitud,
+            'longitud': act.longitud,
+            'pdf_activitat': act.pdf_activitat.url if act.pdf_activitat else None,
+        }
+        events.append(event)
     return render(request, 'activitats_calendar.html', {'entitats': entitats, 'events_json': events})
 
 def noticia_detail(request, pk):
