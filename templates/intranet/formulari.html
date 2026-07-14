@@ -3354,9 +3354,35 @@
 								style="display:flex; flex-direction:column; gap:20px;">
 								{% csrf_token %}
 								{% for field in form %}
-								<div style="display:flex; flex-direction:column;">
-									<label style="font-weight:600; margin-bottom:8px;">{{ field.label }}</label>
+								<div style="display:flex; flex-direction:column;" data-field-name="{{ field.name }}">
+									<label style="font-weight:600; margin-bottom:8px;">
+										{{ field.label }}
+										{% if field.name == 'adreça' or field.name == 'adreca' %}
+										<button type="button" id="btn-buscar-adreca"
+											style="margin-left:8px; padding:3px 10px; background:#6c757d; color:white; border:none; border-radius:4px; cursor:pointer; font-size:12px; font-weight:bold;">📍 Buscar coordenades</button>
+										<button type="button" id="btn-comprovar-maps"
+											style="margin-left:5px; padding:3px 10px; background:#007bff; color:white; border:none; border-radius:4px; cursor:pointer; font-size:12px; font-weight:bold; display:none;">🗺️ Comprova a Maps</button>
+										{% endif %}
+									</label>
 									{{ field }}
+									{% if field.name == 'adreça' or field.name == 'adreca' %}
+									<div style="color:#856404; background:#fff3cd; border:1px solid #ffeeba; padding:6px 10px; font-size:13px; border-radius:4px; margin-top:5px;">
+										⚠️ Escriu l'adreça exacta i clica "Buscar coordenades". Després pots comprovar-les a Google Maps.
+									</div>
+									{% endif %}
+									{% if field.name == 'pdf_activitat' %}
+									<!-- Previsualització del PDF pujat -->
+									<div id="pdf-preview-container" style="display:none; margin-top:10px; background:#f8f9fa; border:1px solid #dee2e6; border-radius:6px; padding:12px; display:none; align-items:center; gap:12px;">
+										<span style="font-size:32px;">📄</span>
+										<div style="flex:1; overflow:hidden;">
+											<div id="pdf-preview-name" style="font-weight:bold; font-size:14px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;"></div>
+											<div id="pdf-preview-size" style="font-size:12px; color:#6c757d; margin-top:3px;"></div>
+										</div>
+										<button type="button" id="btn-eliminar-pdf"
+											style="background:#dc3545; color:white; border:none; border-radius:50%; width:26px; height:26px; cursor:pointer; font-size:14px; font-weight:bold; line-height:26px; text-align:center; flex-shrink:0;">✕</button>
+									</div>
+									<div id="pdf-error-msg" style="color:#dc3545; font-size:13px; margin-top:5px; font-weight:bold; display:none;"></div>
+									{% endif %}
 									{% if field.errors %}
 									<div
 										style="color:var(--wp--preset--color--vivid-red); margin-top:5px; font-size:14px;">
@@ -3639,79 +3665,180 @@
 	</script>
 </body>
 <script>
-	document.addEventListener("DOMContentLoaded", function () {
-		var adrecaInput = document.getElementById('id_adreça') || document.querySelector('input[name="adreça"]');
-		var latInput = document.getElementById('id_latitud') || document.querySelector('input[name="latitud"]');
-		var lngInput = document.getElementById('id_longitud') || document.querySelector('input[name="longitud"]');
+		document.addEventListener("DOMContentLoaded", function () {
+			var adrecaInput = document.getElementById('id_adreça') || document.querySelector('input[name="adreça"]');
+			var latInput = document.getElementById('id_latitud') || document.querySelector('input[name="latitud"]');
+			var lngInput = document.getElementById('id_longitud') || document.querySelector('input[name="longitud"]');
 
-		if (!adrecaInput) return;
+			if (!adrecaInput) return;
 
-		// crear dropdown
-		var dropdown = document.createElement("div");
-		dropdown.style.position = "absolute";
-		dropdown.style.background = "white";
-		dropdown.style.border = "1px solid #ccc";
-		dropdown.style.width = adrecaInput.offsetWidth + "px";
-		dropdown.style.zIndex = "9999";
-		dropdown.style.maxHeight = "200px";
-		dropdown.style.overflowY = "auto";
+			// --- DROPDOWN D'AUTOCOMPLETAR ADRECES (Nominatim) ---
+			var dropdown = document.createElement("div");
+			dropdown.style.position = "absolute";
+			dropdown.style.background = "white";
+			dropdown.style.border = "1px solid #ccc";
+			dropdown.style.width = adrecaInput.offsetWidth + "px";
+			dropdown.style.zIndex = "9999";
+			dropdown.style.maxHeight = "200px";
+			dropdown.style.overflowY = "auto";
 
-		adrecaInput.parentNode.style.position = "relative";
-		adrecaInput.parentNode.appendChild(dropdown);
+			adrecaInput.parentNode.style.position = "relative";
+			adrecaInput.parentNode.appendChild(dropdown);
 
-		let timeout = null;
+			let timeout = null;
 
-		adrecaInput.addEventListener("input", function () {
-			clearTimeout(timeout);
+			adrecaInput.addEventListener("input", function () {
+				clearTimeout(timeout);
 
-			const query = adrecaInput.value;
-			if (query.length < 3) {
-				dropdown.innerHTML = "";
-				return;
-			}
+				const query = adrecaInput.value;
+				if (query.length < 3) {
+					dropdown.innerHTML = "";
+					return;
+				}
 
-			timeout = setTimeout(async () => {
-				const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=5`);
-				const data = await res.json();
+				timeout = setTimeout(async () => {
+					const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=5`);
+					const data = await res.json();
 
-				dropdown.innerHTML = "";
+					dropdown.innerHTML = "";
 
-				data.forEach(place => {
-					var item = document.createElement("div");
-					item.style.padding = "8px";
-					item.style.cursor = "pointer";
-					item.style.borderBottom = "1px solid #eee";
-					item.textContent = place.display_name;
+					data.forEach(place => {
+						var item = document.createElement("div");
+						item.style.padding = "8px";
+						item.style.cursor = "pointer";
+						item.style.borderBottom = "1px solid #eee";
+						item.textContent = place.display_name;
 
-					item.addEventListener("mouseover", () => item.style.background = "#f0f0f0");
-					item.addEventListener("mouseout", () => item.style.background = "white");
+						item.addEventListener("mouseover", () => item.style.background = "#f0f0f0");
+						item.addEventListener("mouseout", () => item.style.background = "white");
 
-					item.onclick = function () {
-						adrecaInput.value = place.display_name;
-						if (latInput) latInput.value = place.lat;
-						if (lngInput) lngInput.value = place.lon;
-						dropdown.innerHTML = "";
-					};
+						item.onclick = function () {
+							adrecaInput.value = place.display_name;
+							if (latInput) latInput.value = place.lat;
+							if (lngInput) lngInput.value = place.lon;
+							dropdown.innerHTML = "";
+							// Mostrem el botó de comprovar a Maps
+							const btnComprovar = document.getElementById('btn-comprovar-maps');
+							if (btnComprovar) btnComprovar.style.display = 'inline-block';
+						};
 
-					dropdown.appendChild(item);
+						dropdown.appendChild(item);
+					});
+				}, 300); // debounce
+			});
+
+			// --- BOTÓ BUSCAR COORDENADES MANUALMENT ---
+			const btnBuscar = document.getElementById('btn-buscar-adreca');
+			const btnComprovar = document.getElementById('btn-comprovar-maps');
+			let mapWindowOpened = false;
+
+			if (btnBuscar) {
+				btnBuscar.addEventListener('click', async () => {
+					const query = adrecaInput.value.trim();
+					if (!query) { alert("Escriu una adreça primer."); return; }
+					btnBuscar.innerText = "🔍 Buscant...";
+					btnBuscar.disabled = true;
+					try {
+						const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=1`);
+						const data = await res.json();
+						if (data && data.length > 0) {
+							if (latInput) latInput.value = data[0].lat;
+							if (lngInput) lngInput.value = data[0].lon;
+							if (btnComprovar) btnComprovar.style.display = 'inline-block';
+						} else {
+							alert("No s'ha trobat cap localització. Revisa l'adreça.");
+						}
+					} catch(e) { alert("Error en la cerca de coordenades."); }
+					btnBuscar.innerText = "📍 Buscar coordenades";
+					btnBuscar.disabled = false;
 				});
-			}, 300); // debounce
-		});
+			}
 
-		// evitar submit amb enter
-		adrecaInput.addEventListener('keydown', function (e) {
-			if (e.key === 'Enter') {
-				e.preventDefault();
+			// --- BOTÓ COMPROVAR A GOOGLE MAPS ---
+			if (btnComprovar) {
+				btnComprovar.addEventListener('click', () => {
+					const lat = latInput ? latInput.value : '';
+					const lng = lngInput ? lngInput.value : '';
+					if (!lat || !lng) { alert("Primer busca les coordenades."); return; }
+					window.open(`https://www.google.com/maps/search/?api=1&query=${lat},${lng}`, '_blank');
+					mapWindowOpened = true;
+				});
+			}
+
+			// --- DETECCIÓ DE TORNADA DES DE GOOGLE MAPS ---
+			window.addEventListener('focus', () => {
+				if (!mapWindowOpened) return;
+				mapWindowOpened = false;
+				setTimeout(() => {
+					const esCorrecte = confirm("Són correctes les coordenades que has vist a Google Maps?");
+					if (!esCorrecte) {
+						if (adrecaInput) adrecaInput.value = "";
+						if (latInput) latInput.value = "";
+						if (lngInput) lngInput.value = "";
+						if (btnComprovar) btnComprovar.style.display = 'none';
+						alert("Camps esborrats. Torna a introduir l'adreça.");
+						if (adrecaInput) adrecaInput.focus();
+					}
+				}, 500);
+			});
+
+			// evitar submit amb enter a l'adreça
+			adrecaInput.addEventListener('keydown', function (e) {
+				if (e.key === 'Enter') e.preventDefault();
+			});
+
+			// tancar dropdown si cliques fora
+			document.addEventListener("click", function (e) {
+				if (!adrecaInput.contains(e.target)) dropdown.innerHTML = "";
+			});
+
+			// --- PREVISUALITZACIÓ I GESTIÓ DEL PDF ---
+			const pdfInput = document.getElementById('id_pdf_activitat');
+			const pdfPreviewContainer = document.getElementById('pdf-preview-container');
+			const pdfPreviewName = document.getElementById('pdf-preview-name');
+			const pdfPreviewSize = document.getElementById('pdf-preview-size');
+			const pdfErrorMsg = document.getElementById('pdf-error-msg');
+			const btnEliminarPdf = document.getElementById('btn-eliminar-pdf');
+
+			if (pdfInput) {
+				pdfInput.addEventListener('change', function () {
+					const file = this.files[0];
+					pdfErrorMsg.style.display = 'none';
+					pdfPreviewContainer.style.display = 'none';
+
+					if (file) {
+						const maxBytes = 2 * 1024 * 1024; // 2MB (límit del backend)
+						if (file.size > maxBytes) {
+							pdfErrorMsg.innerText = "🔺 El PDF supera el límit màxim de 2MB. Selecciona un fitxer més petit.";
+							pdfErrorMsg.style.display = 'block';
+							this.value = "";
+							return;
+						}
+						if (!file.name.toLowerCase().endsWith('.pdf')) {
+							pdfErrorMsg.innerText = "🔺 Només s'accepten fitxers en format PDF.";
+							pdfErrorMsg.style.display = 'block';
+							this.value = "";
+							return;
+						}
+						// Mostrar previsualització
+						const mida = (file.size / 1024).toFixed(1);
+						const unitat = mida > 1024 ? (mida / 1024).toFixed(2) + ' MB' : mida + ' KB';
+						pdfPreviewName.innerText = file.name;
+						pdfPreviewSize.innerText = unitat;
+						pdfPreviewContainer.style.display = 'flex';
+					}
+				});
+
+				// Botó creueta: eliminar PDF seleccionat
+				if (btnEliminarPdf) {
+					btnEliminarPdf.addEventListener('click', function () {
+						pdfInput.value = "";
+						pdfPreviewContainer.style.display = 'none';
+						pdfErrorMsg.style.display = 'none';
+					});
+				}
 			}
 		});
-
-		// tancar dropdown si cliques fora
-		document.addEventListener("click", function (e) {
-			if (!adrecaInput.contains(e.target)) {
-				dropdown.innerHTML = "";
-			}
-		});
-	});
-</script>
+	</script>
 
 </html>

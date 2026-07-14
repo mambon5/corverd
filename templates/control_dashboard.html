@@ -131,7 +131,7 @@
                     <input type="hidden" name="action" value="crear_associacio">
 
                     {% for field in form_assoc %}
-                    <div style="margin-bottom: 20px;" data-field-name="{{ field.name }}">
+                    <div style="margin-bottom: 20px;" data-field-name="{{ field.name }}" class="assoc-field-container">
                         <label style="display: block; font-weight: bold; margin-bottom: 5px;">
                             {{ field.label }}
                             {% if field.name == 'adreça' or field.name == 'adreca' %}
@@ -147,6 +147,18 @@
                             {% endif %}
                         </label>
                         {{ field }}
+
+                        <!-- Contenidors de suport. El JS només els activarà si el camp és de tipus imatge/fitxer -->
+                        <div class="image-preview-container"
+                            style="display: none; margin-top: 10px; position: relative; width: 120px; height: 120px; border: 1px solid #ddd; border-radius: 4px; padding: 4px; background: #fff;">
+                            <img class="image-preview-element" src="" alt="Previsualització"
+                                style="width: 100%; height: 100%; object-fit: cover; border-radius: 2px;">
+                            <button type="button" class="btn-remove-image"
+                                style="position: absolute; top: -8px; right: -8px; background: #dc3545; color: white; border: none; border-radius: 50%; width: 22px; height: 22px; cursor: pointer; font-size: 12px; font-weight: bold; line-height: 20px; text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.2); padding: 0;">✕</button>
+                        </div>
+                        <div class="image-error-msg"
+                            style="color: #dc3545; font-size: 13px; margin-top: 5px; font-weight: bold; display: none;">
+                        </div>
 
                         {% if field.name == 'adreça' or field.name == 'adreca' %}
                         <!-- Advertència sota el camp d'adreça -->
@@ -299,6 +311,65 @@
                     passwordInput.type = 'password';
                     btn.innerText = '👁️';  // Torna a la icona de l'ull obert
                 }
+            });
+        }
+    });
+
+
+    // 5. Lògica de validació de pes de foto (4MB), previsualització i botó de borrar
+    const fileInputs = document.querySelectorAll('.assoc-field-container input[type="file"]');
+
+    fileInputs.forEach(input => {
+        const container = input.closest('.assoc-field-container');
+        const previewContainer = container.querySelector('.image-preview-container');
+        const previewImage = container.querySelector('.image-preview-element');
+        const removeBtn = container.querySelector('.btn-remove-image');
+        const errorMsg = container.querySelector('.image-error-msg');
+
+        if (!previewContainer || !previewImage) return;
+
+        input.addEventListener('change', function () {
+            const file = this.files[0];
+
+            // Ocultem errors previs
+            errorMsg.style.display = "none";
+            errorMsg.innerText = "";
+
+            if (file) {
+                const maxBytes = 4 * 1024 * 1024; // 4MB en bytes
+
+                if (file.size > maxBytes) {
+                    errorMsg.innerText = "🔺 L'arxiu és massa gran. El límit màxim permès és de 4MB.";
+                    errorMsg.style.display = "block";
+                    this.value = ""; // Reseteja l'input perquè no s'enviï el fitxer al servidor
+                    previewContainer.style.display = "none";
+                    previewImage.src = "";
+                    return;
+                }
+
+                // Generem la previsualització al front-end de forma segura
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    previewImage.src = e.target.result;
+                    previewContainer.style.display = "block";
+                }
+                reader.readAsDataURL(file);
+            } else {
+                previewContainer.style.display = "none";
+                previewImage.src = "";
+            }
+        });
+
+        // Lògica per a la creu de borrar la imatge seleccionada
+        if (removeBtn) {
+            removeBtn.addEventListener('click', function () {
+                input.value = ""; // Buidem el camp del formulari
+                previewContainer.style.display = "none"; // Amaguem el quadrat de la foto
+                previewImage.src = "";
+
+                // També netegem missatges d'error per si n'hi hagués
+                errorMsg.style.display = "none";
+                errorMsg.innerText = "";
             });
         }
     });
