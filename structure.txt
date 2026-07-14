@@ -15,14 +15,33 @@
 │   │   │   ├── 0002_rename_admin_associacio_gerent_activitat_adreça_and_more.py
 │   │   │   ├── 0003_activitat_pdf_activitat.py
 │   │   │   ├── 0004_adhesioentitat_adhesiopersona_associacio_adreça_and_more.py
-│   │   │   └── __init__.py
+│   │   │   ├── __init__.py
+│   │   │   └── __pycache__
+│   │   │       ├── 0001_initial.cpython-312.pyc
+│   │   │       ├── 0002_rename_admin_associacio_gerent_activitat_adreça_and_more.cpython-312.pyc
+│   │   │       ├── 0003_activitat_pdf_activitat.cpython-312.pyc
+│   │   │       ├── 0004_adhesioentitat_adhesiopersona_associacio_adreça_and_more.cpython-312.pyc
+│   │   │       └── __init__.cpython-312.pyc
 │   │   ├── models.py
+│   │   ├── __pycache__
+│   │   │   ├── admin.cpython-312.pyc
+│   │   │   ├── apps.cpython-312.pyc
+│   │   │   ├── forms.cpython-312.pyc
+│   │   │   ├── __init__.cpython-312.pyc
+│   │   │   ├── models.cpython-312.pyc
+│   │   │   ├── urls.cpython-312.pyc
+│   │   │   └── views.cpython-312.pyc
 │   │   ├── tests.py
 │   │   ├── urls.py
 │   │   └── views.py
 │   └── corverd_project
 │       ├── asgi.py
 │       ├── __init__.py
+│       ├── __pycache__
+│       │   ├── __init__.cpython-312.pyc
+│       │   ├── settings.cpython-312.pyc
+│       │   ├── urls.cpython-312.pyc
+│       │   └── wsgi.cpython-312.pyc
 │       ├── settings.py
 │       ├── urls.py
 │       └── wsgi.py
@@ -39,7 +58,11 @@
 ├── LICENSE
 ├── manage.py
 ├── media
+│   ├── fotos_associacions
+│   │   └── PHOTO-2025-12-01-20-11-44.jpg
 │   └── pdfs_activitats
+│       ├── A1_Problemes_Proporcionalitat.pdf
+│       ├── A1_Problemes_Proporcionalitat_zRSChof.pdf
 │       ├── justificant_carta_pagament1_627eur_ha3CQP5.pdf
 │       └── justificant_carta_pagament1_627eur.pdf
 ├── README.md
@@ -111,6 +134,7 @@
     ├── base_layout.html
     ├── blog.html
     ├── contacte.html
+    ├── control_dashboard.html
     ├── entitat_activitats.html
     ├── entitats_adherides.html
     ├── entitats.html
@@ -135,4 +159,4 @@
     ├── sobre.html
     └── testimonis.html
 
-38 directories, 98 files
+42 directories, 118 files
