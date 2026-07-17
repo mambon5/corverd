@@ -4,17 +4,17 @@ from django.contrib.auth.models import User
 class Associacio(models.Model):
     nom = models.CharField(max_length=255)
     descripcio = models.TextField()
-    any_fundacio = models.IntegerField(null=True, blank=True)
+    any_fundacio = models.CharField(max_length=100, null=True, blank=True)
     zona_geografica = models.CharField(max_length=255, null=True, blank=True)
     latitud = models.FloatField(null=True, blank=True)
     longitud = models.FloatField(null=True, blank=True)
     gerent = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='associacions_administrades')
     adreça = models.CharField(max_length=255, null=True, blank=True)
-    web = models.URLField(max_length=255, null=True, blank=True)
+    web = models.CharField(max_length=255, null=True, blank=True)
     correu = models.EmailField(max_length=255, null=True, blank=True)
     foto = models.ImageField(upload_to='fotos_associacions/', null=True, blank=True)
-    descripcio_curta = models.CharField(max_length=150, null=True, blank=True, help_text="Breu descripció (màxim 10 paraules)")
-
+    descripcio_curta = models.CharField(max_length=150, null=True, blank=True, help_text="Breu descripció (màyim 10 paraules)")
+    
     def __str__(self):
         return self.nom
 
