@@ -120,3 +120,10 @@ A més de l'administració central de Django, hi ha un panell simplificat i esti
   - Crear noves associacions i vincular-les a un administrador existent. Aquest pas és obligatori.
 
 
+## Per executar el servidor en local
+
+I permetre que altres aparell de la lan es conectiu i vegin com es veu:
+
+```
+python manage.py runserver 0.0.0.0:8000 --settings=corverd_project.settings
+```

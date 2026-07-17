@@ -143,12 +143,12 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # DEBUG = False (comentat per permetre el control des de l'entorn)
 
-ALLOWED_HOSTS = [
-    "coordinadoraverda.cat",
-    "www.coordinadoraverda.cat",
-    'localhost', '127.0.0.1', '0.0.0.0',
+# ALLOWED_HOSTS = [
+#     "coordinadoraverda.cat",
+#     "www.coordinadoraverda.cat",
+#     'localhost', '127.0.0.1', '0.0.0.0',
     
-]
+# ]
 # per permetre canvis desde django admin:
 CSRF_TRUSTED_ORIGINS = [
     "https://coordinadoraverda.cat",
