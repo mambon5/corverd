@@ -3866,11 +3866,16 @@
 					{% for entitat in entitats %}
 					<div class="entitat-card">
 						{% if entitat.foto %}
-						<img src="{{ entitat.foto.url }}" alt="Foto de {{ entitat.nom }}" class="entitat-foto">
+						<!-- 1ª Opció: Imatge de la lluita pujada directament al servidor local -->
+						<img src="{{ entitat.foto.url }}" alt="Imatge de {{ entitat.nom }}" class="entitat-foto">
+						{% elif entitat.foto_url %}
+						<!-- 2ª Opció: Imatge de la lluita provinent de Google Drive -->
+						<img src="{{ entitat.foto_url }}" alt="Imatge de {{ entitat.nom }}" class="entitat-foto">
 						{% else %}
+						<!-- 3ª Opció: Si no hi ha cap imatge de la lluita disponible -->
 						<div class="entitat-foto"
-							style="display: flex; align-items: center; justify-content: center; color: #999;">
-							Sense imatge
+							style="display: flex; align-items: center; justify-content: center; color: #999; background-color: #f5f5f5;">
+							Sense imatge de la lluita
 						</div>
 						{% endif %}
 

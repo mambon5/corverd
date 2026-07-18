@@ -13,6 +13,8 @@ class Associacio(models.Model):
     web = models.CharField(max_length=255, null=True, blank=True)
     correu = models.EmailField(max_length=255, null=True, blank=True)
     foto = models.ImageField(upload_to='fotos_associacions/', null=True, blank=True)
+    logo_url = models.URLField(max_length=500, null=True, blank=True, help_text="URL del logo de l'entitat (Google Drive)")
+    foto_url = models.URLField(max_length=500, null=True, blank=True, help_text="URL d'una imatge externa (ex: Google Drive)")
     descripcio_curta = models.CharField(max_length=150, null=True, blank=True, help_text="Breu descripció (màyim 10 paraules)")
     
     def __str__(self):
