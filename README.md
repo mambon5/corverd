@@ -110,6 +110,27 @@ Al tauler d'administració `/admin`, pots crear noves instàncies d'**Associaci�
 1. Completa el camp **Latitud** i **Longitud** de l'Entitat (Exemple per Barcelona centre: Lat=41.3879, Lng=2.1699).
 2. L'entitat apareixerà llavors llistada a `/entitats/` amb el seu pin corresponent al visor Leaflet.
 
+---
 
+## 📂 Estructura d'Arxius de l'Aplicació
 
+Aquesta és l'estructura de directoris del projecte, per entendre quines carpetes conformen el **Front-end**, el **Back-end** i quines són residuals o duplicades:
 
+### ⚙️ Back-end (Codi base i lògica)
+- **`core/`**: És l'aplicació (app) principal de Django. Aquí s'hi troben els models de dades (`Associacio`, `Activitat`, `Noticia`, etc.), les vistes (lògica) i les rutes (urls) principals.
+- **`serveis/`**: Sembla ser una aplicació secundària de Django destinada a gestionar alguna altra part específica del projecte (serveis).
+- **`corverd_project/`**: És la carpeta de configuració global de Django. Inclou `settings.py` (configuracions, base de dades, directrius de seguretat) i `urls.py` (el router principal).
+- **`manage.py`**: Arxiu del sistema, és l'entrada del projecte per executar comandes com arrencar el servidor, aplicar canvis a la base de dades o recollir fitxers estàtics.
+
+### 🎨 Front-end (Interfície d'usuari)
+- **`templates/`**: Conté tots els arxius `.html` (plantilles de Django). És la **base del Front-end**, les pantalles base on s'hi encasta la informació i on s'estructura el que veurà l'usuari.
+- **`static/`**: Conté el disseny principal: imatges del disseny, el codi CSS pur i els arxius personals de JavaScript.
+
+### 🌐 Carpetes servides al públic (En ús actiu)
+- **`staticfiles/`**: Funciona com una **còpia duplicada (però necessària)** de tot el que hi ha a `static/`, sumant-hi recursos del propi sistema del panell d'admin. Aquesta és la carpeta que **s'està servint realment en producció** quan un usuari entra a la web. (Es genera amb la comanda de muntatge `collectstatic`).
+- **`media/`**: Carpeta destinada als arxius dinàmics. Aquí és on s'emmagatzema qualsevol arxiu, foto o document que pugi un usuari i es serveix automàticament a la web (fotos de perfil, fotos de notícies...).
+
+### 🗑️ Carpetes i Arxius No Utilitzats (Residuals)
+> Tens tota la raó, hi ha elements que actualment no fan cap funció a l'app servida, la majoria producte del procés de migració, i que podrien ser esborrats si ja s'han utilitzat:
+- **`coordinadoraverda.cat/`**: Aquesta carpeta conté un copiat / càpia sencera ("scrape") de l'antiga web (probablement la de WordPress, hi ha `.html` estàtics, i tot el codi de wp-content, wp-includes, etc.). **No s'està servint**, no té ús i pesa força.
+- **Scripts de Python solts a l'arrel (`add_entrar_nav.py`, `fix_paths.py`, `replace_nav.py`, `seed.py`, etc.)**: Són scripts de procediment usats segurament durant la migració de l'antic format per arreglar l'HTML en massa o popular informació d'exemple a la base de dades. **No s'estan utilitzant per l'aplicació**.
