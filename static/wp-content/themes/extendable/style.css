@@ -436,3 +436,44 @@ input, textarea {
     display: block;
   }
 }
+
+/* Fixed Header and Mobile Thin Layout */
+.wp-site-blocks > header.wp-block-template-part {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    z-index: 99999 !important;
+    background-color: var(--wp--preset--color--background, #EDFAE5) !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+/* Offset the next sibling content block under the fixed header */
+.wp-site-blocks > header.wp-block-template-part + * {
+    margin-top: 106px !important;
+}
+
+@media (max-width: 768px) {
+    .wp-site-blocks > header.wp-block-template-part .wp-block-group.alignfull {
+        padding-top: 10px !important;
+        padding-bottom: 10px !important;
+        padding-left: 15px !important;
+        padding-right: 15px !important;
+    }
+    
+    .wp-site-blocks > header.wp-block-template-part .wp-block-site-logo img {
+        max-height: 32px !important;
+    }
+    
+    .wp-site-blocks > header.wp-block-template-part .wp-block-site-title {
+        font-size: 0.95rem !important;
+    }
+    
+    .wp-site-blocks > header.wp-block-template-part .wp-block-navigation__responsive-container-open {
+        padding: 5px !important;
+    }
+    
+    .wp-site-blocks > header.wp-block-template-part + * {
+        margin-top: 60px !important;
+    }
+}

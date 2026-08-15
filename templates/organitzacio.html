@@ -1,62 +1,30 @@
-<!DOCTYPE html>
-<html dir="ltr" lang="ca">
+{% extends 'base_layout.html' %}
 
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Com ens organitzem? - Coordinadora Verda</title>
-    <link rel='stylesheet' href='/static/wp-content/themes/extendable/style.css' media='all' />
-    <style>
-        :root {
-            --wp--preset--color--background: #EDFAE5;
-            --wp--preset--color--foreground: #2D5544;
-        }
+{% block title %}Com ens organitzem? - Coordinadora Verda{% endblock %}
 
-        body {
-            background-color: var(--wp--preset--color--background);
-            color: var(--wp--preset--color--foreground);
-            font-family: "Inter", sans-serif;
-        }
+{% block page_title %}Com ens organitzem?{% endblock %}
 
-        .content-container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 60px 20px;
-            line-height: 1.6;
-        }
-
-        h1 {
-            font-size: 2.5rem;
-            text-align: center;
-            margin-bottom: 40px;
-            color: #2B5544;
-        }
-    </style>
-</head>
-
-<body class="wp-site-blocks">
-    {% include 'nav.html' %}
-
-    <main class="wp-site-blocks">
-        <div class="content-container">
-            <h1>Com ens organitzem?</h1>
-            <div class="entry-content">
-                <p>La Coordinadora en Defensa del Patrimoni Verd s’organitza de la següent manera:</p>
-                <ul>
-                    <li><strong>Assemblees generals ordinàries mensuals:</strong> Es realitzen un dissabte al mes en un
-                        espai de lluita. Les assemblees estan formades pels representants de les entitats i col·lectius
-                        i de ciutadans compromesos en la lluita de la CV a nivell personal, sempre que formin part d’un
-                        grup de treball i/o comissió de la CV. Després de l’Assemblea s’organitza un dinar i una
-                        passejada per a conèixer l’espai de lluita.</li>
-                    <li><strong>Grups de treball i comissions:</strong> Són els encarregats de portar a terme la
-                        logística, les activitats, els projectes i els objectius. Són autònoms i es reuneixen segons les
-                        seves pròpies necessitats, ja sigui presencialment o online.</li>
-                </ul>
-            </div>
-        </div>
-    </main>
-
-    {% include 'footer.html' %}
-</body>
-
-</html>
+{% block content %}
+<div class="wp-block-group alignfull is-style-ext-preset--group--natural-1--section has-background-background-color has-background has-global-padding is-layout-constrained wp-block-group-is-layout-constrained"
+	style="margin-top:0;margin-bottom:0;padding-top:var(--wp--preset--spacing--70);padding-bottom:var(--wp--preset--spacing--70)">
+	<div
+		class="wp-block-group alignwide is-vertical is-content-justification-center is-layout-flex wp-container-core-group-is-layout-c9ee0c5a wp-block-group-is-layout-flex">
+		<div
+			class="wp-block-group has-global-padding is-layout-constrained wp-container-core-group-is-layout-5e05634a wp-block-group-is-layout-constrained">
+			<div class="has-text-align-left" style="max-width: 800px; margin: 0 auto; line-height: 1.8; font-size: 1.125rem;">
+				<p>La Coordinadora en Defensa del Patrimoni Verd s’organitza de la següent manera:</p>
+				<ul>
+					<li><strong>Assemblees generals ordinàries mensuals:</strong> Es realitzen un dissabte al mes en un
+						espai de lluita. Les assemblees estan formades pels representants de les entitats i col·lectius
+						i de ciutadans compromesos en la lluita de la CV a nivell personal, sempre que formin part d’un
+						grup de treball i/o comissió de la CV. Després de l’Assemblea s’organitza un dinar i una
+						passejada per a conèixer l’espai de lluita.</li>
+					<li><strong>Grups de treball i comissions:</strong> Són els encarregats de portar a terme la
+						logística, les activitats, els projectes i els objectius. Són autònoms i es reuneixen segons les
+						seves pròpies necessitats, ja sigui presencialment o online.</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}

@@ -1,83 +1,51 @@
-<!DOCTYPE html>
-<html dir="ltr" lang="ca">
+{% extends 'base_layout.html' %}
 
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Història - Coordinadora Verda</title>
-    <!-- Use existing site styles -->
-    <link rel='stylesheet' href='/static/wp-content/themes/extendable/style.css' media='all' />
-    <style>
-        :root {
-            --wp--preset--color--background: #EDFAE5;
-            --wp--preset--color--foreground: #2D5544;
-        }
+{% block title %}Història - Coordinadora Verda{% endblock %}
 
-        body {
-            background-color: var(--wp--preset--color--background);
-            color: var(--wp--preset--color--foreground);
-            font-family: "Inter", sans-serif;
-        }
+{% block page_title %}Història{% endblock %}
 
-        .content-container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 60px 20px;
-            line-height: 1.6;
-        }
-
-        h1 {
-            font-size: 2.5rem;
-            text-align: center;
-            margin-bottom: 40px;
-            color: #2B5544;
-        }
-    </style>
-</head>
-
-<body class="wp-site-blocks">
-    {% include 'nav.html' %}
-
-    <main class="wp-site-blocks">
-        <div class="content-container">
-            <h1>Història</h1>
-            <div class="entry-content">
-                <p>La defensa del patrimoni verd no és una lluita nova. Forma part d’una llarga tradició de mobilització
-                    popular que, des de fa segles, ha modelat la història de Barcelona, la dels pobles del Pla i les de
-                    Catalunya.</p>
-                <p>Des de l’Edat Mitjana, les comunitats que habitaven aquest territori han defensat els seus espais
-                    comuns, els camps, l’aigua i les formes de vida que els sostenien. Els camins, els recs, les hortes
-                    i els boscos que envoltaven la ciutat no eren només paisatge: eren vida quotidiana, treball i
-                    comunitat. Quan aquests espais han estat amenaçats —per l’especulació, la concentració del poder o
-                    projectes que ignoraven les necessitats del veïnat i dels camperols— la resposta sovint ha estat
-                    l’organització col·lectiva.</p>
-                <p>El resultat, nombroses lluites populars: revoltes pageses, resistències contra abusos senyorials,
-                    moviments veïnals per defensar barris i serveis, i mobilitzacions per preservar el territori davant
-                    transformacions urbanístiques que posaven en risc el patrimoni comú. Aquest fil de resistència
-                    connecta generacions diferents però comparteix una mateixa idea: que la ciutat i el territori han de
-                    servir a la vida de la seva gent.</p>
-                <p>La defensa del patrimoni verd s’inscriu plenament en aquesta tradició. Protegir espais naturals,
-                    agrícoles i paisatgístics no és només una qüestió ambiental; és també una defensa del bé comú, de la
-                    memòria del territori i del dret de les comunitats a decidir com volen viure i relacionar-se amb el
-                    seu entorn.</p>
-                <p>Avui, molts col·lectius de la ciutat, de l’entorn urbà i del país estan lluitant amb l’objectiu de
-                    preservar espais verds que estan amenaçats. Cal adaptar les polítiques a la nova realitat sorgida
-                    del canvi climàtic i del convenciment que el verd és vida i salut. Però els poders polítics
-                    continuen presoners dels discursos vells i caducs dels anys 90 i estan sotmesos a les polítiques
-                    especulatives dels lobbies turístics, immobiliaris, financers i polítics. D’aquesta manera són
-                    incapaços d’articular un discurs coherent amb la nova realitat i molt menys d’implementar-lo.</p>
-                <p>El 10/10/2025 la lluita SALVEM LA SELVA del barri d’Horta va convocar tot de col·lectius compromesos
-                    com ells en la lluita pel patrimoni verd de la ciutat. Allí es va evidenciar la necessitat
-                    d’unir-nos i organitzar-nos per poder tenir més força.</p>
-                <p>La Coordinadora en Defensa del Patrimoni Verd neix amb aquest esperit: sumar esforços per preservar
-                    allò que ens sosté, recuperar la memòria de les lluites que ens han precedit i continuar construint,
-                    col·lectivament, un futur més just, habitable i arrelat al territori, en benefici de les persones,
-                    de la societat i a favor de la natura, la salut i la vida.</p>
-            </div>
-        </div>
-    </main>
-
-    {% include 'footer.html' %}
-</body>
-
-</html>
+{% block content %}
+<div class="wp-block-group alignfull is-style-ext-preset--group--natural-1--section has-background-background-color has-background has-global-padding is-layout-constrained wp-block-group-is-layout-constrained"
+	id="historia-detall"
+	style="margin-top:0;margin-bottom:0;padding-top:var(--wp--preset--spacing--70);padding-bottom:var(--wp--preset--spacing--70)">
+	<div
+		class="wp-block-group alignwide is-vertical is-content-justification-center is-layout-flex wp-container-core-group-is-layout-c9ee0c5a wp-block-group-is-layout-flex">
+		<div
+			class="wp-block-group has-global-padding is-layout-constrained wp-container-core-group-is-layout-5e05634a wp-block-group-is-layout-constrained">
+			<div class="has-text-align-left" style="max-width: 800px; margin: 0 auto; line-height: 1.8; font-size: 1.125rem;">
+				<p>La defensa del patrimoni verd no és una lluita nova. Forma part d’una llarga tradició de mobilització
+					popular que, des de fa segles, ha modelat la història de Barcelona, la dels pobles del Pla i les de
+					Catalunya.</p>
+				<p>Des de l’Edat Mitjana, les comunitats que habitaven aquest territori han defensat els seus espais
+					comuns, els camps, l’aigua i les formes de vida que els sostenien. Els camins, els recs, les hortes
+					i els boscos que envoltaven la ciutat no eren només paisatge: eren vida quotidiana, treball i
+					comunitat. Quan aquests espais han estat amenaçats —per l’especulació, la concentració del poder o
+					projectes que ignoraven les necessitats del veïnat i dels camperols— la resposta sovint ha estat
+					l’organització col·lectiva.</p>
+				<p>El resultat, nombroses lluites populars: revoltes pageses, resistències contra abusos senyorials,
+					moviments veïnals per defensar barris i serveis, i mobilitzacions per preservar el territori davant
+					transformacions urbanístiques que posaven en risc el patrimoni comú. Aquest fil de resistència
+					connecta generacions diferents per share una mateixa idea: que la ciutat i el territori han de
+					servir a la vida de la seva gent.</p>
+				<p>La defensa del patrimoni verd s’inscriu plenament en aquesta tradició. Protegir espais naturals,
+					agrícoles i paisatgístics no és només una qüestió ambiental; és també una defensa del bé comú, de la
+					memòria del territori i del dret de les comunitats a decidir com volen viure i relacionar-se amb el
+					seu entorn.</p>
+				<p>Avui, molts col·lectius de la ciutat, de l’entorn urbà i del país estan lluitant amb l’objectiu de
+					preservar espais verds que estan amenaçats. Cal adaptar les polítiques a la nova reality sorgida
+					del canvi climàtic i del convenciment que el verd és vida i salut. Però els poders polítics
+					continuen presoners dels discursos vells i caducs dels anys 90 i estan sotmesos a les polítiques
+					especulatives dels lobbies turístics, immobiliaris, financers i polítics. D’aquesta manera són
+					incapaços d’articular un discurs coherent amb la nova realitat i molt menys d’implementar-lo.</p>
+				<p>El 10/10/2025 la lluita SALVEM LA SELVA del barri d’Horta va convocar tot de col·lectius compromesos
+					com ells en la lluita pel patrimoni verd de la ciutat. Allí es va evidenciar la necessitat
+					d’unir-nos i organitzar-nos per poder tenir més força.</p>
+				<p>La Coordinadora en Defensa del Patrimoni Verd neix amb aquest esperit: sumar esforços per preservar
+					allò que ens sosté, recuperar la memòria de les lluites que ens han precedit i continuar construint,
+					col·lectivament, un futur més just, habitable i arrelat al territori, en benefici de les persones,
+					de la societat i a favor de la natura, la salut i la vida.</p>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
