@@ -134,3 +134,12 @@ Aquesta és l'estructura de directoris del projecte, per entendre quines carpete
 > Tens tota la raó, hi ha elements que actualment no fan cap funció a l'app servida, la majoria producte del procés de migració, i que podrien ser esborrats si ja s'han utilitzat:
 - **`coordinadoraverda.cat/`**: Aquesta carpeta conté un copiat / càpia sencera ("scrape") de l'antiga web (probablement la de WordPress, hi ha `.html` estàtics, i tot el codi de wp-content, wp-includes, etc.). **No s'està servint**, no té ús i pesa força.
 - **Scripts de Python solts a l'arrel (`add_entrar_nav.py`, `fix_paths.py`, `replace_nav.py`, `seed.py`, etc.)**: Són scripts de procediment usats segurament durant la migració de l'antic format per arreglar l'HTML en massa o popular informació d'exemple a la base de dades. **No s'estan utilitzant per l'aplicació**.
+
+
+# Per reiniciar la app heu d'executar:
+
+
+```
+git pull
+sudo systemctl restart corverd
+```
