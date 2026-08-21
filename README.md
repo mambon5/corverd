@@ -140,6 +140,13 @@ Aquesta és l'estructura de directoris del projecte, per entendre quines carpete
 
 
 ```
-git pull
+python manage.py runserver 0.0.0.0:8000 --settings=corverd_project.settings
+```
+
+## Per executar al servidor
+
+Només fer pull dels canvis i executar:
+
+```
 sudo systemctl restart corverd
 ```
