@@ -150,3 +150,6 @@ Només fer pull dels canvis i executar:
 ```
 sudo systemctl restart corverd
 ```
+## Actualitzar bbddd entitats:
+
+python3 manage.py importa_tsv_entitats fitxes_entitats_cv.tsv

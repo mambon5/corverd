@@ -2,7 +2,9 @@
 import csv
 import os
 import re
+import requests  # <-- Afegit
 from django.core.management.base import BaseCommand
+from django.core.files.base import ContentFile  # <-- Afegit
 from core.models import Associacio
 
 class Command(BaseCommand):
@@ -35,6 +37,35 @@ class Command(BaseCommand):
             return f"https://drive.google.com/uc?export=view&id={video_id}"
         
         return url
+
+    def download_image_from_drive(self, url, file_name):
+        """Descarrega la imatge de Google Drive i retorna un ContentFile per a Django."""
+        if not url or "drive.google.com" not in url:
+            return None
+
+        # Busquem l'ID de Drive
+        drive_id = None
+        if "id=" in url:
+            match = re.search(r'id=([^&]+)', url)
+            if match:
+                drive_id = match.group(1)
+        elif "/file/d/" in url:
+            match = re.search(r'/file/d/([^/]+)', url)
+            if match:
+                drive_id = match.group(1)
+
+        if not drive_id:
+            return None
+
+        # Fent servir el thumbnail evitem els bloquejos de Google Drive
+        download_url = f"https://drive.google.com/thumbnail?id={drive_id}&sz=s1000"
+        try:
+            res = requests.get(download_url, timeout=15)
+            if res.status_code == 200 and 'image' in res.headers.get('Content-Type', ''):
+                return ContentFile(res.content, name=file_name)
+        except Exception:
+            pass
+        return None
 
     def handle(self, *args, **options):
         tsv_path = options['tsv_file']
@@ -103,6 +134,13 @@ class Command(BaseCommand):
                         'foto_url': foto_neta,
                     }
                 )
+
+                # --- NOVES LÍNIES AFEGIDES: Descarregar i desar al camp foto (ImageField) ---
+                if drive_foto and not associacio.foto:
+                    filename = f"associacio_{associacio.id}.jpg"
+                    img_content = self.download_image_from_drive(drive_foto, filename)
+                    if img_content:
+                        associacio.foto.save(filename, img_content, save=True)
 
                 if created:
                     created_count += 1

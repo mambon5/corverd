@@ -3866,11 +3866,14 @@
 					{% for entitat in entitats %}
 					<div class="entitat-card">
 						{% if entitat.foto %}
-						<!-- 1ª Opció: Imatge de la lluita pujada directament al servidor local -->
+						<!-- 1ª Opció: Imatge descarregada al teu propi servidor (directa, sense wsrv.nl) -->
 						<img src="{{ entitat.foto.url }}" alt="Imatge de {{ entitat.nom }}" class="entitat-foto">
+
 						{% elif entitat.foto_url %}
-						<!-- 2ª Opció: Imatge de la lluita provinent de Google Drive -->
-						<img src="{{ entitat.foto_url }}" alt="Imatge de {{ entitat.nom }}" class="entitat-foto">
+						<!-- 2ª Opció: Fallback per a imatges externes de Google Drive -->
+						<img src="{{ entitat.foto_url }}" alt="Imatge de {{ entitat.nom }}" class="entitat-foto"
+							referrerpolicy="no-referrer">
+
 						{% else %}
 						<!-- 3ª Opció: Si no hi ha cap imatge de la lluita disponible -->
 						<div class="entitat-foto"
