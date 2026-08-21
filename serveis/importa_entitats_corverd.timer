@@ -1,0 +1,9 @@
+[Unit]
+Description=Executa el servei d'importacio d'entitats cada dia a les 02:00
+
+[Timer]
+OnCalendar=*-*-* 02:00:00
+Persistent=true
+
+[Install]
+WantedBy=timers.target
