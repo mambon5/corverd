@@ -3738,6 +3738,87 @@
             color: #333;
         }
 
+        .filters-toggle-btn {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .calendar-layout-container {
+                flex-direction: column;
+                margin: 10px 0;
+                width: 100% !important;
+            }
+
+            .sidebar {
+                width: 100% !important;
+                min-width: 100% !important;
+                border-right: none !important;
+                margin-right: 0 !important;
+                padding-right: 0 !important;
+                margin-bottom: 15px;
+                position: relative;
+            }
+
+            .filters-toggle-btn {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                width: 100%;
+                padding: 12px 18px;
+                background: #1a5c1a;
+                color: white;
+                font-size: 1.1rem;
+                font-weight: bold;
+                border: none;
+                border-radius: 10px;
+                cursor: pointer;
+                box-sizing: border-box;
+                box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            }
+
+            .sidebar-content {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: #ffffff;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+                border: 1px solid #e5e7eb;
+                border-radius: 12px;
+                padding: 18px;
+                z-index: 9999;
+                box-sizing: border-box;
+                max-height: 60vh;
+                overflow-y: auto;
+                margin-top: 5px;
+            }
+
+            .sidebar-content.open {
+                display: block;
+            }
+
+            .main-content {
+                width: 100% !important;
+                max-width: 100% !important;
+            }
+
+            #map {
+                height: 320px !important;
+                width: 100% !important;
+            }
+
+            .fc-toolbar {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .fc-toolbar-chunk {
+                display: flex;
+                justify-content: center;
+            }
+        }
+
         .fc-event {
             cursor: pointer;
             padding: 4px;
@@ -3985,25 +4066,28 @@
 
                 <div class="calendar-layout-container">
                     <div class="sidebar">
-                    <a href="{% url 'index' %}" class="back-link">&larr; Tornar a l'inici</a>
-                    <h5 style="display: inline-block; font-size: 1.2rem; margin-bottom: 10px;">Llegenda / Filtres</h5>
-                    <div id="filters">
-                        <div class="entity-filter" style="border-bottom: 1px solid #ccc; padding-bottom: 8px; margin-bottom: 12px;">
-                            <label style="font-weight: bold;">
-                                <input type="checkbox" id="select-all-cb" class="entity-cb" checked>
-                                Seleccionar tots
-                            </label>
+                        <a href="{% url 'index' %}" class="back-link">&larr; Tornar a l'inici</a>
+                        <button type="button" id="toggleFiltersBtn" class="filters-toggle-btn">Entitats ▾</button>
+                        <div class="sidebar-content" id="sidebarContent">
+                            <h5 style="display: inline-block; font-size: 1.2rem; margin-bottom: 10px;">Llegenda / Filtres</h5>
+                            <div id="filters">
+                                <div class="entity-filter" style="border-bottom: 1px solid #ccc; padding-bottom: 8px; margin-bottom: 12px;">
+                                    <label style="font-weight: bold;">
+                                        <input type="checkbox" id="select-all-cb" class="entity-cb" checked>
+                                        Seleccionar tots
+                                    </label>
+                                </div>
+                                {% for entitat in entitats %}
+                                <div class="entity-filter">
+                                    <label>
+                                        <input type="checkbox" class="entity-cb entity-single-cb" value="{{ entitat.id }}" checked>
+                                        {{ entitat.nom }}
+                                    </label>
+                                </div>
+                                {% endfor %}
+                            </div>
                         </div>
-                        {% for entitat in entitats %}
-                        <div class="entity-filter">
-                            <label>
-                                <input type="checkbox" class="entity-cb entity-single-cb" value="{{ entitat.id }}" checked>
-                                {{ entitat.nom }}
-                            </label>
-                        </div>
-                        {% endfor %}
                     </div>
-                </div>
 
                 <div class="main-content">
                     <h1 style="text-align: center;">Totes les Activitats</h1>
@@ -4211,6 +4295,27 @@
                                 updateMap();
                             });
                         });
+
+                        var toggleBtn = document.getElementById('toggleFiltersBtn');
+                        var sidebarContent = document.getElementById('sidebarContent');
+
+                        if (toggleBtn && sidebarContent) {
+                            toggleBtn.addEventListener('click', function () {
+                                sidebarContent.classList.toggle('open');
+                                if (sidebarContent.classList.contains('open')) {
+                                    toggleBtn.innerHTML = 'Entitats ▴';
+                                } else {
+                                    toggleBtn.innerHTML = 'Entitats ▾';
+                                }
+                            });
+
+                            document.addEventListener('click', function (e) {
+                                if (!sidebarContent.contains(e.target) && !toggleBtn.contains(e.target)) {
+                                    sidebarContent.classList.remove('open');
+                                    toggleBtn.innerHTML = 'Entitats ▾';
+                                }
+                            });
+                        }
                     });
                 </script>
 
