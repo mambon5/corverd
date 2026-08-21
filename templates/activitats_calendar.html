@@ -3820,24 +3820,64 @@
 
             .fc-event {
                 padding: 1px 2px !important;
-                font-size: 0.72rem !important;
-                line-height: 1.15 !important;
+                margin-bottom: 2px !important;
             }
 
-            .fc-event-title {
-                font-size: 0.72rem !important;
-                line-height: 1.15 !important;
+            .fc-custom-event-time {
+                font-size: 0.58rem !important;
+                padding: 0px 2px !important;
+            }
+
+            .fc-custom-event-title {
+                font-size: 0.64rem !important;
+                line-height: 1.1 !important;
+                -webkit-line-clamp: 2;
+                display: -webkit-box;
+                -webkit-box-orient: vertical;
+                overflow: hidden;
+                text-overflow: ellipsis;
             }
 
             .fc-daygrid-day-number {
-                font-size: 0.8rem !important;
-                padding: 2px 4px !important;
+                font-size: 0.75rem !important;
+                padding: 1px 3px !important;
             }
 
             .fc-col-header-cell-cushion {
-                font-size: 0.75rem !important;
-                padding: 2px !important;
+                font-size: 0.7rem !important;
+                padding: 1px !important;
             }
+        }
+
+        .fc-custom-event-content {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: baseline;
+            gap: 2px;
+            line-height: 1.15;
+            overflow: hidden;
+            width: 100%;
+        }
+
+        .fc-custom-event-time {
+            font-weight: bold;
+            font-size: 0.72rem;
+            color: #1a5c1a;
+            background: #e8f5e9;
+            padding: 1px 3px;
+            border-radius: 3px;
+            flex-shrink: 0;
+            display: inline-block;
+        }
+
+        .fc-custom-event-title {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            word-break: break-word;
+            font-size: 0.85rem;
         }
 
         .fc-event {
@@ -4269,6 +4309,16 @@
                                     return checkedEntities.includes(event.entity_id.toString());
                                 });
                                 successCallback(filteredEvents);
+                            },
+                            eventContent: function (arg) {
+                                var hora = arg.event.extendedProps.hora;
+                                var title = arg.event.title;
+                                var html = '<div class="fc-custom-event-content">';
+                                if (hora) {
+                                    html += '<span class="fc-custom-event-time">' + hora + '</span> ';
+                                }
+                                html += '<span class="fc-custom-event-title">' + title + '</span></div>';
+                                return { html: html };
                             },
                             eventClick: function (info) {
                                 if (typeof info.event.extendedProps._idx !== 'undefined') {
