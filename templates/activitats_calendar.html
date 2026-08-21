@@ -4055,12 +4055,43 @@
                 <script>
                     document.addEventListener('DOMContentLoaded', function () {
                         var eventsData = JSON.parse(document.getElementById('events-data').textContent);
+                        eventsData.forEach(function (e, idx) { e._idx = idx; });
+
                         var calendarEl = document.getElementById('calendar');
 
                         var currentStart = null;
                         var currentEnd = null;
                         var map = null;
                         var markers = [];
+
+                        window.openActivityDetails = function (idx) {
+                            var ev = eventsData[idx];
+                            if (!ev) return;
+
+                            document.getElementById('modalTitle').innerText = ev.title;
+                            document.getElementById('modalDate').innerText = ev.data || '';
+                            document.getElementById('modalTime').innerText = ev.hora || '';
+                            document.getElementById('modalAddress').innerText = ev.adreça || 'Adreça no disponible';
+                            document.getElementById('modalDescription').innerText = ev.description || 'Sense descripció.';
+
+                            var btnMaps = document.getElementById('btnMaps');
+                            if (ev.adreça) {
+                                btnMaps.href = 'https://maps.google.com/?q=' + encodeURIComponent(ev.adreça);
+                                btnMaps.style.display = 'inline-flex';
+                            } else {
+                                btnMaps.style.display = 'none';
+                            }
+
+                            var btnPdf = document.getElementById('btnPdf');
+                            if (ev.pdf_activitat) {
+                                btnPdf.href = ev.pdf_activitat;
+                                btnPdf.style.display = 'inline-flex';
+                            } else {
+                                btnPdf.style.display = 'none';
+                            }
+
+                            document.getElementById('eventModalOverlay').style.display = 'flex';
+                        };
 
                         function updateMap() {
                             if (!map) return;
@@ -4077,7 +4108,10 @@
                                     }
 
                                     if (dateMatches) {
-                                        var popupContent = "<b>" + e.title + "</b>";
+                                        var popupContent = "<b style='font-size:1.05rem;'>" + e.title + "</b>";
+                                        if (e.entity_nom) {
+                                            popupContent += "<br>🏛️ <i>" + e.entity_nom + "</i>";
+                                        }
                                         if (e.data) {
                                             popupContent += "<br>📅 " + e.data;
                                             if (e.hora) {
@@ -4087,9 +4121,12 @@
                                         if (e.adreça) {
                                             popupContent += "<br>📍 " + e.adreça;
                                         }
+                                        popupContent += '<div style="margin-top:8px;"><a href="#" onclick="openActivityDetails(' + e._idx + '); return false;" style="display:inline-block; font-weight:bold; color:#1a5c1a;">ℹ️ Més informació</a>';
                                         if (e.pdf_activitat) {
-                                            popupContent += '<br><a href="' + e.pdf_activitat + '" target="_blank" style="display:inline-block; margin-top:5px; font-weight:bold; color:#0693e3;">📄 PDF de l\'activitat</a>';
+                                            popupContent += ' &nbsp;|&nbsp; <a href="' + e.pdf_activitat + '" target="_blank" style="display:inline-block; font-weight:bold; color:#0693e3;">📄 PDF</a>';
                                         }
+                                        popupContent += '</div>';
+
                                         var marker = L.marker([e.latitud, e.longitud]).addTo(map)
                                             .bindPopup(popupContent);
                                         markers.push(marker);
@@ -4129,32 +4166,9 @@
                                 successCallback(filteredEvents);
                             },
                             eventClick: function (info) {
-                                var ev = info.event;
-                                var props = ev.extendedProps;
-
-                                document.getElementById('modalTitle').innerText = ev.title;
-                                document.getElementById('modalDate').innerText = props.data || '';
-                                document.getElementById('modalTime').innerText = props.hora || '';
-                                document.getElementById('modalAddress').innerText = props.adreça || 'Adreça no disponible';
-                                document.getElementById('modalDescription').innerText = props.description || 'Sense descripció.';
-
-                                var btnMaps = document.getElementById('btnMaps');
-                                if (props.adreça) {
-                                    btnMaps.href = 'https://maps.google.com/?q=' + encodeURIComponent(props.adreça);
-                                    btnMaps.style.display = 'inline-flex';
-                                } else {
-                                    btnMaps.style.display = 'none';
+                                if (typeof info.event.extendedProps._idx !== 'undefined') {
+                                    openActivityDetails(info.event.extendedProps._idx);
                                 }
-
-                                var btnPdf = document.getElementById('btnPdf');
-                                if (props.pdf_activitat) {
-                                    btnPdf.href = props.pdf_activitat;
-                                    btnPdf.style.display = 'inline-flex';
-                                } else {
-                                    btnPdf.style.display = 'none';
-                                }
-
-                                document.getElementById('eventModalOverlay').style.display = 'flex';
                             }
                         });
 

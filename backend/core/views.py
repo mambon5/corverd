@@ -85,6 +85,7 @@ def activitats_calendar(request):
             'title': act.titol,
             'start': act.data.isoformat() + ('T' + act.hora.strftime('%H:%M:%S') if act.hora else ''),
             'entity_id': act.associacio_id,
+            'entity_nom': act.associacio.nom if act.associacio else '',
             'description': act.descripcio,
             'data': act.data.strftime('%d/%m/%Y'),
             'hora': act.hora.strftime('%H:%M') if act.hora else '',
