@@ -3674,22 +3674,35 @@
     <meta name="msapplication-TileImage" content="/static/wp-content/uploads/2026/01/cropped-cor_verd-1-270x270.png" />
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js'></script>
     <style>
+        .entry-content,
+        .entry-content.is-layout-constrained > *,
+        .wp-block-post-content {
+            max-width: 1400px !important;
+            width: 100% !important;
+        }
+
         .calendar-layout-container {
             font-family: Arial, sans-serif;
-            margin: 20px 0;
+            margin: 20px auto;
             display: flex;
+            width: 100%;
+            max-width: 1400px;
+            box-sizing: border-box;
         }
 
         .sidebar {
-            width: 250px;
-            padding-right: 20px;
+            width: 320px;
+            min-width: 280px;
+            flex-shrink: 0;
+            padding-right: 25px;
             border-right: 1px solid #ccc;
-            margin-right: 20px;
+            margin-right: 25px;
+            box-sizing: border-box;
         }
 
         .main-content {
             flex-grow: 1;
-            max-width: 900px;
+            min-width: 0;
         }
 
         #calendar {
@@ -3697,7 +3710,25 @@
         }
 
         .entity-filter {
-            margin-bottom: 10px;
+            margin-bottom: 12px;
+        }
+
+        .entity-filter label {
+            font-size: 1.25rem;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            line-height: 1.4;
+        }
+
+        .entity-cb {
+            width: 26px;
+            height: 26px;
+            margin-right: 12px;
+            cursor: pointer;
+            flex-shrink: 0;
+            transform: scale(1.2);
+            transform-origin: left center;
         }
 
         .back-link {
@@ -3709,6 +3740,17 @@
 
         .fc-event {
             cursor: pointer;
+            padding: 4px;
+            font-size: 1rem;
+        }
+
+        .fc-event-title {
+            font-size: 1rem !important;
+            white-space: normal !important;
+        }
+
+        .fc-daygrid-event {
+            white-space: normal !important;
         }
 
         /* Premium Modal Styles */
@@ -3946,10 +3988,16 @@
                     <a href="{% url 'index' %}" class="back-link">&larr; Tornar a l'inici</a>
                     <h5 style="display: inline-block; font-size: 1.2rem; margin-bottom: 10px;">Llegenda / Filtres</h5>
                     <div id="filters">
+                        <div class="entity-filter" style="border-bottom: 1px solid #ccc; padding-bottom: 8px; margin-bottom: 12px;">
+                            <label style="font-weight: bold;">
+                                <input type="checkbox" id="select-all-cb" class="entity-cb" checked>
+                                Seleccionar tots
+                            </label>
+                        </div>
                         {% for entitat in entitats %}
                         <div class="entity-filter">
                             <label>
-                                <input type="checkbox" class="entity-cb" value="{{ entitat.id }}" checked>
+                                <input type="checkbox" class="entity-cb entity-single-cb" value="{{ entitat.id }}" checked>
                                 {{ entitat.nom }}
                             </label>
                         </div>
@@ -4008,6 +4056,57 @@
                     document.addEventListener('DOMContentLoaded', function () {
                         var eventsData = JSON.parse(document.getElementById('events-data').textContent);
                         var calendarEl = document.getElementById('calendar');
+
+                        var currentStart = null;
+                        var currentEnd = null;
+                        var map = null;
+                        var markers = [];
+
+                        function updateMap() {
+                            if (!map) return;
+                            markers.forEach(function (m) { map.removeLayer(m); });
+                            markers = [];
+                            var checkedEntities = Array.from(document.querySelectorAll('.entity-single-cb:checked')).map(function (cb) { return cb.value; });
+
+                            eventsData.forEach(function (e) {
+                                if (checkedEntities.includes(e.entity_id.toString()) && e.latitud && e.longitud) {
+                                    var eventDate = new Date(e.start);
+                                    var dateMatches = true;
+                                    if (currentStart && currentEnd) {
+                                        dateMatches = (eventDate >= currentStart && eventDate < currentEnd);
+                                    }
+
+                                    if (dateMatches) {
+                                        var popupContent = "<b>" + e.title + "</b>";
+                                        if (e.data) {
+                                            popupContent += "<br>📅 " + e.data;
+                                            if (e.hora) {
+                                                popupContent += " ⏰ " + e.hora;
+                                            }
+                                        }
+                                        if (e.adreça) {
+                                            popupContent += "<br>📍 " + e.adreça;
+                                        }
+                                        if (e.pdf_activitat) {
+                                            popupContent += '<br><a href="' + e.pdf_activitat + '" target="_blank" style="display:inline-block; margin-top:5px; font-weight:bold; color:#0693e3;">📄 PDF de l\'activitat</a>';
+                                        }
+                                        var marker = L.marker([e.latitud, e.longitud]).addTo(map)
+                                            .bindPopup(popupContent);
+                                        markers.push(marker);
+                                    }
+                                }
+                            });
+                        }
+
+                        // MAP INITIALIZATION FIRST
+                        var mapEl = document.getElementById('map');
+                        if (mapEl) {
+                            map = L.map('map').setView([41.3851, 2.1734], 12);
+                            L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
+                                attribution: '&copy; Esri & contributors'
+                            }).addTo(map);
+                        }
+
                         var calendar = new FullCalendar.Calendar(calendarEl, {
                             initialView: 'dayGridMonth',
                             locale: 'ca',
@@ -4017,8 +4116,13 @@
                                 center: 'title',
                                 right: 'dayGridMonth,timeGridWeek,timeGridDay'
                             },
+                            datesSet: function (info) {
+                                currentStart = info.start;
+                                currentEnd = info.end;
+                                updateMap();
+                            },
                             events: function (fetchInfo, successCallback, failureCallback) {
-                                var checkedEntities = Array.from(document.querySelectorAll('.entity-cb:checked')).map(function (cb) { return cb.value; });
+                                var checkedEntities = Array.from(document.querySelectorAll('.entity-single-cb:checked')).map(function (cb) { return cb.value; });
                                 var filteredEvents = eventsData.filter(function (event) {
                                     return checkedEntities.includes(event.entity_id.toString());
                                 });
@@ -4065,38 +4169,30 @@
                                 closeEventModal();
                             }
                         };
+
                         calendar.render();
+                        updateMap();
 
-                        // MAP INITIALIZATION
-                        var map = L.map('map').setView([41.3851, 2.1734], 12);
-                        L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
-                            attribution: '&copy; Esri & contributors'
-                        }).addTo(map);
+                        var selectAllCb = document.getElementById('select-all-cb');
+                        var singleCheckboxes = document.querySelectorAll('.entity-single-cb');
 
-                        var markers = [];
-
-                        function updateMap() {
-                            markers.forEach(function (m) { map.removeLayer(m); });
-                            markers = [];
-                            var checkedEntities = Array.from(document.querySelectorAll('.entity-cb:checked')).map(function (cb) { return cb.value; });
-                            eventsData.forEach(function (e) {
-                                if (checkedEntities.includes(e.entity_id.toString()) && e.latitud && e.longitud) {
-                                    var popupContent = "<b>" + e.title + "</b><br>" + (e.adreça ? e.adreça : '');
-                                    if (e.pdf_activitat) {
-                                        popupContent += '<br><a href="' + e.pdf_activitat + '" target="_blank" style="display:inline-block; margin-top:5px; font-weight:bold; color:#0693e3;">PDF de l\'activitat</a>';
-                                    }
-                                    var marker = L.marker([e.latitud, e.longitud]).addTo(map)
-                                        .bindPopup(popupContent);
-                                    markers.push(marker);
-                                }
+                        if (selectAllCb) {
+                            selectAllCb.addEventListener('change', function () {
+                                var isChecked = this.checked;
+                                singleCheckboxes.forEach(function (cb) {
+                                    cb.checked = isChecked;
+                                });
+                                calendar.refetchEvents();
+                                updateMap();
                             });
                         }
 
-                        updateMap();
-
-                        var checkboxes = document.querySelectorAll('.entity-cb');
-                        checkboxes.forEach(function (cb) {
+                        singleCheckboxes.forEach(function (cb) {
                             cb.addEventListener('change', function () {
+                                var allChecked = Array.from(singleCheckboxes).every(function (c) { return c.checked; });
+                                if (selectAllCb) {
+                                    selectAllCb.checked = allChecked;
+                                }
                                 calendar.refetchEvents();
                                 updateMap();
                             });
