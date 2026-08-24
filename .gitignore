@@ -142,6 +142,11 @@ celerybeat.pid
 env/
 venv/
 ENV/
+
+# Fixes locals per a desenvolupament (només aquesta màquina, no pujar mai)
+local.README.md
+backend/core/migrations/0002_rename_admin_associacio_gerent_activitat_adreca_and_more.py
+backend/core/migrations/0004_adhesioentitat_adhesiopersona_associacio_adreca_and_more.py
 env.bak/
 venv.bak/
 
