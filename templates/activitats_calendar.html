@@ -3674,22 +3674,35 @@
     <meta name="msapplication-TileImage" content="/static/wp-content/uploads/2026/01/cropped-cor_verd-1-270x270.png" />
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js'></script>
     <style>
+        .entry-content,
+        .entry-content.is-layout-constrained > *,
+        .wp-block-post-content {
+            max-width: 1400px !important;
+            width: 100% !important;
+        }
+
         .calendar-layout-container {
             font-family: Arial, sans-serif;
-            margin: 20px 0;
+            margin: 20px auto;
             display: flex;
+            width: 100%;
+            max-width: 1400px;
+            box-sizing: border-box;
         }
 
         .sidebar {
-            width: 250px;
-            padding-right: 20px;
+            width: 320px;
+            min-width: 280px;
+            flex-shrink: 0;
+            padding-right: 25px;
             border-right: 1px solid #ccc;
-            margin-right: 20px;
+            margin-right: 25px;
+            box-sizing: border-box;
         }
 
         .main-content {
             flex-grow: 1;
-            max-width: 900px;
+            min-width: 0;
         }
 
         #calendar {
@@ -3697,7 +3710,25 @@
         }
 
         .entity-filter {
-            margin-bottom: 10px;
+            margin-bottom: 12px;
+        }
+
+        .entity-filter label {
+            font-size: 1.25rem;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            line-height: 1.4;
+        }
+
+        .entity-cb {
+            width: 26px;
+            height: 26px;
+            margin-right: 12px;
+            cursor: pointer;
+            flex-shrink: 0;
+            transform: scale(1.2);
+            transform-origin: left center;
         }
 
         .back-link {
@@ -3707,8 +3738,161 @@
             color: #333;
         }
 
+        .filters-toggle-btn {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .calendar-layout-container {
+                flex-direction: column;
+                margin: 10px 0;
+                width: 100% !important;
+            }
+
+            .sidebar {
+                width: 100% !important;
+                min-width: 100% !important;
+                border-right: none !important;
+                margin-right: 0 !important;
+                padding-right: 0 !important;
+                margin-bottom: 15px;
+                position: relative;
+            }
+
+            .filters-toggle-btn {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                width: 100%;
+                padding: 12px 18px;
+                background: #1a5c1a;
+                color: white;
+                font-size: 1.1rem;
+                font-weight: bold;
+                border: none;
+                border-radius: 10px;
+                cursor: pointer;
+                box-sizing: border-box;
+                box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            }
+
+            .sidebar-content {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: #ffffff;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+                border: 1px solid #e5e7eb;
+                border-radius: 12px;
+                padding: 18px;
+                z-index: 9999;
+                box-sizing: border-box;
+                max-height: 60vh;
+                overflow-y: auto;
+                margin-top: 5px;
+            }
+
+            .sidebar-content.open {
+                display: block;
+            }
+
+            .main-content {
+                width: 100% !important;
+                max-width: 100% !important;
+            }
+
+            #map {
+                height: 320px !important;
+                width: 100% !important;
+            }
+
+            .fc-toolbar {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .fc-toolbar-chunk {
+                display: flex;
+                justify-content: center;
+            }
+
+            .fc-event {
+                padding: 1px 2px !important;
+                margin-bottom: 2px !important;
+            }
+
+            .fc-custom-event-time {
+                font-size: 0.58rem !important;
+                padding: 0px 2px !important;
+            }
+
+            .fc-custom-event-title {
+                font-size: 0.64rem !important;
+                line-height: 1.1 !important;
+                -webkit-line-clamp: 2;
+                display: -webkit-box;
+                -webkit-box-orient: vertical;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            .fc-daygrid-day-number {
+                font-size: 0.75rem !important;
+                padding: 1px 3px !important;
+            }
+
+            .fc-col-header-cell-cushion {
+                font-size: 0.7rem !important;
+                padding: 1px !important;
+            }
+        }
+
+        .fc-custom-event-content {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: baseline;
+            gap: 2px;
+            line-height: 1.15;
+            overflow: hidden;
+            width: 100%;
+        }
+
+        .fc-custom-event-time {
+            font-weight: bold;
+            font-size: 0.72rem;
+            color: #1a5c1a;
+            background: #e8f5e9;
+            padding: 1px 3px;
+            border-radius: 3px;
+            flex-shrink: 0;
+            display: inline-block;
+        }
+
+        .fc-custom-event-title {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            word-break: break-word;
+            font-size: 0.85rem;
+        }
+
         .fc-event {
             cursor: pointer;
+            padding: 4px;
+            font-size: 1rem;
+        }
+
+        .fc-event-title {
+            font-size: 1rem !important;
+            white-space: normal !important;
+        }
+
+        .fc-daygrid-event {
+            white-space: normal !important;
         }
 
         /* Premium Modal Styles */
@@ -3943,19 +4127,28 @@
 
                 <div class="calendar-layout-container">
                     <div class="sidebar">
-                    <a href="{% url 'index' %}" class="back-link">&larr; Tornar a l'inici</a>
-                    <h5 style="display: inline-block; font-size: 1.2rem; margin-bottom: 10px;">Llegenda / Filtres</h5>
-                    <div id="filters">
-                        {% for entitat in entitats %}
-                        <div class="entity-filter">
-                            <label>
-                                <input type="checkbox" class="entity-cb" value="{{ entitat.id }}" checked>
-                                {{ entitat.nom }}
-                            </label>
+                        <a href="{% url 'index' %}" class="back-link">&larr; Tornar a l'inici</a>
+                        <button type="button" id="toggleFiltersBtn" class="filters-toggle-btn">Entitats ▾</button>
+                        <div class="sidebar-content" id="sidebarContent">
+                            <h5 style="display: inline-block; font-size: 1.2rem; margin-bottom: 10px;">Llegenda / Filtres</h5>
+                            <div id="filters">
+                                <div class="entity-filter" style="border-bottom: 1px solid #ccc; padding-bottom: 8px; margin-bottom: 12px;">
+                                    <label style="font-weight: bold;">
+                                        <input type="checkbox" id="select-all-cb" class="entity-cb" checked>
+                                        Seleccionar tots
+                                    </label>
+                                </div>
+                                {% for entitat in entitats %}
+                                <div class="entity-filter">
+                                    <label>
+                                        <input type="checkbox" class="entity-cb entity-single-cb" value="{{ entitat.id }}" checked>
+                                        {{ entitat.nom }}
+                                    </label>
+                                </div>
+                                {% endfor %}
+                            </div>
                         </div>
-                        {% endfor %}
                     </div>
-                </div>
 
                 <div class="main-content">
                     <h1 style="text-align: center;">Totes les Activitats</h1>
@@ -4007,7 +4200,95 @@
                 <script>
                     document.addEventListener('DOMContentLoaded', function () {
                         var eventsData = JSON.parse(document.getElementById('events-data').textContent);
+                        eventsData.forEach(function (e, idx) { e._idx = idx; });
+
                         var calendarEl = document.getElementById('calendar');
+
+                        var currentStart = null;
+                        var currentEnd = null;
+                        var map = null;
+                        var markers = [];
+
+                        window.openActivityDetails = function (idx) {
+                            var ev = eventsData[idx];
+                            if (!ev) return;
+
+                            document.getElementById('modalTitle').innerText = ev.title;
+                            document.getElementById('modalDate').innerText = ev.data || '';
+                            document.getElementById('modalTime').innerText = ev.hora || '';
+                            document.getElementById('modalAddress').innerText = ev.adreça || 'Adreça no disponible';
+                            document.getElementById('modalDescription').innerText = ev.description || 'Sense descripció.';
+
+                            var btnMaps = document.getElementById('btnMaps');
+                            if (ev.adreça) {
+                                btnMaps.href = 'https://maps.google.com/?q=' + encodeURIComponent(ev.adreça);
+                                btnMaps.style.display = 'inline-flex';
+                            } else {
+                                btnMaps.style.display = 'none';
+                            }
+
+                            var btnPdf = document.getElementById('btnPdf');
+                            if (ev.pdf_activitat) {
+                                btnPdf.href = ev.pdf_activitat;
+                                btnPdf.style.display = 'inline-flex';
+                            } else {
+                                btnPdf.style.display = 'none';
+                            }
+
+                            document.getElementById('eventModalOverlay').style.display = 'flex';
+                        };
+
+                        function updateMap() {
+                            if (!map) return;
+                            markers.forEach(function (m) { map.removeLayer(m); });
+                            markers = [];
+                            var checkedEntities = Array.from(document.querySelectorAll('.entity-single-cb:checked')).map(function (cb) { return cb.value; });
+
+                            eventsData.forEach(function (e) {
+                                if (checkedEntities.includes(e.entity_id.toString()) && e.latitud && e.longitud) {
+                                    var eventDate = new Date(e.start);
+                                    var dateMatches = true;
+                                    if (currentStart && currentEnd) {
+                                        dateMatches = (eventDate >= currentStart && eventDate < currentEnd);
+                                    }
+
+                                    if (dateMatches) {
+                                        var popupContent = "<b style='font-size:1.05rem;'>" + e.title + "</b>";
+                                        if (e.entity_nom) {
+                                            popupContent += "<br>🏛️ <i>" + e.entity_nom + "</i>";
+                                        }
+                                        if (e.data) {
+                                            popupContent += "<br>📅 " + e.data;
+                                            if (e.hora) {
+                                                popupContent += " ⏰ " + e.hora;
+                                            }
+                                        }
+                                        if (e.adreça) {
+                                            popupContent += "<br>📍 " + e.adreça;
+                                        }
+                                        popupContent += '<div style="margin-top:8px;"><a href="#" onclick="openActivityDetails(' + e._idx + '); return false;" style="display:inline-block; font-weight:bold; color:#1a5c1a;">ℹ️ Més informació</a>';
+                                        if (e.pdf_activitat) {
+                                            popupContent += ' &nbsp;|&nbsp; <a href="' + e.pdf_activitat + '" target="_blank" style="display:inline-block; font-weight:bold; color:#0693e3;">📄 PDF</a>';
+                                        }
+                                        popupContent += '</div>';
+
+                                        var marker = L.marker([e.latitud, e.longitud]).addTo(map)
+                                            .bindPopup(popupContent);
+                                        markers.push(marker);
+                                    }
+                                }
+                            });
+                        }
+
+                        // MAP INITIALIZATION FIRST
+                        var mapEl = document.getElementById('map');
+                        if (mapEl) {
+                            map = L.map('map').setView([41.3851, 2.1734], 12);
+                            L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
+                                attribution: '&copy; Esri & contributors'
+                            }).addTo(map);
+                        }
+
                         var calendar = new FullCalendar.Calendar(calendarEl, {
                             initialView: 'dayGridMonth',
                             locale: 'ca',
@@ -4017,40 +4298,32 @@
                                 center: 'title',
                                 right: 'dayGridMonth,timeGridWeek,timeGridDay'
                             },
+                            datesSet: function (info) {
+                                currentStart = info.start;
+                                currentEnd = info.end;
+                                updateMap();
+                            },
                             events: function (fetchInfo, successCallback, failureCallback) {
-                                var checkedEntities = Array.from(document.querySelectorAll('.entity-cb:checked')).map(function (cb) { return cb.value; });
+                                var checkedEntities = Array.from(document.querySelectorAll('.entity-single-cb:checked')).map(function (cb) { return cb.value; });
                                 var filteredEvents = eventsData.filter(function (event) {
                                     return checkedEntities.includes(event.entity_id.toString());
                                 });
                                 successCallback(filteredEvents);
                             },
+                            eventContent: function (arg) {
+                                var hora = arg.event.extendedProps.hora;
+                                var title = arg.event.title;
+                                var html = '<div class="fc-custom-event-content">';
+                                if (hora) {
+                                    html += '<span class="fc-custom-event-time">' + hora + '</span> ';
+                                }
+                                html += '<span class="fc-custom-event-title">' + title + '</span></div>';
+                                return { html: html };
+                            },
                             eventClick: function (info) {
-                                var ev = info.event;
-                                var props = ev.extendedProps;
-
-                                document.getElementById('modalTitle').innerText = ev.title;
-                                document.getElementById('modalDate').innerText = props.data || '';
-                                document.getElementById('modalTime').innerText = props.hora || '';
-                                document.getElementById('modalAddress').innerText = props.adreça || 'Adreça no disponible';
-                                document.getElementById('modalDescription').innerText = props.description || 'Sense descripció.';
-
-                                var btnMaps = document.getElementById('btnMaps');
-                                if (props.adreça) {
-                                    btnMaps.href = 'https://maps.google.com/?q=' + encodeURIComponent(props.adreça);
-                                    btnMaps.style.display = 'inline-flex';
-                                } else {
-                                    btnMaps.style.display = 'none';
+                                if (typeof info.event.extendedProps._idx !== 'undefined') {
+                                    openActivityDetails(info.event.extendedProps._idx);
                                 }
-
-                                var btnPdf = document.getElementById('btnPdf');
-                                if (props.pdf_activitat) {
-                                    btnPdf.href = props.pdf_activitat;
-                                    btnPdf.style.display = 'inline-flex';
-                                } else {
-                                    btnPdf.style.display = 'none';
-                                }
-
-                                document.getElementById('eventModalOverlay').style.display = 'flex';
                             }
                         });
 
@@ -4065,42 +4338,55 @@
                                 closeEventModal();
                             }
                         };
+
                         calendar.render();
+                        updateMap();
 
-                        // MAP INITIALIZATION
-                        var map = L.map('map').setView([41.3851, 2.1734], 12);
-                        L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
-                            attribution: '&copy; Esri & contributors'
-                        }).addTo(map);
+                        var selectAllCb = document.getElementById('select-all-cb');
+                        var singleCheckboxes = document.querySelectorAll('.entity-single-cb');
 
-                        var markers = [];
-
-                        function updateMap() {
-                            markers.forEach(function (m) { map.removeLayer(m); });
-                            markers = [];
-                            var checkedEntities = Array.from(document.querySelectorAll('.entity-cb:checked')).map(function (cb) { return cb.value; });
-                            eventsData.forEach(function (e) {
-                                if (checkedEntities.includes(e.entity_id.toString()) && e.latitud && e.longitud) {
-                                    var popupContent = "<b>" + e.title + "</b><br>" + (e.adreça ? e.adreça : '');
-                                    if (e.pdf_activitat) {
-                                        popupContent += '<br><a href="' + e.pdf_activitat + '" target="_blank" style="display:inline-block; margin-top:5px; font-weight:bold; color:#0693e3;">PDF de l\'activitat</a>';
-                                    }
-                                    var marker = L.marker([e.latitud, e.longitud]).addTo(map)
-                                        .bindPopup(popupContent);
-                                    markers.push(marker);
-                                }
+                        if (selectAllCb) {
+                            selectAllCb.addEventListener('change', function () {
+                                var isChecked = this.checked;
+                                singleCheckboxes.forEach(function (cb) {
+                                    cb.checked = isChecked;
+                                });
+                                calendar.refetchEvents();
+                                updateMap();
                             });
                         }
 
-                        updateMap();
-
-                        var checkboxes = document.querySelectorAll('.entity-cb');
-                        checkboxes.forEach(function (cb) {
+                        singleCheckboxes.forEach(function (cb) {
                             cb.addEventListener('change', function () {
+                                var allChecked = Array.from(singleCheckboxes).every(function (c) { return c.checked; });
+                                if (selectAllCb) {
+                                    selectAllCb.checked = allChecked;
+                                }
                                 calendar.refetchEvents();
                                 updateMap();
                             });
                         });
+
+                        var toggleBtn = document.getElementById('toggleFiltersBtn');
+                        var sidebarContent = document.getElementById('sidebarContent');
+
+                        if (toggleBtn && sidebarContent) {
+                            toggleBtn.addEventListener('click', function () {
+                                sidebarContent.classList.toggle('open');
+                                if (sidebarContent.classList.contains('open')) {
+                                    toggleBtn.innerHTML = 'Entitats ▴';
+                                } else {
+                                    toggleBtn.innerHTML = 'Entitats ▾';
+                                }
+                            });
+
+                            document.addEventListener('click', function (e) {
+                                if (!sidebarContent.contains(e.target) && !toggleBtn.contains(e.target)) {
+                                    sidebarContent.classList.remove('open');
+                                    toggleBtn.innerHTML = 'Entitats ▾';
+                                }
+                            });
+                        }
                     });
                 </script>
 

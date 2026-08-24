@@ -136,10 +136,80 @@ Aquesta és l'estructura de directoris del projecte, per entendre quines carpete
 - **Scripts de Python solts a l'arrel (`add_entrar_nav.py`, `fix_paths.py`, `replace_nav.py`, `seed.py`, etc.)**: Són scripts de procediment usats segurament durant la migració de l'antic format per arreglar l'HTML en massa o popular informació d'exemple a la base de dades. **No s'estan utilitzant per l'aplicació**.
 
 
-# Per reiniciar la app heu d'executar:
+# Per reiniciar la app en local
+
+Heu d'executar:
 
 
 ```
-git pull
+python manage.py runserver 0.0.0.0:8000 --settings=corverd_project.settings
+```
+
+## Per executar al servidor
+
+Només fer pull dels canvis i executar:
+
+```
 sudo systemctl restart corverd
+```
+## Actualitzar bbddd entitats:
+
+python3 manage.py importa_tsv_entitats fitxes_entitats_cv.tsv
+
+## Donar permisos d'escriptura 
+
+Donar permisos d'escriptura a un usuari per a una carpeta:
+
+### Donar permís d'escriptura a la carpeta actual i contingut
+sudo setfacl -R -m u:nuriarai:rwx /var/www/corverd
+
+### Permís per defecte (perquè els fitxers/carpetes noves que es creïn continuïn sent escrivibles per ella)
+sudo setfacl -R -d -m u:nuriarai:rwx /var/www/corverd
+
+
+## Afegir serveis systemd
+
+Afegir servesi de system per actualitzar la llista d'entitats cada nit a les 2am:
+
+servei:
+```
+
+[Unit]
+Description=Importacio diaria d'entitats TSV per a Django
+After=network.target
+
+[Service]
+Type=oneshot
+User=www-data
+Group=www-data
+WorkingDirectory=/var/www/corverd
+# Executa el Python de l'entorn virtual directament si en tens un:
+ExecStart=/var/www/corverd/venv/bin/python3 manage.py importa_tsv_entitats fitxes_entitats_cv.tsv
+
+[Install]
+WantedBy=multi-user.target
+
+```
+
+timer:
+```
+[Unit]
+Description=Executa el servei d'importacio d'entitats cada dia a les 02:00
+
+[Timer]
+OnCalendar=*-*-* 02:00:00
+Persistent=true
+
+[Install]
+WantedBy=timers.target
+```
+
+
+- Recarregar el dimoni de systemd
+```
+sudo systemctl daemon-reload
+```
+- Activar el timer perquè s'engegui amb el sistema i iniciar-lo ara
+```
+sudo systemctl enable --now importa_entitats_corverd.timer
 ```
