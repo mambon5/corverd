@@ -79,18 +79,19 @@
                     <ul
                         class="wp-block-navigation__container custom-nav-menu is-responsive items-justified-right wp-block-navigation">
 
-                        <!-- 1. QUI SOM -->
+                        <!-- 1. LA COORDINADORA VERDA -->
                         <li class="wp-block-navigation-item has-child wp-block-navigation-submenu">
                             <a class="wp-block-navigation-item__content" href="{% url 'sobre' %}"><span
-                                    class="wp-block-navigation-item__label">Qui som</span></a>
+                                    class="wp-block-navigation-item__label">La Coordinadora Verda</span></a>
                             <ul class="wp-block-navigation__submenu-container">
-                                <li class="wp-block-navigation-item"><a href="{% url 'historia' %}">Història</a>
-                                </li>
-                                <li class="wp-block-navigation-item"><a href="{% url 'manifest' %}">Manifest</a></li>
-                                <li class="wp-block-navigation-item"><a href="{% url 'presentacio' %}">La
-                                        presentació de la CV</a></li>
-                                <li class="wp-block-navigation-item"><a href="{% url 'organitzacio' %}">Com ens
-                                        organitzem?</a></li>
+								<li class="wp-block-navigation-item"><a href="{% url 'presentacio' %}">Presentació</a></li>
+								<li class="wp-block-navigation-item"><a href="{% url 'manifest' %}">Manifest</a></li>
+								<li class="wp-block-navigation-item"><a href="{% url 'organitzacio' %}">Com ens
+									organitzem?</a></li>
+								<li class="wp-block-navigation-item"><a href="{% url 'entitats_adherides' %}">Adhesions
+                                    al manifest</a></li>
+                                <!-- <li class="wp-block-navigation-item"><a href="{% url 'historia' %}">Història</a>
+                                </li> -->
                             </ul>
                         </li>
 
@@ -98,23 +99,21 @@
                         <li class="wp-block-navigation-item has-child wp-block-navigation-submenu">
                             <a class="wp-block-navigation-item__content" href="{% url 'entitats_list' %}"><span
                                     class="wp-block-navigation-item__label">Entitats i lluites</span></a>
-                            <ul class="wp-block-navigation__submenu-container">
+                           <!--  <ul class="wp-block-navigation__submenu-container">
                                 <li class="wp-block-navigation-item"><a href="{% url 'entitats_list' %}">Llista
                                         d’entitats de la CV</a></li>
-                                <li class="wp-block-navigation-item"><a href="{% url 'entitats_adherides' %}">Adhesions
-                                        al manifest</a></li>
                                 <li class="wp-block-navigation-item"><a href="{% url 'mapa_entitats' %}">Mapa de les
                                         entitats</a></li>
                                 <li class="wp-block-navigation-item"><a href="{% url 'activitats_calendar' %}">Mapa de
                                         les activitats</a></li>
-                            </ul>
+                            </ul> -->
                         </li>
 
                         <!-- 3. NOTÍCIES I CALENDARI -->
                         <li class="wp-block-navigation-item has-child wp-block-navigation-submenu">
                             <a class="wp-block-navigation-item__content" href="{% url 'activitats_calendar' %}"><span
-                                    class="wp-block-navigation-item__label">Calendari i notícies</span></a>
-                            <ul class="wp-block-navigation__submenu-container">
+                                    class="wp-block-navigation-item__label">Calendari d'activitats</span></a>
+                            <!-- <ul class="wp-block-navigation__submenu-container">
                                 <li class="wp-block-navigation-item"><a href="{% url 'activitats_calendar' %}">Calendari
                                         nostre</a></li>
                                 <li class="wp-block-navigation-item"><a
@@ -123,17 +122,17 @@
                                         d’altres entitats</a></li>
                                 <li class="wp-block-navigation-item"><a
                                         href="{% url 'activitats_calendar' %}">Activitats d’altres entitats</a></li>
-                            </ul>
+                            </ul> -->
                         </li>
 
                         <!-- 4. CONTACTE -->
                         <li class="wp-block-navigation-item has-child wp-block-navigation-submenu">
                             <a class="wp-block-navigation-item__content" href="{% url 'contacte' %}"><span
                                     class="wp-block-navigation-item__label">Contacte</span></a>
-                            <ul class="wp-block-navigation__submenu-container">
+                           <!--  <ul class="wp-block-navigation__submenu-container">
                                 <li class="wp-block-navigation-item"><a href="{% url 'contacte' %}">Dades de
                                         contacte</a></li>
-                            </ul>
+                            </ul> -->
                         </li>
 
                         <!-- Entrar a la intranet (optional, but keep it if authenticated or logic wants it) -->
