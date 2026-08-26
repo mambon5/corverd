@@ -135,11 +135,19 @@ class Command(BaseCommand):
                     }
                 )
 
-                # --- NOVES LÍNIES AFEGIDES: Descarregar i desar al camp foto (ImageField) ---
-                if drive_foto and not associacio.foto:
+                # --- Descarregar i sobreescriure la foto mantenint el nom net ---
+                if drive_foto:
                     filename = f"associacio_{associacio.id}.jpg"
                     img_content = self.download_image_from_drive(drive_foto, filename)
+                    
                     if img_content:
+                        # 1. Si l'objecte ja té una foto assignada o existeix el fitxer físic, l'esborrem primer
+                        if associacio.foto:
+                            # save=False evita desar el model a la BD a meitat del procés
+                            associacio.foto.delete(save=False)
+                        
+                        # 2. Guardem el fitxer nou. Com que el disc està net, 
+                        # Django mantindrà exactament el nom "associacio_X.jpg"
                         associacio.foto.save(filename, img_content, save=True)
 
                 if created:
