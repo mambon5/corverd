@@ -136,19 +136,28 @@ class Command(BaseCommand):
                 )
 
                 # --- Descarregar i sobreescriure la foto mantenint el nom net ---
+                # --- Descarregar i sobreescriure NOMSÉS si ha canviat la imatge ---
                 if drive_foto:
                     filename = f"associacio_{associacio.id}.jpg"
-                    img_content = self.download_image_from_drive(drive_foto, filename)
                     
-                    if img_content:
-                        # 1. Si l'objecte ja té una foto assignada o existeix el fitxer físic, l'esborrem primer
-                        if associacio.foto:
-                            # save=False evita desar el model a la BD a meitat del procés
-                            associacio.foto.delete(save=False)
+                    # Comprovem si l'URL ha canviat o si el fitxer físic no existeix al disc
+                    foto_ha_canviat = (associacio.foto_url != foto_neta)
+                    fitxer_existeix = associacio.foto and os.path.exists(associacio.foto.path)
+
+                    if foto_ha_canviat or not fitxer_existeix:
+                        img_content = self.download_image_from_drive(drive_foto, filename)
                         
-                        # 2. Guardem el fitxer nou. Com que el disc està net, 
-                        # Django mantindrà exactament el nom "associacio_X.jpg"
-                        associacio.foto.save(filename, img_content, save=True)
+                        if img_content:
+                            # 1. Si ja hi ha un fitxer en disc, l'eliminem per evitar duplicats amb sufixos aleatoris
+                            if associacio.foto:
+                                associacio.foto.delete(save=False)
+                            
+                            # 2. Guardem la nova imatge mantenint el nom net
+                            associacio.foto.save(filename, img_content, save=True)
+                            
+                            # 3. Actualitzem el camp foto_url a la BD amb la nova URL de Drive
+                            associacio.foto_url = foto_neta
+                            associacio.save(update_fields=['foto_url'])
 
                 if created:
                     created_count += 1
