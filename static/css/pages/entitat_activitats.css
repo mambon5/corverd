@@ -1,0 +1,21 @@
+/* Page styles: entitat_activitats.html */
+body {
+			font-family: Arial, sans-serif;
+			margin: 40px;
+		}
+
+		#calendar {
+			max-width: 900px;
+			margin: 0 auto;
+		}
+
+		.back-link {
+			display: inline-block;
+			margin-bottom: 20px;
+			text-decoration: none;
+			color: #333;
+		}
+
+		.fc-event {
+			cursor: pointer;
+		}

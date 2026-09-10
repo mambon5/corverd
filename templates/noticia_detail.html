@@ -1,47 +1,17 @@
-<!DOCTYPE html>
-<html lang="ca">
+{% extends 'base_layout.html' %}
 
-<head>
-    <meta charset="UTF-8">
-    <title>{{ noticia.titol }} - Coordinadora Verda</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            max-width: 800px;
-        }
+{% block title %}{{ noticia.titol }} - Coordinadora Verda{% endblock %}
 
-        .comment-section {
-            margin-top: 40px;
-            border-top: 1px solid #ccc;
-            padding-top: 20px;
-        }
+{% block page_title %}{{ noticia.titol }}{% endblock %}
 
-        .comment {
-            background: #f9f9f9;
-            padding: 10px;
-            margin-bottom: 15px;
-            border-radius: 4px;
-        }
+{% block extra_css %}
+<link rel="stylesheet" href="/static/css/pages/noticia_detail.css">
+{% endblock %}
 
-        textarea {
-            width: 100%;
-            height: 80px;
-            margin-bottom: 10px;
-        }
-
-        button {
-            padding: 8px 15px;
-            cursor: pointer;
-        }
-    </style>
-</head>
-
-<body>
-
+{% block content %}
+<div class="noticia-detail">
     <a href="{% url 'entitats_list' %}">&larr; Tornar a les entitats</a>
 
-    <h1>{{ noticia.titol }}</h1>
     <p><em>Publicat per {{ noticia.associacio.nom }} el {{ noticia.data_publicacio|date:"d/m/Y H:i" }}</em></p>
 
     <div>
@@ -74,7 +44,5 @@
         <p>No hi ha cap comentari. Sigues el primer en dir-hi la teva!</p>
         {% endfor %}
     </div>
-
-</body>
-
-</html>
+</div>
+{% endblock %}
