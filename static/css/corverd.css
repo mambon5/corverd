@@ -4939,3 +4939,151 @@ img.wp-smiley,
             display: block;
         }
     }
+
+    /* =========================================================
+   FIX MENÚ MÒBIL EN DJANGO (Sobreescritura de WordPress)
+   ========================================================= */
+
+@media (max-width: 781px) {
+    /* 1. Permet scroll vertical si el menú ocupa més que la pantalla */
+    .wp-block-navigation__responsive-container.is-menu-open {
+        overflow-y: auto !important;
+        max-height: 100vh !important;
+        padding: 20px !important;
+    }
+
+    .wp-block-navigation__responsive-container.is-menu-open .wp-block-navigation__responsive-container-content {
+        padding-top: 2rem !important; /* Redueix l'espai superior gegant */
+    }
+
+    /* 2. Redueix les distàncies verticals entre ítems */
+    .wp-block-navigation__responsive-container.is-menu-open .wp-block-navigation__container {
+        gap: 1.2rem !important;
+    }
+
+    /* 3. FORÇA que els submenús ESTIGUIN AMAGATS fins que s'hi faci clic */
+    .wp-block-navigation__responsive-container.is-menu-open .wp-block-navigation__submenu-container {
+        display: none !important;
+        height: 0 !important;
+        visibility: hidden !important;
+        padding-top: 0.5rem !important;
+        padding-bottom: 0.5rem !important;
+    }
+
+    /* 4. Només es mostra el submenú quan la seva 'li' té la classe 'is-submenu-open' */
+    .wp-block-navigation-item.is-submenu-open > .wp-block-navigation__submenu-container {
+        display: block !important;
+        height: auto !important;
+        visibility: visible !important;
+    }
+
+    /* 5. Ajust de la font i padding dels enllaços */
+    .wp-block-navigation-item__content {
+        font-size: 1.1rem !important;
+        line-height: 1.4 !important;
+    }
+}
+
+/* --- NAVEGACIÓ MÒBIL I DESKTOP (CORVERD) --- */
+
+/* Utilitat per amagar elements quan W3.CSS no està carregat */
+.cv-hide {
+    display: none !important;
+}
+
+/* Barra del menú */
+.cv-nav-container {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    width: 100%;
+}
+
+.cv-menu-link {
+    font-weight: 500;
+    color: var(--wp--preset--color--foreground, #333);
+    text-decoration: none;
+    padding: 6px 12px;
+}
+
+/* Submenú Desktop */
+.cv-dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.cv-dropdown-content {
+    display: none;
+    position: absolute;
+    right: 0;
+    background-color: #ffffff;
+    min-width: 220px;
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+    border-radius: 4px;
+    padding: 4px 0;
+}
+
+.cv-dropdown:hover .cv-dropdown-content {
+    display: block;
+}
+
+.cv-dropdown-content a {
+    display: block;
+    padding: 6px 12px;
+    color: #333;
+    text-decoration: none;
+}
+
+/* --- VERSIÓ MÒBIL --- */
+
+/* Fons semitransparent i espais ajustats */
+.cv-mobile-overlay {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 100%;
+    z-index: 9999;
+    background-color: rgba(255, 255, 255, 0.85) !important;
+    backdrop-filter: blur(8px);
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.1);
+    padding: 6px 0 !important;
+}
+
+.cv-mobile-overlay .cv-menu-link,
+.cv-mobile-overlay .w3-bar-item {
+    padding: 6px 16px !important;
+    font-size: 0.95rem;
+    display: block;
+}
+
+.cv-mobile-subitems {
+    background-color: rgba(240, 240, 240, 0.7) !important;
+    padding-left: 12px !important;
+}
+
+.cv-mobile-subitems a {
+    padding: 5px 16px !important;
+    font-size: 0.9rem;
+    display: block;
+}
+
+/* Visibilitat segons la pantalla */
+@media (max-width: 781px) {
+    .cv-desktop-menu {
+        display: none !important;
+    }
+    .cv-mobile-btn {
+        display: inline-block !important;
+    }
+}
+
+@media (min-width: 782px) {
+    .cv-desktop-menu {
+        display: flex !important;
+    }
+    .cv-mobile-btn,
+    .cv-mobile-overlay {
+        display: none !important;
+    }
+}

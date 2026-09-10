@@ -1,369 +1,393 @@
 /* Page styles: activitats_calendar.html */
+
+/* 1. Control estricte per evitar scroll horitzontal a tota la pàgina */
+html, body {
+    overflow-x: hidden !important;
+    max-width: 100% !important;
+}
+
 .entry-content,
-        .entry-content.is-layout-constrained > *,
-        .wp-block-post-content {
-            max-width: 1400px !important;
-            width: 100% !important;
-        }
+.entry-content.is-layout-constrained > *,
+.wp-block-post-content {
+    max-width: 1400px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+}
 
-        .calendar-layout-container {
-            font-family: Arial, sans-serif;
-            margin: 20px auto;
-            display: flex;
-            width: 100%;
-            max-width: 1400px;
-            box-sizing: border-box;
-        }
+.calendar-layout-container {
+    display: flex;
+    flex-direction: column;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    overflow-x: hidden !important;
+}
 
-        .sidebar {
-            width: 320px;
-            min-width: 280px;
-            flex-shrink: 0;
-            padding-right: 25px;
-            border-right: 1px solid #ccc;
-            margin-right: 25px;
-            box-sizing: border-box;
-        }
+.main-content, .sidebar {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+}
 
-        .main-content {
-            flex-grow: 1;
-            min-width: 0;
-        }
+#map {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+}
 
-        #calendar {
-            width: 100%;
-        }
+#calendar {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    overflow-x: hidden !important; /* Evita que el calendari empenyi la pàgina */
+}
 
-        .entity-filter {
-            margin-bottom: 12px;
-        }
+/* 2. Filtres i Sidebar */
+.entity-filter {
+    margin-bottom: 12px;
+}
 
-        .entity-filter label {
-            font-size: 1.25rem;
-            display: flex;
-            align-items: center;
-            cursor: pointer;
-            line-height: 1.4;
-        }
+.entity-filter label {
+    font-size: 1.25rem;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    line-height: 1.4;
+}
 
-        .entity-cb {
-            width: 26px;
-            height: 26px;
-            margin-right: 12px;
-            cursor: pointer;
-            flex-shrink: 0;
-            transform: scale(1.2);
-            transform-origin: left center;
-        }
+.entity-cb {
+    width: 26px;
+    height: 26px;
+    margin-right: 12px;
+    cursor: pointer;
+    flex-shrink: 0;
+    transform: scale(1.2);
+    transform-origin: left center;
+}
 
-        .back-link {
-            display: inline-block;
-            margin-bottom: 20px;
-            text-decoration: none;
-            color: #333;
-        }
+.back-link {
+    display: inline-block;
+    margin-bottom: 20px;
+    text-decoration: none;
+    color: #333;
+}
 
-        .filters-toggle-btn {
-            display: none;
-        }
+.filters-toggle-btn {
+    display: none;
+}
 
-        @media (max-width: 768px) {
-            .calendar-layout-container {
-                flex-direction: column;
-                margin: 10px 0;
-                width: 100% !important;
-            }
+/* 3. Estils dels esdeveniments de FullCalendar */
+.fc-custom-event-content {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 2px;
+    line-height: 1.15;
+    overflow: hidden;
+    width: 100%;
+}
 
-            .sidebar {
-                width: 100% !important;
-                min-width: 100% !important;
-                border-right: none !important;
-                margin-right: 0 !important;
-                padding-right: 0 !important;
-                margin-bottom: 15px;
-                position: relative;
-            }
+.fc-custom-event-time {
+    font-weight: bold;
+    font-size: 0.72rem;
+    color: #1a5c1a;
+    background: #e8f5e9;
+    padding: 1px 3px;
+    border-radius: 3px;
+    flex-shrink: 0;
+    display: inline-block;
+}
 
-            .filters-toggle-btn {
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-                width: 100%;
-                padding: 12px 18px;
-                background: #1a5c1a;
-                color: white;
-                font-size: 1.1rem;
-                font-weight: bold;
-                border: none;
-                border-radius: 10px;
-                cursor: pointer;
-                box-sizing: border-box;
-                box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-            }
+.fc-custom-event-title {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-break: break-word;
+    font-size: 0.85rem;
+}
 
-            .sidebar-content {
-                display: none;
-                position: absolute;
-                top: 100%;
-                left: 0;
-                width: 100%;
-                background: #ffffff;
-                box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-                border: 1px solid #e5e7eb;
-                border-radius: 12px;
-                padding: 18px;
-                z-index: 9999;
-                box-sizing: border-box;
-                max-height: 60vh;
-                overflow-y: auto;
-                margin-top: 5px;
-            }
+.fc-event {
+    cursor: pointer;
+    padding: 4px;
+    font-size: 1rem;
+}
 
-            .sidebar-content.open {
-                display: block;
-            }
+.fc-event-title {
+    font-size: 1rem !important;
+    white-space: normal !important;
+}
 
-            .main-content {
-                width: 100% !important;
-                max-width: 100% !important;
-            }
+.fc-daygrid-event {
+    white-space: normal !important;
+}
 
-            #map {
-                height: 320px !important;
-                width: 100% !important;
-            }
+/* 4. MODAL DETALLS D'ACTIVITAT (Adaptada a mòbil) */
+.event-modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(8px);
+    z-index: 10000;
+    justify-content: center;
+    align-items: center;
+    animation: modalFadeIn 0.3s ease-out;
+    padding: 10px;
+    box-sizing: border-box;
+}
 
-            .fc-toolbar {
-                flex-direction: column;
-                gap: 10px;
-            }
+.event-modal {
+    background: #ffffff;
+    border-radius: 24px;
+    padding: 25px;
+    max-width: 650px;
+    width: 95% !important;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    position: relative;
+    max-height: 85vh;
+    overflow-y: auto;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-sizing: border-box !important;
+}
 
-            .fc-toolbar-chunk {
-                display: flex;
-                justify-content: center;
-            }
+@keyframes modalFadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
 
-            .fc-event {
-                padding: 1px 2px !important;
-                margin-bottom: 2px !important;
-            }
+.event-modal h2 {
+    color: #1a5c1a;
+    margin-top: 0;
+    font-size: 1.5rem;
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 15px;
+    padding-right: 25px;
+}
 
-            .fc-custom-event-time {
-                font-size: 0.58rem !important;
-                padding: 0px 2px !important;
-            }
+.event-modal .event-info {
+    display: grid;
+    gap: 12px;
+    margin-bottom: 20px;
+}
 
-            .fc-custom-event-title {
-                font-size: 0.64rem !important;
-                line-height: 1.1 !important;
-                -webkit-line-clamp: 2;
-                display: -webkit-box;
-                -webkit-box-orient: vertical;
-                overflow: hidden;
-                text-overflow: ellipsis;
-            }
+.event-modal .info-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 1rem;
+    color: #444;
+}
 
-            .fc-daygrid-day-number {
-                font-size: 0.75rem !important;
-                padding: 1px 3px !important;
-            }
+.event-modal .info-item .icon {
+    font-size: 1.2rem;
+    min-width: 20px;
+}
 
-            .fc-col-header-cell-cushion {
-                font-size: 0.7rem !important;
-                padding: 1px !important;
-            }
-        }
+.event-modal .event-description {
+    background: #f8faf8;
+    padding: 15px;
+    border-radius: 12px;
+    margin: 15px 0;
+    line-height: 1.5;
+    color: #333;
+    border-left: 4px solid #4caf50;
+    word-break: break-word;
+}
 
-        .fc-custom-event-content {
-            display: flex;
-            flex-wrap: wrap;
-            align-items: baseline;
-            gap: 2px;
-            line-height: 1.15;
-            overflow: hidden;
-            width: 100%;
-        }
+.event-modal .modal-footer {
+    margin-top: 20px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    border-top: 1px solid #eee;
+    padding-top: 15px;
+}
 
-        .fc-custom-event-time {
-            font-weight: bold;
-            font-size: 0.72rem;
-            color: #1a5c1a;
-            background: #e8f5e9;
-            padding: 1px 3px;
-            border-radius: 3px;
-            flex-shrink: 0;
-            display: inline-block;
-        }
+.event-modal .btn {
+    padding: 10px 18px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    flex: 1 1 auto; /* Es reordenen bé en mòbil */
+}
 
-        .fc-custom-event-title {
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            word-break: break-word;
-            font-size: 0.85rem;
-        }
+.event-modal .btn-close {
+    background: #f3f4f6;
+    color: #4b5563;
+}
 
-        .fc-event {
-            cursor: pointer;
-            padding: 4px;
-            font-size: 1rem;
-        }
+.event-modal .btn-close:hover {
+    background: #e5e7eb;
+}
 
-        .fc-event-title {
-            font-size: 1rem !important;
-            white-space: normal !important;
-        }
+.event-modal .btn-maps {
+    background: #1a5c1a;
+    color: white;
+}
 
-        .fc-daygrid-event {
-            white-space: normal !important;
-        }
+.event-modal .btn-maps:hover {
+    background: #144614;
+}
 
-        /* Premium Modal Styles */
-        .event-modal-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(8px);
-            z-index: 10000;
-            justify-content: center;
-            align-items: center;
-            animation: modalFadeIn 0.3s ease-out;
-        }
+.event-modal .btn-pdf {
+    background: #cf2e2e;
+    color: white;
+}
 
-        .event-modal {
-            background: #ffffff;
-            border-radius: 24px;
-            padding: 40px;
-            max-width: 650px;
-            width: 90%;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-            position: relative;
-            max-height: 90vh;
-            overflow-y: auto;
-            border: 1px solid rgba(0, 0, 0, 0.1);
-        }
+.event-modal .btn-pdf:hover {
+    background: #b12828;
+}
 
-        @keyframes modalFadeIn {
-            from {
-                opacity: 0;
-                transform: scale(0.95);
-            }
+.event-modal .close-x {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    font-size: 22px;
+    cursor: pointer;
+    color: #999;
+}
 
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
+/* 5. MEDIA QUERIES PER A PANTALLES PETITES (< 768px) */
+@media (max-width: 768px) {
+    .calendar-layout-container {
+        flex-direction: column;
+        margin: 5px 0;
+        width: 100% !important;
+        padding: 0 5px;
+    }
 
-        .event-modal h2 {
-            color: #1a5c1a;
-            margin-top: 0;
-            font-size: 2rem;
-            font-weight: 700;
-            line-height: 1.2;
-            margin-bottom: 20px;
-        }
+    .sidebar {
+        width: 100% !important;
+        min-width: 100% !important;
+        border-right: none !important;
+        margin-right: 0 !important;
+        padding-right: 0 !important;
+        margin-bottom: 15px;
+        position: relative;
+    }
 
-        .event-modal .event-info {
-            display: grid;
-            gap: 15px;
-            margin-bottom: 25px;
-        }
+    .filters-toggle-btn {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        padding: 12px 18px;
+        background: #1a5c1a;
+        color: white;
+        font-size: 1.1rem;
+        font-weight: bold;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        box-sizing: border-box;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    }
 
-        .event-modal .info-item {
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
-            font-size: 1.1rem;
-            color: #444;
-        }
+    .sidebar-content {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background: #ffffff;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        border: 1px solid #e5e7eb;
+        border-radius: 12px;
+        padding: 18px;
+        z-index: 9999;
+        box-sizing: border-box;
+        max-height: 60vh;
+        overflow-y: auto;
+        margin-top: 5px;
+    }
 
-        .event-modal .info-item .icon {
-            font-size: 1.3rem;
-            min-width: 24px;
-        }
+    .sidebar-content.open {
+        display: block;
+    }
 
-        .event-modal .event-description {
-            background: #f8faf8;
-            padding: 20px;
-            border-radius: 16px;
-            margin: 25px 0;
-            line-height: 1.7;
-            color: #333;
-            border-left: 4px solid #4caf50;
-        }
+    .main-content {
+        width: 100% !important;
+        max-width: 100% !important;
+    }
 
-        .event-modal .modal-footer {
-            margin-top: 35px;
-            display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
-            border-top: 1px solid #eee;
-            padding-top: 25px;
-        }
+    #map {
+        height: 250px !important; /* Alçada reduïda en mòbil */
+        width: 100% !important;
+    }
 
-        .event-modal .btn {
-            padding: 14px 28px;
-            border-radius: 12px;
-            border: none;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 1rem;
-            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
+    /* REDUCCIÓ DE LA BOTONERA DE FULLCALENDAR EN MÒBIL */
+    .fc-toolbar {
+        flex-direction: column !important;
+        gap: 8px !important;
+    }
 
-        .event-modal .btn-close {
-            background: #f3f4f6;
-            color: #4b5563;
-        }
+    .fc-toolbar-chunk {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+    }
 
-        .event-modal .btn-close:hover {
-            background: #e5e7eb;
-        }
+    .fc-button {
+        padding: 4px 8px !important;
+        font-size: 0.8rem !important;
+    }
 
-        .event-modal .btn-maps {
-            background: #1a5c1a;
-            color: white;
-        }
+    .fc-toolbar-title {
+        font-size: 1.1rem !important;
+    }
 
-        .event-modal .btn-maps:hover {
-            background: #144614;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(26, 92, 26, 0.2);
-        }
+    /* AJUST DELS DIES I NÚMEROS DEL CALENDARI */
+    .fc-event {
+        padding: 1px 2px !important;
+        margin-bottom: 2px !important;
+    }
 
-        .event-modal .btn-pdf {
-            background: #cf2e2e;
-            color: white;
-        }
+    .fc-custom-event-time {
+        font-size: 0.58rem !important;
+        padding: 0px 2px !important;
+    }
 
-        .event-modal .btn-pdf:hover {
-            background: #b12828;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(207, 46, 46, 0.2);
-        }
+    .fc-custom-event-title {
+        font-size: 0.64rem !important;
+        line-height: 1.1 !important;
+        -webkit-line-clamp: 2;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
 
-        .event-modal .close-x {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            font-size: 24px;
-            cursor: pointer;
-            color: #999;
-            transition: color 0.2s;
-        }
+    .fc-daygrid-day-number {
+        font-size: 0.75rem !important;
+        padding: 1px 3px !important;
+    }
 
-        .event-modal .close-x:hover {
-            color: #333;
-        }
+    .fc-col-header-cell-cushion {
+        font-size: 0.7rem !important;
+        padding: 1px !important;
+    }
+
+    .fc-daygrid-day-frame {
+        min-height: 45px !important; /* Ajustat perquè les caselles no es facin gegants */
+    }
+}

@@ -1,105 +1,89 @@
-<nav class="is-responsive items-justified-right wp-block-navigation is-content-justification-right is-layout-flex wp-container-core-navigation-is-layout-f665d2b5 wp-block-navigation-is-layout-flex"
-    aria-label="Navegació de la capçalera" data-wp-interactive="core/navigation"
-    data-wp-context='{"overlayOpenedBy":{"click":false,"hover":false,"focus":false},"type":"overlay","roleAttribute":"","ariaLabel":"Menú"}'>
-    <button aria-haspopup="dialog" aria-label="Obre el menú" class="wp-block-navigation__responsive-container-open"
-        data-wp-on--click="actions.openMenuOnClick" data-wp-on--keydown="actions.handleMenuKeydown"><svg width="24"
-            height="24" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-            <path d="M5 5v1.5h14V5H5z"></path>
-            <path d="M5 12.8h14v-1.5H5v1.5z"></path>
-            <path d="M5 19h14v-1.5H5V19z"></path>
-        </svg></button>
-    <div class="wp-block-navigation__responsive-container  has-text-color has-foreground-color has-background has-background-background-color"
-        id="modal-2" data-wp-class--has-modal-open="state.isMenuOpen" data-wp-class--is-menu-open="state.isMenuOpen"
-        data-wp-watch="callbacks.initMenu" data-wp-on--keydown="actions.handleMenuKeydown"
-        data-wp-on--focusout="actions.handleMenuFocusout" tabindex="-1">
-        <div class="wp-block-navigation__responsive-close" tabindex="-1">
-            <div class="wp-block-navigation__responsive-dialog" data-wp-bind--aria-modal="state.ariaModal"
-                data-wp-bind--aria-label="state.ariaLabel" data-wp-bind--role="state.roleAttribute">
-                <button aria-label="Tanca el menú" class="wp-block-navigation__responsive-container-close"
-                    data-wp-on--click="actions.closeMenuOnClick"><svg xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false">
-                        <path
-                            d="m13.06 12 6.47-6.47-1.06-1.06L12 10.94 5.53 4.47 4.47 5.53 10.94 12l-6.47 6.47 1.06 1.06L12 13.06l6.47 6.47 1.06-1.06L13.06 12Z">
-                        </path>
-                    </svg></button>
-                <div class="wp-block-navigation__responsive-container-content"
-                    data-wp-watch="callbacks.focusFirstElement" id="modal-2-content">
-                    <ul
-                        class="wp-block-navigation__container custom-nav-menu is-responsive items-justified-right wp-block-navigation">
+<!-- NAV PRINCIPAL -->
+<div class="cv-nav-container">
 
-                        <!-- 1. LA COORDINADORA VERDA -->
-                        <li class="wp-block-navigation-item has-child wp-block-navigation-submenu">
-                            <a class="wp-block-navigation-item__content" href="{% url 'sobre' %}"><span
-                                    class="wp-block-navigation-item__label">La Coordinadora Verda</span></a>
-                            <ul class="wp-block-navigation__submenu-container">
-								<li class="wp-block-navigation-item"><a href="{% url 'presentacio' %}">Presentació</a></li>
-								<li class="wp-block-navigation-item"><a href="{% url 'manifest' %}">Manifest</a></li>
-								<li class="wp-block-navigation-item"><a href="{% url 'organitzacio' %}">Com ens
-									organitzem?</a></li>
-								<li class="wp-block-navigation-item"><a href="{% url 'entitats_adherides' %}">Adhesions
-                                    al manifest</a></li>
-                                <!-- <li class="wp-block-navigation-item"><a href="{% url 'historia' %}">Història</a>
-                                </li> -->
-                            </ul>
-                        </li>
-
-                        <!-- 2. ENTITATS I LLUITES -->
-                        <li class="wp-block-navigation-item has-child wp-block-navigation-submenu">
-                            <a class="wp-block-navigation-item__content" href="{% url 'entitats_list' %}"><span
-                                    class="wp-block-navigation-item__label">Entitats i lluites</span></a>
-                           <!--  <ul class="wp-block-navigation__submenu-container">
-                                <li class="wp-block-navigation-item"><a href="{% url 'entitats_list' %}">Llista
-                                        d’entitats de la CV</a></li>
-                                <li class="wp-block-navigation-item"><a href="{% url 'mapa_entitats' %}">Mapa de les
-                                        entitats</a></li>
-                                <li class="wp-block-navigation-item"><a href="{% url 'activitats_calendar' %}">Mapa de
-                                        les activitats</a></li>
-                            </ul> -->
-                        </li>
-
-                        <!-- 3. NOTÍCIES I CALENDARI -->
-                        <li class="wp-block-navigation-item has-child wp-block-navigation-submenu">
-                            <a class="wp-block-navigation-item__content" href="{% url 'activitats_calendar' %}"><span
-                                    class="wp-block-navigation-item__label">Calendari d'activitats</span></a>
-                            <!-- <ul class="wp-block-navigation__submenu-container">
-                                <li class="wp-block-navigation-item"><a href="{% url 'activitats_calendar' %}">Calendari
-                                        nostre</a></li>
-                                <li class="wp-block-navigation-item"><a
-                                        href="{% url 'activitats_calendar' %}">Activitats nostres</a></li>
-                                <li class="wp-block-navigation-item"><a href="{% url 'activitats_calendar' %}">Calendari
-                                        d’altres entitats</a></li>
-                                <li class="wp-block-navigation-item"><a
-                                        href="{% url 'activitats_calendar' %}">Activitats d’altres entitats</a></li>
-                            </ul> -->
-                        </li>
-
-                        <!-- 4. CONTACTE -->
-                        <li class="wp-block-navigation-item has-child wp-block-navigation-submenu">
-                            <a class="wp-block-navigation-item__content" href="{% url 'contacte' %}"><span
-                                    class="wp-block-navigation-item__label">Contacte</span></a>
-                           <!--  <ul class="wp-block-navigation__submenu-container">
-                                <li class="wp-block-navigation-item"><a href="{% url 'contacte' %}">Dades de
-                                        contacte</a></li>
-                            </ul> -->
-                        </li>
-
-                        <!-- Entrar a la intranet (optional, but keep it if authenticated or logic wants it) -->
-                        {% if user.is_authenticated %}
-                        <li class="wp-block-navigation-item wp-block-navigation-link"><a
-                                class="wp-block-navigation-item__content" href="{% url 'intranet_dashboard' %}"><span
-                                    class="wp-block-navigation-item__label">Intranet</span></a></li>
-                        <li class="wp-block-navigation-item wp-block-navigation-link"><a
-                                class="wp-block-navigation-item__content" href="{% url 'logout' %}"><span
-                                    class="wp-block-navigation-item__label">Sortir</span></a></li>
-                        {% else %}
-                        <li class="wp-block-navigation-item wp-block-navigation-link"><a
-                                class="wp-block-navigation-item__content" href="{% url 'login' %}"><span
-                                    class="wp-block-navigation-item__label">Entrar</span></a></li>
-                        {% endif %}
-
-                    </ul>
-                </div>
+    <!-- MENÚ DESKTOP -->
+    <div class="cv-desktop-menu">
+        
+        <!-- 1. LA COORDINADORA VERDA -->
+        <div class="cv-dropdown">
+            <a href="{% url 'sobre' %}" class="cv-menu-link">La Coordinadora Verda ▾</a>
+            <div class="cv-dropdown-content">
+                <a href="{% url 'presentacio' %}">Presentació</a>
+                <a href="{% url 'manifest' %}">Manifest</a>
+                <a href="{% url 'organitzacio' %}">Com ens organitzem?</a>
+                <a href="{% url 'entitats_adherides' %}">Adhesions al manifest</a>
             </div>
         </div>
+
+        <!-- 2. ENTITATS I LLUITES -->
+        <a href="{% url 'entitats_list' %}" class="cv-menu-link">Entitats i lluites</a>
+
+        <!-- 3. CALENDARI -->
+        <a href="{% url 'activitats_calendar' %}" class="cv-menu-link">Calendari d'activitats</a>
+
+        <!-- 4. CONTACTE -->
+        <a href="{% url 'contacte' %}" class="cv-menu-link">Contacte</a>
+
+        <!-- INTRANET -->
+        {% if user.is_authenticated %}
+            <a href="{% url 'intranet_dashboard' %}" class="cv-menu-link">Intranet</a>
+            <a href="{% url 'logout' %}" class="cv-menu-link">Sortir</a>
+        {% else %}
+            <a href="{% url 'login' %}" class="cv-menu-link">Entrar</a>
+        {% endif %}
     </div>
-</nav>
+
+    <!-- BOTÓ HAMBURGUESA PER A MÒBIL (Amb les 3 línies SVG) -->
+    <button onclick="toggleCvMobileMenu()" class="w3-button cv-mobile-btn" aria-label="Obre el menú" style="background: transparent; border: none; cursor: pointer; padding: 4px 8px;">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="#333">
+            <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
+        </svg>
+    </button>
+</div>
+
+<!-- MENÚ DESPLEGABLE MÒBIL (Amagat per defecte amb la classe cv-hide) -->
+<div id="cvMobileMenu" class="cv-mobile-overlay cv-hide">
+    
+    <!-- Acordió Submenú -->
+    <button onclick="toggleCvAccordion()" class="cv-menu-link" style="background: none; border: none; width: 100%; text-align: left; cursor: pointer;">
+        La Coordinadora Verda ▾
+    </button>
+    <div id="cvMobileAccordion" class="cv-mobile-subitems cv-hide">
+        <a href="{% url 'presentacio' %}">Presentació</a>
+        <a href="{% url 'manifest' %}">Manifest</a>
+        <a href="{% url 'organitzacio' %}">Com ens organitzem?</a>
+        <a href="{% url 'entitats_adherides' %}">Adhesions al manifest</a>
+    </div>
+
+    <a href="{% url 'entitats_list' %}" class="cv-menu-link">Entitats i lluites</a>
+    <a href="{% url 'activitats_calendar' %}" class="cv-menu-link">Calendari d'activitats</a>
+    <a href="{% url 'contacte' %}" class="cv-menu-link">Contacte</a>
+
+    {% if user.is_authenticated %}
+        <a href="{% url 'intranet_dashboard' %}" class="cv-menu-link">Intranet</a>
+        <a href="{% url 'logout' %}" class="cv-menu-link">Sortir</a>
+    {% else %}
+        <a href="{% url 'login' %}" class="cv-menu-link">Entrar</a>
+    {% endif %}
+</div>
+
+<!-- Lògica JavaScript per mostrar/amagar -->
+<script>
+    function toggleCvMobileMenu() {
+        var menu = document.getElementById("cvMobileMenu");
+        if (menu.classList.contains("cv-hide")) {
+            menu.classList.remove("cv-hide");
+        } else {
+            menu.classList.add("cv-hide");
+        }
+    }
+
+    function toggleCvAccordion() {
+        var acc = document.getElementById("cvMobileAccordion");
+        if (acc.classList.contains("cv-hide")) {
+            acc.classList.remove("cv-hide");
+        } else {
+            acc.classList.add("cv-hide");
+        }
+    }
+</script>

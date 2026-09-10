@@ -26,7 +26,7 @@ Si ja tens l'entorn configurat, segueix aquests passos per aixecar el servidor d
 
 3. **Inicia el servidor de Django**:
    ```bash
-   python manage.py runserver
+   python3 manage.py runserver
    ```
 
 > [!TIP]
@@ -35,6 +35,24 @@ Si ja tens l'entorn configurat, segueix aquests passos per aixecar el servidor d
 L'aplicació estarà disponible a [http://127.0.0.1:8000](http://127.0.0.1:8000).
 
 ---
+
+### Executar desde el movil en local
+
+Disponible a: http://127.0.0.1:8000
+
+Per accedir des de la xarxa local (mòbils o altres dispositius de la mateixa Wi-Fi):
+Bash
+
+python manage.py runserver 0.0.0.0:8000 --settings=corverd_project.settings
+
+Disponible a: http://<IP_LOCAL_DE_LA_TEVA_MAQUINA>:8000
+
+    [!TIP]
+    Configuració de ALLOWED_HOSTS i DEBUG:
+
+        Assegura't d'incloure la teva IP local (o ALLOWED_HOSTS=*) al .env o settings.py per permetre la connexió des del mòbil.
+
+        Si no es carreguen els estils o les imatges localment, comprova que el fitxer .env té DEBUG=True.
 
 ## 🛠️ Guia d'Instal·lació Completa
 
