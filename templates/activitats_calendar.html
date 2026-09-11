@@ -53,6 +53,10 @@
 
                         <div class="event-info">
                             <div class="info-item">
+                                <span class="icon">🏛️</span>
+                                <span id="modalEntity">Entitat</span>
+                            </div>
+                            <div class="info-item">
                                 <span class="icon">📅</span>
                                 <span id="modalDate">Data</span>
                             </div>
@@ -100,6 +104,7 @@
                             if (!ev) return;
 
                             document.getElementById('modalTitle').innerText = ev.title;
+                            document.getElementById('modalEntity').innerText = ev.entity_nom || 'Entitat no especificada';
                             document.getElementById('modalDate').innerText = ev.data || '';
                             document.getElementById('modalTime').innerText = ev.hora || '';
                             document.getElementById('modalAddress').innerText = ev.adreça || 'Adreça no disponible';

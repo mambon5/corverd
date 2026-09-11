@@ -1,6 +1,15 @@
 /* Coordinadora Verda — unified frontend styles (WordPress/Extendable shell) */
 /* Generated to remove duplicated inline <style> blocks from templates. */
 
+
+:root {
+    /* Amplada per defecte del contingut (canvia 1200px o 1400px segons prefereixis) */
+    --wp--style--global--content-size: 1300px !important;
+    
+    /* Amplada per als blocs amples (alignwide) */
+    --wp--style--global--wide-size: 1400px !important;
+}
+
 /* --- wp-img-auto-sizes-contain-inline-css --- */
 img:is([sizes=auto i], [sizes^="auto," i]) {
             contain-intrinsic-size: 3000px 1500px

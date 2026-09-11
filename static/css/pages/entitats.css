@@ -1,91 +1,93 @@
 /* Page styles: entitats.html */
 body {
-			font-family: Arial, sans-serif;
-			margin: 20px;
-		}
+    font-family: Arial, sans-serif;
+    margin: 20px;
+}
 
-		.entitat-card {
-			border: 1px solid #ccc;
-			padding: 15px;
-			margin-bottom: 20px;
-			border-radius: 5px;
-		}
+/* Correcció del contenidor pare de WordPress (per centrar el bloc) */
+.page-id-31 .is-layout-constrained > :not(.alignleft):not(.alignright):not(.alignfull) {
+    max-width: 1400px !important;
+    width: 100% !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+}
 
-		.entitat-map {
-			height: 200px !important;
-			width: 100% !important;
-			margin-top: 10px;
-			background-color: #f0f0f0;
-			position: relative;
-			z-index: 1;
-		}
+/* Graella principal centrada */
+/* Graella adaptable que s'ajusta a l'amplada nativa del tema */
+.entitats-grid {
+    display: grid;
+    /* Crea columnes d'un mínim de 280px que s'eixamplen per omplir tot el contenidor */
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+    width: 100%;
+    box-sizing: border-box;
+}
 
-		.news-list {
-			margin-top: 10px;
-			font-size: 0.9em;
-		}
+/* Adaptació per a pantalles mitjanes (Tauletes) */
+@media (max-width: 1024px) {
+    .entitats-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
 
-/* Eliminem el límit d'amplada de WordPress només en aquesta pàgina (ID 31) */
-					.page-id-31 .is-layout-constrained> :not(.alignleft):not(.alignright):not(.alignfull) {
-						max-width: 1400px !important;
-						/* L'amplada total que vulguis per a la graella */
-						width: 100%;
-					}
+/* Adaptació per a pantalles petites (Mòbils) */
+@media (max-width: 600px) {
+    .entitats-grid {
+        grid-template-columns: 1fr;
+    }
+}
 
-					.entitats-grid {
-						display: grid;
-						/* Per defecte en pantalles grans: 4 columnes idèntiques */
-						grid-template-columns: repeat(4, 1fr);
-						gap: 20px;
-						margin-top: 20px;
-					}
+.entitat-card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 15px;
+    background: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    width: 100%;
+    /* Assegura que el text llarg no forci la cel·la a fer-se més ampla */
+    min-width: 0; 
+    word-break: break-word;
+}
 
-					/* Adaptació per a pantalles mitjanes (Tauletes) */
-					@media (max-width: 1024px) {
-						.entitats-grid {
-							grid-template-columns: repeat(2, 1fr);
-							/* 2 columnes */
-						}
-					}
+.entitat-foto {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    background-color: #f0f0f0;
+}
 
-					/* Adaptació per a pantalles petites (Mòbils) */
-					@media (max-width: 600px) {
-						.entitats-grid {
-							grid-template-columns: 1fr;
-							/* 1 sola columna */
-						}
-					}
+.entitat-card h2 {
+    margin-top: 0;
+    font-size: 1.5em;
+    word-break: break-word;
+}
 
-					.entitat-card {
-						border: 1px solid #ddd;
-						border-radius: 8px;
-						padding: 15px;
-						background: #fff;
-						box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-						display: flex;
-						flex-direction: column;
-					}
+.entitat-card p {
+    margin: 5px 0;
+    font-size: 0.9em;
+}
 
-					.entitat-foto {
-						width: 100%;
-						height: 200px;
-						object-fit: cover;
-						border-radius: 4px;
-						margin-bottom: 10px;
-						background-color: #f0f0f0;
-					}
+.entitat-map {
+    height: 200px !important;
+    width: 100% !important;
+    margin-top: 10px;
+    background-color: #f0f0f0;
+    position: relative;
+    z-index: 1;
+}
 
-					.entitat-card h2 {
-						margin-top: 0;
-						font-size: 1.5em;
-					}
+.news-list {
+    margin-top: 10px;
+    font-size: 0.9em;
+}
 
-					.entitat-card p {
-						margin: 5px 0;
-						font-size: 0.9em;
-					}
-
-					.entitat-action {
-						margin-top: auto;
-						padding-top: 15px;
-					}
+.entitat-action {
+    margin-top: auto;
+    padding-top: 15px;
+}

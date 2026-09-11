@@ -1,54 +1,68 @@
 /* Page styles: activitats_calendar.html */
 
-/* 1. Control estricte per evitar scroll horitzontal a tota la pàgina */
+//* 1. Control per evitar scroll horitzontal */
 html, body {
     overflow-x: hidden !important;
     max-width: 100% !important;
 }
 
+/* Forçar centratat en el contenidor principal de base_layout.html */
 .entry-content,
-.entry-content.is-layout-constrained > *,
+.entry-content.is-layout-constrained,
 .wp-block-post-content {
     max-width: 1400px !important;
     width: 100% !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
     box-sizing: border-box !important;
 }
 
+/* 2. Contenidor principal centrat (CENTRA ELS FILLS DINS DEL CONTENIDOR) */
 .calendar-layout-container {
-    display: flex;
+    display: flex !direction;
     flex-direction: column;
+    align-items: center !important; /* CENTRA ELS FILLS (SIDEBAR I MAIN-CONTENT) AL MIG */
     width: 100% !important;
-    max-width: 100% !important;
-    box-sizing: border-box !important;
-    overflow-x: hidden !important;
-}
-
-.main-content, .sidebar {
-    width: 100% !important;
-    max-width: 100% !important;
+    max-width: 1100px !important;    /* Amplada màxima continguda */
+    margin: 0 auto !important;       /* Centra el contenidor respecte la pàgina */
+    padding: 0 15px;
     box-sizing: border-box !important;
 }
 
-#map {
+.main-content {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 auto !important;      /* Centra el bloc del calendari i mapa */
+    box-sizing: border-box !important;
+}
+
+.sidebar {
     width: 100% !important;
     max-width: 100% !important;
     box-sizing: border-box !important;
 }
 
-#calendar {
+/* Assegurar que els elements interns ocupin el 100% de l'amplada del seu pare centrat */
+#map, #calendar {
     width: 100% !important;
     max-width: 100% !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
     box-sizing: border-box !important;
-    overflow-x: hidden !important; /* Evita que el calendari empenyi la pàgina */
+}
+/* 3. Filtres i Sidebar (PLEGABLE TANT EN PC COM EN MÒBIL) */
+.sidebar {
+    position: relative;
+    margin-bottom: 20px;
+    width: 100% !important;
 }
 
-/* 2. Filtres i Sidebar */
 .entity-filter {
     margin-bottom: 12px;
 }
 
 .entity-filter label {
-    font-size: 1.25rem;
+    font-size: 1.1rem;
     display: flex;
     align-items: center;
     cursor: pointer;
@@ -56,27 +70,63 @@ html, body {
 }
 
 .entity-cb {
-    width: 26px;
-    height: 26px;
+    width: 22px;
+    height: 22px;
     margin-right: 12px;
     cursor: pointer;
     flex-shrink: 0;
-    transform: scale(1.2);
-    transform-origin: left center;
 }
 
 .back-link {
     display: inline-block;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
     text-decoration: none;
     color: #333;
+    font-weight: 500;
 }
 
+/* BOTÓ DESPLEGABLE VISIBLE EN PC I MÒBIL */
 .filters-toggle-btn {
-    display: none;
+    display: flex !important;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 12px 18px;
+    background: #1a5c1a;
+    color: white;
+    font-size: 1.1rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    box-sizing: border-box;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
 }
 
-/* 3. Estils dels esdeveniments de FullCalendar */
+/* MENÚ PLEGAT PER DEFECTE EN TOTS ELS DISPOSITIUS */
+.sidebar-content {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background: #ffffff;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 18px;
+    z-index: 9999;
+    box-sizing: border-box;
+    max-height: 60vh;
+    overflow-y: auto;
+    margin-top: 5px;
+}
+
+.sidebar-content.open {
+    display: block !important;
+}
+
+/* 4. Estils dels esdeveniments de FullCalendar */
 .fc-custom-event-content {
     display: flex;
     flex-wrap: wrap;
@@ -123,7 +173,7 @@ html, body {
     white-space: normal !important;
 }
 
-/* 4. MODAL DETALLS D'ACTIVITAT (Adaptada a mòbil) */
+/* 5. MODAL DETALLS D'ACTIVITAT */
 .event-modal-overlay {
     display: none;
     position: fixed;
@@ -228,35 +278,15 @@ html, body {
     align-items: center;
     justify-content: center;
     gap: 6px;
-    flex: 1 1 auto; /* Es reordenen bé en mòbil */
+    flex: 1 1 auto;
 }
 
-.event-modal .btn-close {
-    background: #f3f4f6;
-    color: #4b5563;
-}
-
-.event-modal .btn-close:hover {
-    background: #e5e7eb;
-}
-
-.event-modal .btn-maps {
-    background: #1a5c1a;
-    color: white;
-}
-
-.event-modal .btn-maps:hover {
-    background: #144614;
-}
-
-.event-modal .btn-pdf {
-    background: #cf2e2e;
-    color: white;
-}
-
-.event-modal .btn-pdf:hover {
-    background: #b12828;
-}
+.event-modal .btn-close { background: #f3f4f6; color: #4b5563; }
+.event-modal .btn-close:hover { background: #e5e7eb; }
+.event-modal .btn-maps { background: #1a5c1a; color: white; }
+.event-modal .btn-maps:hover { background: #144614; }
+.event-modal .btn-pdf { background: #cf2e2e; color: white; }
+.event-modal .btn-pdf:hover { background: #b12828; }
 
 .event-modal .close-x {
     position: absolute;
@@ -267,75 +297,16 @@ html, body {
     color: #999;
 }
 
-/* 5. MEDIA QUERIES PER A PANTALLES PETITES (< 768px) */
+/* 6. RETOCS ESPECÍFICS NOMÉS PER A MÒBIL (< 768px) */
 @media (max-width: 768px) {
     .calendar-layout-container {
-        flex-direction: column;
-        margin: 5px 0;
-        width: 100% !important;
         padding: 0 5px;
     }
 
-    .sidebar {
-        width: 100% !important;
-        min-width: 100% !important;
-        border-right: none !important;
-        margin-right: 0 !important;
-        padding-right: 0 !important;
-        margin-bottom: 15px;
-        position: relative;
-    }
-
-    .filters-toggle-btn {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        width: 100%;
-        padding: 12px 18px;
-        background: #1a5c1a;
-        color: white;
-        font-size: 1.1rem;
-        font-weight: bold;
-        border: none;
-        border-radius: 10px;
-        cursor: pointer;
-        box-sizing: border-box;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-    }
-
-    .sidebar-content {
-        display: none;
-        position: absolute;
-        top: 100%;
-        left: 0;
-        width: 100%;
-        background: #ffffff;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-        border: 1px solid #e5e7eb;
-        border-radius: 12px;
-        padding: 18px;
-        z-index: 9999;
-        box-sizing: border-box;
-        max-height: 60vh;
-        overflow-y: auto;
-        margin-top: 5px;
-    }
-
-    .sidebar-content.open {
-        display: block;
-    }
-
-    .main-content {
-        width: 100% !important;
-        max-width: 100% !important;
-    }
-
     #map {
-        height: 250px !important; /* Alçada reduïda en mòbil */
-        width: 100% !important;
+        height: 250px !important;
     }
 
-    /* REDUCCIÓ DE LA BOTONERA DE FULLCALENDAR EN MÒBIL */
     .fc-toolbar {
         flex-direction: column !important;
         gap: 8px !important;
@@ -356,7 +327,6 @@ html, body {
         font-size: 1.1rem !important;
     }
 
-    /* AJUST DELS DIES I NÚMEROS DEL CALENDARI */
     .fc-event {
         padding: 1px 2px !important;
         margin-bottom: 2px !important;
@@ -370,11 +340,6 @@ html, body {
     .fc-custom-event-title {
         font-size: 0.64rem !important;
         line-height: 1.1 !important;
-        -webkit-line-clamp: 2;
-        display: -webkit-box;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-        text-overflow: ellipsis;
     }
 
     .fc-daygrid-day-number {
@@ -388,6 +353,6 @@ html, body {
     }
 
     .fc-daygrid-day-frame {
-        min-height: 45px !important; /* Ajustat perquè les caselles no es facin gegants */
+        min-height: 45px !important;
     }
 }
