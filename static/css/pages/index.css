@@ -1,0 +1,10 @@
+/* Page styles: index.html */
+.cover-responsive {
+						height: 200px;
+					}
+
+					@media (max-width: 768px) {
+						.cover-responsive {
+							height: 100px;
+						}
+					}

@@ -1,0 +1,358 @@
+/* Page styles: activitats_calendar.html */
+
+//* 1. Control per evitar scroll horitzontal */
+html, body {
+    overflow-x: hidden !important;
+    max-width: 100% !important;
+}
+
+/* Forçar centratat en el contenidor principal de base_layout.html */
+.entry-content,
+.entry-content.is-layout-constrained,
+.wp-block-post-content {
+    max-width: 1400px !important;
+    width: 100% !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    box-sizing: border-box !important;
+}
+
+/* 2. Contenidor principal centrat (CENTRA ELS FILLS DINS DEL CONTENIDOR) */
+.calendar-layout-container {
+    display: flex !direction;
+    flex-direction: column;
+    align-items: center !important; /* CENTRA ELS FILLS (SIDEBAR I MAIN-CONTENT) AL MIG */
+    width: 100% !important;
+    max-width: 1100px !important;    /* Amplada màxima continguda */
+    margin: 0 auto !important;       /* Centra el contenidor respecte la pàgina */
+    padding: 0 15px;
+    box-sizing: border-box !important;
+}
+
+.main-content {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 auto !important;      /* Centra el bloc del calendari i mapa */
+    box-sizing: border-box !important;
+}
+
+.sidebar {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+}
+
+/* Assegurar que els elements interns ocupin el 100% de l'amplada del seu pare centrat */
+#map, #calendar {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    box-sizing: border-box !important;
+}
+/* 3. Filtres i Sidebar (PLEGABLE TANT EN PC COM EN MÒBIL) */
+.sidebar {
+    position: relative;
+    margin-bottom: 20px;
+    width: 100% !important;
+}
+
+.entity-filter {
+    margin-bottom: 12px;
+}
+
+.entity-filter label {
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    line-height: 1.4;
+}
+
+.entity-cb {
+    width: 22px;
+    height: 22px;
+    margin-right: 12px;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.back-link {
+    display: inline-block;
+    margin-bottom: 15px;
+    text-decoration: none;
+    color: #333;
+    font-weight: 500;
+}
+
+/* BOTÓ DESPLEGABLE VISIBLE EN PC I MÒBIL */
+.filters-toggle-btn {
+    display: flex !important;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 12px 18px;
+    background: #1a5c1a;
+    color: white;
+    font-size: 1.1rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    box-sizing: border-box;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+/* MENÚ PLEGAT PER DEFECTE EN TOTS ELS DISPOSITIUS */
+.sidebar-content {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background: #ffffff;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 18px;
+    z-index: 9999;
+    box-sizing: border-box;
+    max-height: 60vh;
+    overflow-y: auto;
+    margin-top: 5px;
+}
+
+.sidebar-content.open {
+    display: block !important;
+}
+
+/* 4. Estils dels esdeveniments de FullCalendar */
+.fc-custom-event-content {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 2px;
+    line-height: 1.15;
+    overflow: hidden;
+    width: 100%;
+}
+
+.fc-custom-event-time {
+    font-weight: bold;
+    font-size: 0.72rem;
+    color: #1a5c1a;
+    background: #e8f5e9;
+    padding: 1px 3px;
+    border-radius: 3px;
+    flex-shrink: 0;
+    display: inline-block;
+}
+
+.fc-custom-event-title {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-break: break-word;
+    font-size: 0.85rem;
+}
+
+.fc-event {
+    cursor: pointer;
+    padding: 4px;
+    font-size: 1rem;
+}
+
+.fc-event-title {
+    font-size: 1rem !important;
+    white-space: normal !important;
+}
+
+.fc-daygrid-event {
+    white-space: normal !important;
+}
+
+/* 5. MODAL DETALLS D'ACTIVITAT */
+.event-modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(8px);
+    z-index: 10000;
+    justify-content: center;
+    align-items: center;
+    animation: modalFadeIn 0.3s ease-out;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.event-modal {
+    background: #ffffff;
+    border-radius: 24px;
+    padding: 25px;
+    max-width: 650px;
+    width: 95% !important;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    position: relative;
+    max-height: 85vh;
+    overflow-y: auto;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-sizing: border-box !important;
+}
+
+@keyframes modalFadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.event-modal h2 {
+    color: #1a5c1a;
+    margin-top: 0;
+    font-size: 1.5rem;
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 15px;
+    padding-right: 25px;
+}
+
+.event-modal .event-info {
+    display: grid;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.event-modal .info-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 1rem;
+    color: #444;
+}
+
+.event-modal .info-item .icon {
+    font-size: 1.2rem;
+    min-width: 20px;
+}
+
+.event-modal .event-description {
+    background: #f8faf8;
+    padding: 15px;
+    border-radius: 12px;
+    margin: 15px 0;
+    line-height: 1.5;
+    color: #333;
+    border-left: 4px solid #4caf50;
+    word-break: break-word;
+}
+
+.event-modal .modal-footer {
+    margin-top: 20px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    border-top: 1px solid #eee;
+    padding-top: 15px;
+}
+
+.event-modal .btn {
+    padding: 10px 18px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    flex: 1 1 auto;
+}
+
+.event-modal .btn-close { background: #f3f4f6; color: #4b5563; }
+.event-modal .btn-close:hover { background: #e5e7eb; }
+.event-modal .btn-maps { background: #1a5c1a; color: white; }
+.event-modal .btn-maps:hover { background: #144614; }
+.event-modal .btn-pdf { background: #cf2e2e; color: white; }
+.event-modal .btn-pdf:hover { background: #b12828; }
+
+.event-modal .close-x {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    font-size: 22px;
+    cursor: pointer;
+    color: #999;
+}
+
+/* 6. RETOCS ESPECÍFICS NOMÉS PER A MÒBIL (< 768px) */
+@media (max-width: 768px) {
+    .calendar-layout-container {
+        padding: 0 5px;
+    }
+
+    #map {
+        height: 250px !important;
+    }
+
+    .fc-toolbar {
+        flex-direction: column !important;
+        gap: 8px !important;
+    }
+
+    .fc-toolbar-chunk {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+    }
+
+    .fc-button {
+        padding: 4px 8px !important;
+        font-size: 0.8rem !important;
+    }
+
+    .fc-toolbar-title {
+        font-size: 1.1rem !important;
+    }
+
+    .fc-event {
+        padding: 1px 2px !important;
+        margin-bottom: 2px !important;
+    }
+
+    .fc-custom-event-time {
+        font-size: 0.58rem !important;
+        padding: 0px 2px !important;
+    }
+
+    .fc-custom-event-title {
+        font-size: 0.64rem !important;
+        line-height: 1.1 !important;
+    }
+
+    .fc-daygrid-day-number {
+        font-size: 0.75rem !important;
+        padding: 1px 3px !important;
+    }
+
+    .fc-col-header-cell-cushion {
+        font-size: 0.7rem !important;
+        padding: 1px !important;
+    }
+
+    .fc-daygrid-day-frame {
+        min-height: 45px !important;
+    }
+}

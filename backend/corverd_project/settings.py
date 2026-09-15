@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 from pathlib import Path
 import os
 from dotenv import load_dotenv
+import socket
 
 # Load .env file
 load_dotenv()
@@ -30,9 +31,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG', 'True') == 'True'
 
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '').split(',') if os.getenv('ALLOWED_HOSTS') else []
-
-
+ALLOWED_HOSTS = [host.strip() for host in os.getenv('ALLOWED_HOSTS', '').split(',')] if os.getenv('ALLOWED_HOSTS') else []
 # Application definition
 
 INSTALLED_APPS = [
@@ -166,3 +165,18 @@ EMAIL_USE_TLS = False
 EMAIL_HOST_USER = os.getenv('EMAIL')
 EMAIL_HOST_PASSWORD = os.getenv('CONTRASENYA_EMAIL')
 DEFAULT_FROM_EMAIL = os.getenv('EMAIL')
+
+
+try:
+    # Obté la IP local de la màquina
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    s.connect(("8.8.8.8", 80))
+    local_ip = s.getsockname()[0]
+    s.close()
+
+    print("\n" + "=" * 50)
+    print(f" 🚀 ACCÉS DES DE LA XARXA LOCAL (MÒBIL / ALTRES):")
+    print(f" 👉 http://{local_ip}:8000")
+    print("=" * 50 + "\n")
+except Exception:
+    pass
