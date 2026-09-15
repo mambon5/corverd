@@ -13,52 +13,50 @@
 {% endblock %}
 
 {% block content %}
-<div class="wp-block-group alignfull is-style-ext-preset--group--natural-1--section has-background-background-color has-background has-global-padding is-layout-constrained wp-block-group-is-layout-constrained"
-					id="contacte"
-					style="margin-top:0;margin-bottom:0;padding-top:var(--wp--preset--spacing--70);padding-bottom:var(--wp--preset--spacing--70)">
+	<div class="wp-block-group alignfull is-style-ext-preset--group--natural-1--section has-background-background-color has-background has-global-padding is-layout-constrained wp-block-group-is-layout-constrained"
+		id="contacte" style="margin-top:0;margin-bottom:0;">
+		<div
+			style="text-align: left; max-width: 600px; margin: 0 auto; background: #fff; padding: 40px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+			<h2 style="color: #2c5e31; margin-bottom: 20px; text-align: center;">Vols contactar amb la
+				Coordinadora Verda?</h2>
 
-					<div
-						style="text-align: left; max-width: 600px; margin: 0 auto; background: #fff; padding: 40px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-						<h2 style="color: #2c5e31; margin-bottom: 20px; text-align: center;">Vols contactar amb la
-							Coordinadora Verda?</h2>
+			{% if success %}
+			<div
+				style="background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; padding: 15px; border-radius: 5px; margin-bottom: 20px; text-align: center;">
+				El missatge s'ha enviat correctament. Ens posarem en contacte amb tu el més aviat possible.
+			</div>
+			{% endif %}
 
-						{% if success %}
-						<div
-							style="background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; padding: 15px; border-radius: 5px; margin-bottom: 20px; text-align: center;">
-							El missatge s'ha enviat correctament. Ens posarem en contacte amb tu el més aviat possible.
-						</div>
-						{% endif %}
+			<form method="post" action="{% url 'contacte' %}"
+				style="display: flex; flex-direction: column; gap: 15px;">
+				{% csrf_token %}
+				<div>
+					<label for="nom_representant"
+						style="font-weight: bold; display: block; margin-bottom: 5px;">Nom
+						representant</label>
+					<input type="text" id="nom_representant" name="nom_representant" required
+						style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px;">
+				</div>
+				<div>
+					<label for="nom_entitat"
+						style="font-weight: bold; display: block; margin-bottom: 5px;">Nom entitat</label>
+					<input type="text" id="nom_entitat" name="nom_entitat" required
+						style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px;">
+				</div>
+				<div>
+					<label for="email" style="font-weight: bold; display: block; margin-bottom: 5px;">Correu
+						electrònic</label>
+					<input type="email" id="email" name="email" required
+						style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px;">
+				</div>
+				<div>
+					<label for="descripcio"
+						style="font-weight: bold; display: block; margin-bottom: 5px;">Descripció</label>
+					<textarea id="descripcio" name="descripcio" rows="5" required
+						style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px;"></textarea>
+				</div>
 
-						<form method="post" action="{% url 'contacte' %}"
-							style="display: flex; flex-direction: column; gap: 15px;">
-							{% csrf_token %}
-							<div>
-								<label for="nom_representant"
-									style="font-weight: bold; display: block; margin-bottom: 5px;">Nom
-									representant</label>
-								<input type="text" id="nom_representant" name="nom_representant" required
-									style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px;">
-							</div>
-							<div>
-								<label for="nom_entitat"
-									style="font-weight: bold; display: block; margin-bottom: 5px;">Nom entitat</label>
-								<input type="text" id="nom_entitat" name="nom_entitat" required
-									style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px;">
-							</div>
-							<div>
-								<label for="email" style="font-weight: bold; display: block; margin-bottom: 5px;">Correu
-									electrònic</label>
-								<input type="email" id="email" name="email" required
-									style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px;">
-							</div>
-							<div>
-								<label for="descripcio"
-									style="font-weight: bold; display: block; margin-bottom: 5px;">Descripció</label>
-								<textarea id="descripcio" name="descripcio" rows="5" required
-									style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px;"></textarea>
-							</div>
-
-							<!-- Secció de Política de Protecció de Dades -->
+				<!-- Secció de Política de Protecció de Dades -->
 <div style="margin-top: 10px;">
     <details style="background: #f9f9f9; padding: 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 0.85rem; color: #444; margin-bottom: 12px;">
         <summary style="font-weight: bold; cursor: pointer; color: #2c5e31;">

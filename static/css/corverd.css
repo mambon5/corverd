@@ -85,9 +85,9 @@ img:is([sizes=auto i], [sizes^="auto," i]) {
         /*# sourceURL=/static/wp-includes/blocks/group/style.min.css */
 
 /* --- wp-block-group-theme-inline-css --- */
-:where(.wp-block-group.has-background) {
+/* 		:where(.wp-block-group.has-background) {
             padding: 1.25em 2.375em
-        }
+        } */
 
         /*# sourceURL=/static/wp-includes/blocks/group/theme.min.css */
 
@@ -2476,9 +2476,9 @@ h1:where(.wp-block-heading).has-background,
             --wp--preset--gradient--diagonal-background-to-tertiary: linear-gradient(to bottom right, var(--wp--preset--color--background) 50%, var(--wp--preset--color--tertiary) 50%);
             --wp--preset--font-size--small: 1rem;
             --wp--preset--font-size--medium: 1.25rem;
-            --wp--preset--font-size--large: clamp(1.39rem, 1.39rem + ((1vw - 0.2rem) * 1.433), 2.25rem);
-            --wp--preset--font-size--x-large: clamp(1.85rem, 1.85rem + ((1vw - 0.2rem) * 1.917), 3rem);
-            --wp--preset--font-size--xx-large: clamp(2.25rem, 2.25rem + ((1vw - 0.2rem) * 2.5), 3.75rem);
+            --wp--preset--font-size--large: clamp(1.0625rem, 1.0114rem + 0.2727vw, 1.25rem); /* mínim 17 i màxim 20px */ /* clamp(1.39rem, 1.39rem + ((1vw - 0.2rem) * 1.433), 2.25rem);*/
+            --wp--preset--font-size--x-large: clamp(1.1875rem, 1.1364rem + 0.2727vw, 1.375rem); /* mínim 19 i màxim 22px */ /* clamp(1.85rem, 1.85rem + ((1vw - 0.2rem) * 1.917), 3rem);*/
+            --wp--preset--font-size--xx-large: clamp(1.5rem, 1.3977rem + 0.5455vw, 1.875rem); /* mínim 24 i màxim 30px */ /* clamp(2.25rem, 2.25rem + ((1vw - 0.2rem) * 2.5), 3.75rem); */
             --wp--preset--font-family--archivo: "Archivo", sans-serif;
             --wp--preset--font-family--arsenal: "Arsenal", serif;
             --wp--preset--font-family--baloo-tamma-2: "Baloo Tamma 2", sans-serif;
@@ -5095,4 +5095,53 @@ img.wp-smiley,
     .cv-mobile-overlay {
         display: none !important;
     }
+}
+
+
+/*
+ * Custom styles for Coordinadora Verda (NRA)
+ */
+
+/* entitats */
+
+.cv-title-wrapper {
+	margin-bottom: 4rem !important;
+}
+.cv-title-wrapper  h1 {
+	margin: 0 auto;
+	background-color: var(--wp--preset--color--background);
+	padding-top: 12px;
+    padding-right: var(--wp--preset--spacing--50);
+    padding-bottom: 12px;
+    padding-left: var(--wp--preset--spacing--50);
+	border-top-left-radius: 48px;
+    border-top-right-radius: 8px;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 48px;
+    min-height: 100%;
+}
+
+.entitat-action {
+	display: none;
+}
+
+/* menu */
+
+.cv-dropdown {
+	padding: 6px 12px;
+}
+
+/* organització */
+
+.cv-flex-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+figure figcaption {
+    text-align: center;
+    font-size: 0.9rem;
+    margin-top: 4px;
 }
