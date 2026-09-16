@@ -4,10 +4,10 @@
 
 :root {
     /* Amplada per defecte del contingut (canvia 1200px o 1400px segons prefereixis) */
-    --wp--style--global--content-size: 1300px !important;
+    --wp--style--global--content-size: 900px !important;
     
     /* Amplada per als blocs amples (alignwide) */
-    --wp--style--global--wide-size: 1400px !important;
+    --wp--style--global--wide-size: 1300px !important;
 }
 
 /* --- wp-img-auto-sizes-contain-inline-css --- */
@@ -5078,7 +5078,7 @@ img.wp-smiley,
 }
 
 /* Visibilitat segons la pantalla */
-@media (max-width: 781px) {
+@media (max-width: 1154px) { /* fins que no resolguem el problema de l'alçada canvio de 781 a 1154*/
     .cv-desktop-menu {
         display: none !important;
     }
@@ -5087,7 +5087,7 @@ img.wp-smiley,
     }
 }
 
-@media (min-width: 782px) {
+@media (min-width: 1155px) {
     .cv-desktop-menu {
         display: flex !important;
     }
@@ -5108,6 +5108,7 @@ img.wp-smiley,
 	margin-bottom: 4rem !important;
 }
 .cv-title-wrapper  h1 {
+	text-transform: uppercase;
 	margin: 0 auto;
 	background-color: var(--wp--preset--color--background);
 	padding-top: 12px;
@@ -5144,4 +5145,26 @@ figure figcaption {
     text-align: center;
     font-size: 0.9rem;
     margin-top: 4px;
+}
+
+/* layout general */
+
+.wp-block-post-content {
+    max-width: var(--wp--style--global--content-size);
+    margin: 0 auto;
+}
+
+.cv-page-entitats_list main .wp-block-post-content {
+
+    max-width: var(--wp--style--global--wide-size);
+    margin: 0 auto;
+}
+
+.cv-sr-only {
+	position:absolute;
+	left:-10000px;
+	top:auto;
+	width:1px;
+	height:1px;
+	overflow:hidden;
 }

@@ -19,11 +19,11 @@ html, body {
 
 /* 2. Contenidor principal centrat (CENTRA ELS FILLS DINS DEL CONTENIDOR) */
 .calendar-layout-container {
-    display: flex !direction;
+    display: flex;
     flex-direction: column;
     align-items: center !important; /* CENTRA ELS FILLS (SIDEBAR I MAIN-CONTENT) AL MIG */
     width: 100% !important;
-    max-width: 1100px !important;    /* Amplada màxima continguda */
+    max-width: 1300px !important;    /* Amplada màxima continguda */
     margin: 0 auto !important;       /* Centra el contenidor respecte la pàgina */
     padding: 0 15px;
     box-sizing: border-box !important;
