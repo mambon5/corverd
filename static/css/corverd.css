@@ -2792,7 +2792,7 @@ h1:where(.wp-block-heading).has-background,
             text-transform: uppercase;
         }
 
-        :root :where(.wp-element-button, .wp-block-button__link) {
+/*         :root :where(.wp-element-button, .wp-block-button__link) {
             background-color: var(--wp--custom--elements--button--color--background);
             border-radius: var(--wp--custom--elements--button--border--radius);
             border-width: 0;
@@ -2809,7 +2809,7 @@ h1:where(.wp-block-heading).has-background,
             padding-left: calc(1.333em + 2px);
             text-decoration: none;
             text-transform: inherit;
-        }
+        } */
 
         :root :where(.wp-element-button:hover, .wp-block-button__link:hover) {
             background-color: var(--wp--custom--elements--button--hover--color--background);
@@ -5108,7 +5108,7 @@ img.wp-smiley,
 	margin-bottom: 4rem !important;
 }
 .cv-title-wrapper  h1 {
-	text-transform: uppercase;
+	font-size: 2.3rem; /* ajusta la mida segons sigui necessari */
 	margin: 0 auto;
 	background-color: var(--wp--preset--color--background);
 	padding-top: 12px;
@@ -5149,9 +5149,81 @@ figure figcaption {
 
 /* layout general */
 
+
+body {
+  font-family: "Outfit", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+}
+
+h1, h2, h3 {
+  font-family: "Fraunces", serif;
+  font-optical-sizing: auto;
+  font-weight: 600;
+  font-style: normal;
+  font-variation-settings:
+    "SOFT" 0,
+    "WONK" 0;
+}
+
+footer {
+	border-top: 1px solid var(--wp--preset--color--foreground);
+}
+
 .wp-block-post-content {
     max-width: var(--wp--style--global--content-size);
     margin: 0 auto;
+}
+
+/* pàgina d'inici */
+
+.cv-page-index h1.wp-block-heading {
+	text-transform: none;
+	font-size: 3rem; /* ajusta la mida segons sigui necessari */	
+}
+
+.cv-page-index .cv-wrapper-inici {
+	max-width: var(--wp--style--global--content-size);
+    margin: 0 auto;
+	padding-top: 40px;
+}
+.cv-page-index .wp-block-post-content {
+    max-width: 100%;
+    margin: 0 auto;
+}
+
+.cv-page-index .cover-responsive img {
+	object-fit: cover;
+    width: 100%;
+    height: 400px;
+}
+
+.cv-page-index .wp-block-button__link {
+	padding-top: calc(0.667em + 2px);
+	padding-right: calc(1.333em + 2px);
+	padding-bottom: calc(0.667em + 2px);
+	padding-left: calc(1.333em + 2px);
+	margin-top: 20px;
+	background-color: var(--wp--custom--elements--button--color--background);
+	color: white;
+	border: 1px solid var(--wp--custom--elements--button--color--background);
+}
+
+.cv-page-index .wp-block-button__link:hover, .cv-page-index .wp-block-button__link:focus {
+	background-color: var(--wp--preset--color--white);
+	color: var(--wp--custom--elements--button--color--background);
+}
+
+
+.cv-page-index .cv-button-entitats {
+    background-color: var(--wp--preset--color--white);
+	color: var(--wp--custom--elements--button--color--background);
+}
+
+.cv-page-index .cv-button-entitats:hover, .cv-page-index .cv-button-entitats:focus {
+    background-color: var(--wp--custom--elements--button--color--background);
+	color: var(--wp--preset--color--white);
 }
 
 .cv-page-entitats_list main .wp-block-post-content {
