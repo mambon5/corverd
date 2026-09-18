@@ -16,6 +16,7 @@
 <div class="wp-block-group alignfull is-style-ext-preset--group--natural-1--section has-background-background-color has-background has-global-padding is-layout-constrained wp-block-group-is-layout-constrained"
 	id="contacte"
 	style="margin-top:0;margin-bottom:0;padding-top:var(--wp--preset--spacing--70);padding-bottom:var(--wp--preset--spacing--70)">
+
 	<div class="wp-block-media-text alignwide is-stacked-on-mobile is-image-fill-element extendify-image-import is-style-ext-preset--media-text--natural-1--card-1 has-tertiary-background-color has-background is-style-ext-preset--media-text--natural-1--card-1--5"
 		style="grid-template-columns:25% auto">
 		<figure class="wp-block-media-text__media"><img decoding="async" width="1024" height="768"
@@ -27,72 +28,24 @@
 			<div class="wp-block-group alignwide has-global-padding is-layout-constrained wp-container-core-group-is-layout-48493932 wp-block-group-is-layout-constrained"
 				style="padding-top:var(--wp--preset--spacing--55);padding-right:var(--wp--preset--spacing--55);padding-bottom:var(--wp--preset--spacing--55);padding-left:var(--wp--preset--spacing--55)">
 
-				{% if entitats %}
-				{% for entitat in entitats %}
+				{% if associacions.count > 1 %}
+				<!-- DESPLEGABLE PER SELLECCIONAR ENTITAT -->
 				<div
-					style="background:#fff; padding:20px; border-radius:8px; box-shadow:0 2px 10px rgba(0,0,0,0.1); width:100%; margin-bottom:30px;">
-					<h2 style="margin-top:0;">Dades de l'Entitat: {{ entitat.nom }}</h2>
-					<p><strong>Descripció:</strong> {{ entitat.descripcio }}</p>
-					<p><strong>Any de fundació:</strong> {{ entitat.any_fundacio }}</p>
-					<p><strong>Zona geogràfica:</strong> {{ entitat.zona_geografica }}</p>
-
-					<p><strong>Gerents:</strong>
-						{% for g in entitat.gerents.all %}
-						{{ g.get_full_name|default:g.username }}{% if not forloop.last %}, {% endif %}
-						{% empty %}
-						Sense gerents assignats
+					style="margin-bottom: 25px; background: #fff; padding: 15px; border-radius: 8px; box-shadow:0 2px 10px rgba(0,0,0,0.05);">
+					<label for="select-associacio"><strong>Selecciona l'entitat a gestionar:</strong></label>
+					<select id="select-associacio" onchange="location = this.value;"
+						style="padding: 8px; margin-left: 10px; border-radius: 4px; border: 1px solid #ccc;">
+						{% for a in associacions %}
+						<option value="?associacio_id={{ a.id }}" {% if a == entitat %}selected{% endif %}>
+							{{ a.nom }}
+						</option>
 						{% endfor %}
-					</p>
-
-					<a href="{% url 'editar_entitat' entitat.id %}" class="wp-element-button"
-						style="display:inline-block; margin-top:10px;">Editar Entitat</a>
+					</select>
 				</div>
+				{% endif %}
 
-				<div
-					style="background:#fff; padding:20px; border-radius:8px; box-shadow:0 2px 10px rgba(0,0,0,0.1); width:100%; margin-bottom:40px;">
-					<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
-						<h2 style="margin:0;">Activitats de {{ entitat.nom }}</h2>
-						<a href="{% url 'crear_activitat' %}?entitat={{ entitat.id }}" class="wp-element-button"
-							style="background:#0693e3;">+ Nova Activitat</a>
-					</div>
-
-					{% if entitat.activitats.all %}
-					<table style="width:100%; border-collapse:collapse;">
-						<thead>
-							<tr style="border-bottom:2px solid #ddd; text-align:left;">
-								<th style="padding:10px; width:30%;">Títol</th>
-								<th style="padding:10px; width:15%; white-space:nowrap;">Data</th>
-								<th style="padding:10px; width:10%; white-space:nowrap;">Hora</th>
-								<th style="padding:10px; width:30%;">Adreça</th>
-								<th style="padding:10px; width:15%; white-space:nowrap;">Accions</th>
-							</tr>
-						</thead>
-						<tbody>
-							{% for act in entitat.activitats.all %}
-							<tr style="border-bottom:1px solid #eee;">
-								<td style="padding:10px;"><strong>{{ act.titol }}</strong></td>
-								<td style="padding:10px; white-space:nowrap;">{{ act.data|date:"d/m/Y" }}</td>
-								<td style="padding:10px; white-space:nowrap;">{{ act.hora|time:"H:i" }}</td>
-								<td style="padding:10px;">{{ act.adreça }}</td>
-								<td style="padding:10px; white-space:nowrap;">
-									<a href="{% url 'editar_activitat' act.id %}"
-										style="color:#007cba; margin-right:10px; text-decoration:none;">Editar</a>
-									<a href="{% url 'esborrar_activitat' act.id %}"
-										style="color:#cf2e2e; text-decoration:none;"
-										onclick="return confirm('Segur que vols esborrar aquesta activitat?');">Esborrar</a>
-								</td>
-							</tr>
-							{% endfor %}
-						</tbody>
-					</table>
-					{% else %}
-					<p>No hi ha activitats programades per a aquesta entitat.</p>
-					{% endif %}
-				</div>
-				{% endfor %}
-
-				{% elif entitat %}
-				{# Mantingurem la retrocompatibilitat si la vista només passa un objecte singular 'entitat' #}
+				{% if entitat %}
+				<!-- DADES DE L'ENTITAT SELECCIONADA -->
 				<div
 					style="background:#fff; padding:20px; border-radius:8px; box-shadow:0 2px 10px rgba(0,0,0,0.1); width:100%; margin-bottom:30px;">
 					<h2 style="margin-top:0;">Dades de l'Entitat: {{ entitat.nom }}</h2>
@@ -110,11 +63,13 @@
 						style="display:inline-block; margin-top:10px;">Editar Entitat</a>
 				</div>
 
+				<!-- ACTIVITATS DE L'ENTITAT SELECCIONADA -->
 				<div
 					style="background:#fff; padding:20px; border-radius:8px; box-shadow:0 2px 10px rgba(0,0,0,0.1); width:100%;">
 					<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
 						<h2 style="margin:0;">Activitats</h2>
-						<a href="{% url 'crear_activitat' %}" class="wp-element-button" style="background:#0693e3;">+
+						<a href="{% url 'crear_activitat' %}?associacio_id={{ entitat.id }}" class="wp-element-button"
+							style="background:#0693e3;">+
 							Nova Activitat</a>
 					</div>
 
@@ -164,6 +119,5 @@
 			</div>
 		</div>
 	</div>
-</div>
 </div>
 {% endblock %}
