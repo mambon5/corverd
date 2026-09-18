@@ -8,7 +8,11 @@ class Associacio(models.Model):
     zona_geografica = models.CharField(max_length=255, null=True, blank=True)
     latitud = models.FloatField(null=True, blank=True)
     longitud = models.FloatField(null=True, blank=True)
-    gerent = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='associacions_administrades')
+    gerents = models.ManyToManyField(User, 
+        blank=True, 
+        related_name='associacions_administrades',
+        help_text="Usuaris que tenen permís per gestionar aquesta associació"
+        )    
     adreça = models.CharField(max_length=255, null=True, blank=True)
     web = models.CharField(max_length=255, null=True, blank=True)
     correu = models.EmailField(max_length=255, null=True, blank=True)

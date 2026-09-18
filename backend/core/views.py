@@ -8,6 +8,7 @@ import json
 from django.core.mail import send_mail
 from django.conf import settings
 from django.contrib import messages
+import os
 
 
 def index(request):
@@ -135,36 +136,73 @@ def blog(request):
 def proteccio_dades(request):
     return render(request, 'proteccio_dades.html')
 
+
+# --- FUNCIONS AUXILIARS DE LA INTRANET ---
+
+def _get_user_associacions(user):
+    """Retorna les associacions que pot gestionar un usuari."""
+    if user.is_superuser or user.is_staff:
+        return Associacio.objects.all().order_by('nom')
+    return Associacio.objects.filter(gerents=user).order_by('nom')
+
+
+# --- VISTES DE LA INTRANET (ACTUALITZADES PER A MOLTS-A-MOLTS) ---
+
 @login_required
 def intranet_dashboard(request):
-    associacions = Associacio.objects.filter(gerent=request.user)
-    entitat = associacions.first() if associacions.exists() else None
+    associacions = _get_user_associacions(request.user)
+    
+    # Obtenir quina associació s'ha seleccionat via query param ?associacio_id=X
+    associacio_id = request.GET.get('associacio_id')
+    entitat = None
+    
+    if associacio_id:
+        entitat = associacions.filter(id=associacio_id).first()
+    
+    # Si no s'ha especificat o no té permís, agafem la primera associació disponible
+    if not entitat and associacions.exists():
+        entitat = associacions.first()
+
     activitats = entitat.activitats.all().order_by('-data', '-hora') if entitat else []
     
     return render(request, 'intranet/dashboard.html', {
+        'associacions': associacions,
         'entitat': entitat,
         'activitats': activitats,
     })
 
 @login_required
 def editar_entitat(request, pk):
-    entitat = get_object_or_404(Associacio, pk=pk, gerent=request.user)
+    # Assegurem que l'usuari actual és gerent d'aquesta associació específica
+    associacions_permeses = _get_user_associacions(request.user)
+    entitat = get_object_or_404(associacions_permeses, pk=pk)
+    
     if request.method == 'POST':
-        form = AssociacioForm(request.POST, instance=entitat)
+        form = AssociacioForm(request.POST, request.FILES, instance=entitat)
         if form.is_valid():
             form.save()
-            return redirect('intranet_dashboard')
+            return redirect(f"/intranet/?associacio_id={entitat.id}")
     else:
         form = AssociacioForm(instance=entitat)
-    return render(request, 'intranet/formulari.html', {'form': form, 'titol': 'Editar Entitat'})
+    return render(request, 'intranet/formulari.html', {'form': form, 'titol': 'Editar Entitat', 'entitat': entitat})
 
 @login_required
 def crear_activitat(request):
-    entitat = Associacio.objects.filter(gerent=request.user).first()
-    if not entitat:
+    associacions = _get_user_associacions(request.user)
+    if not associacions.exists():
+        messages.error(request, "No tens cap entitat assignada per poder crear activitats.")
         return redirect('intranet_dashboard')
-        
+
+    # Si ve el paràmetre ?associacio_id=X a la URL, el fem servir
+    associacio_id = request.GET.get('associacio_id')
+    entitat = associacions.filter(id=associacio_id).first() if associacio_id else associacions.first()
+
     if request.method == 'POST':
+        # Llegim l'associació triada al formulari si n'hi ha més d'una
+        form_assoc_id = request.POST.get('associacio_id')
+        if form_assoc_id:
+            entitat = associacions.filter(id=form_assoc_id).first() or entitat
+
         form = ActivitatForm(request.POST, request.FILES)
         if form.is_valid():
             activitat = form.save(commit=False)
@@ -174,15 +212,23 @@ def crear_activitat(request):
             if form.cleaned_data.get('pdf_activitat'):
                 activitat.pdf_activitat = form.cleaned_data['pdf_activitat']
                 activitat.save()
-            return redirect('intranet_dashboard')
+            return redirect(f"/intranet/?associacio_id={entitat.id}")
     else:
         form = ActivitatForm()
-    return render(request, 'intranet/formulari.html', {'form': form, 'titol': 'Nova Activitat'})
+        
+    return render(request, 'intranet/formulari.html', {
+        'form': form, 
+        'titol': 'Nova Activitat',
+        'entitat': entitat,
+        'associacions': associacions
+    })
 
 @login_required
 def editar_activitat(request, pk):
-    entitat = Associacio.objects.filter(gerent=request.user).first()
-    activitat = get_object_or_404(Activitat, pk=pk, associacio=entitat)
+    associacions = _get_user_associacions(request.user)
+    activitat = get_object_or_404(Activitat, pk=pk, associacio__in=associacions)
+    entitat = activitat.associacio
+
     if request.method == 'POST':
         form = ActivitatForm(request.POST, request.FILES, instance=activitat)
         if form.is_valid():
@@ -190,17 +236,26 @@ def editar_activitat(request, pk):
             if form.cleaned_data.get('pdf_activitat'):
                 activitat.pdf_activitat = form.cleaned_data['pdf_activitat']
             activitat.save()
-            return redirect('intranet_dashboard')
+            return redirect(f"/intranet/?associacio_id={entitat.id}")
     else:
         form = ActivitatForm(instance=activitat)
-    return render(request, 'intranet/formulari.html', {'form': form, 'titol': 'Editar Activitat'})
+        
+    return render(request, 'intranet/formulari.html', {
+        'form': form, 
+        'titol': 'Editar Activitat',
+        'entitat': entitat
+    })
 
 @login_required
 def esborrar_activitat(request, pk):
-    entitat = Associacio.objects.filter(gerent=request.user).first()
-    activitat = get_object_or_404(Activitat, pk=pk, associacio=entitat)
+    associacions = _get_user_associacions(request.user)
+    activitat = get_object_or_404(Activitat, pk=pk, associacio__in=associacions)
+    entitat_id = activitat.associacio_id
     activitat.delete()
-    return redirect('intranet_dashboard')
+    return redirect(f"/intranet/?associacio_id={entitat_id}")
+
+
+# --- RESTA DE VISTES ---
 
 def mapa_entitats_view(request):
     entitats = Associacio.objects.all().order_by('nom')
@@ -270,8 +325,6 @@ def contacte(request):
         
     return render(request, 'contacte.html')
 
-
-import os
 
 def control_dashboard(request):
     # Check if the user is logged in as the special gestor

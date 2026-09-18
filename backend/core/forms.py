@@ -1,5 +1,8 @@
 from django import forms
 from .models import Associacio, Activitat
+from django.contrib.auth.models import User
+
+FIELD_STYLE = 'padding:10px; border:1px solid #ccc; width:100%; border-radius:4px; box-sizing:border-box;'
 
 class AssociacioForm(forms.ModelForm):
     class Meta:
@@ -42,10 +45,6 @@ class ActivitatForm(forms.ModelForm):
             if not pdf.name.endswith('.pdf'):
                 raise forms.ValidationError("Només es permeten arxius PDF.")
         return pdf
-
-from django.contrib.auth.models import User
-
-FIELD_STYLE = 'padding:10px; border:1px solid #ccc; width:100%; border-radius:4px; box-sizing:border-box;'
 
 class GestorUserForm(forms.Form):
     username = forms.CharField(
@@ -95,7 +94,7 @@ class GestorAssociacioForm(forms.ModelForm):
         fields = [
             'nom', 'descripcio_curta', 'descripcio',
             'any_fundacio', 'zona_geografica', 'adreça',
-            'latitud', 'longitud', 'web', 'correu', 'foto', 'gerent'
+            'latitud', 'longitud', 'web', 'correu', 'foto', 'gerents'  # Canviat 'gerent' per 'gerents'
         ]
         widgets = {
             'nom': forms.TextInput(attrs={'style': FIELD_STYLE}),
@@ -109,19 +108,20 @@ class GestorAssociacioForm(forms.ModelForm):
             'web': forms.URLInput(attrs={'style': FIELD_STYLE, 'placeholder': 'https://...'}),
             'correu': forms.EmailInput(attrs={'style': FIELD_STYLE}),
             'foto': forms.ClearableFileInput(attrs={'accept': 'image/*'}),
-            'gerent': forms.Select(attrs={'style': FIELD_STYLE}),
+            # Utilitzem SelectMultiple per poder seleccionar un o diversos administradors (mantenint premut Ctrl/Cmd)
+            'gerents': forms.SelectMultiple(attrs={'style': FIELD_STYLE + ' height: 120px;'}),
         }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # Filtrar el select de gerents per a mostrar només administradors
-        self.fields['gerent'].queryset = User.objects.filter(is_staff=True)
-        self.fields['gerent'].empty_label = "Selecciona un administrador..."
+        # Filtrar el select de gerents per mostrar només usuaris administradors (is_staff=True)
+        self.fields['gerents'].queryset = User.objects.filter(is_staff=True)
+        self.fields['gerents'].label = "Gerents / Administradors"
+        self.fields['gerents'].help_text = "Mantén premut Ctrl (o Cmd a Mac) per seleccionar més d'un gerent."
 
         # Forcem com a obligatoris els camps que el model declara com a opcionals
-        # però que nosaltres exigim sempre en aquest formulari del gestor
         camps_obligatoris = [
-            'gerent', 'foto', 'web', 'correu', 'adreça',
+            'gerents', 'foto', 'web', 'correu', 'adreça',
             'zona_geografica', 'any_fundacio', 'latitud', 'longitud',
             'descripcio_curta',
         ]

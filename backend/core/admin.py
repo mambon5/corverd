@@ -6,22 +6,34 @@ class BaseEntityAdmin(admin.ModelAdmin):
         qs = super().get_queryset(request)
         if request.user.is_superuser:
             return qs
-        return qs.filter(associacio__gerent=request.user)
+        # Canviat associacio__gerent per associacio__gerents
+        return qs.filter(associacio__gerents=request.user).distinct()
     
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if not request.user.is_superuser and db_field.name == "associacio":
-            kwargs["queryset"] = Associacio.objects.filter(gerent=request.user)
+            # Canviat gerent per gerents
+            kwargs["queryset"] = Associacio.objects.filter(gerents=request.user)
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
 @admin.register(Associacio)
 class AssociacioAdmin(admin.ModelAdmin):
-    list_display = ('nom', 'any_fundacio', 'zona_geografica', 'gerent')
+    # Substituïm 'gerent' per la funció custom 'mostrar_gerents'
+    list_display = ('nom', 'any_fundacio', 'zona_geografica', 'mostrar_gerents')
+    
+    # Interfície molt més còmoda a l'admin per seleccionar usuaris gerents
+    filter_horizontal = ('gerents',)
     
     def get_queryset(self, request):
         qs = super().get_queryset(request)
         if request.user.is_superuser:
             return qs
-        return qs.filter(gerent=request.user)
+        # Canviat gerent per gerents
+        return qs.filter(gerents=request.user).distinct()
+
+    @admin.display(description='Gerents')
+    def mostrar_gerents(self, obj):
+        # Retorna els noms d'usuari dels gerents separats per comes
+        return ", ".join([g.username for g in obj.gerents.all()]) or "Sense gerents"
 
 @admin.register(Activitat)
 class ActivitatAdmin(BaseEntityAdmin):
