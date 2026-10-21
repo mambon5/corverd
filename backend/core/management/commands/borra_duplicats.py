@@ -1,32 +1,39 @@
+from django.core.management.base import BaseCommand
 from core.models import Associacio
 from django.db.models import Count
 
-# 1. Agrupem per nom per identificar quins noms tenen duplicats
-noms_duplicats = (
-    Associacio.objects.values('nom')
-    .annotate(total=Count('id'))
-    .filter(total__gt=1)
-    .values_list('nom', flat=True)
-)
+class Command(BaseCommand):
+    help = "Esborra associacions duplicades que no tenen gerents assignats"
 
-for nom in noms_duplicats:
-    # Obtenim totes les associacions amb aquest nom, ordenades per ID (o data)
-    associacions = Associacio.objects.filter(nom=nom).order_by('id')
-    
-    # Suposem que volem conservar la primera (la més antiga) i avaluar la resta
-    original = associacions.first()
-    duplicades = associacions.exclude(id=original.id)
-    
-    for dup in duplicades:
-        # Comprovem si té gerents assignats (la relació ManyToMany 'gerents')
-         te_gerents = dup.gerents.exists()
-         
-         # Opcionalment, pots comprovar també si té activitats, adhesions, etc., si ho creus necessari.
-         
-         if not te_gerents:
-             print(f"Esborrant associació duplicada sense gerents: {dup.nom} (ID: {dup.id})")
-             dup.delete()
-         else:
-             print(f"S'omet {dup.nom} (ID: {dup.id}) perquè té gerents assignats.")
+    def handle(self, *args, **options):
+        self.stdout.write("Buscant associacions duplicades...")
+        
+        noms_duplicats = (
+            Associacio.objects.values('nom')
+            .annotate(total=Count('id'))
+            .filter(total__gt=1)
+            .values_list('nom', flat=True)
+        )
 
-exit()
+        if not noms_duplicats:
+            self.stdout.write(self.style.SUCCESS("No s'ha trobat cap nom duplicat a la base de dades."))
+            return
+
+        eliminats_count = 0
+
+        for nom in noms_duplicats:
+            associacions = Associacio.objects.filter(nom=nom).order_by('id')
+            original = associacions.first()
+            duplicades = associacions.exclude(id=original.id)
+            
+            for dup in duplicades:
+                te_gerents = dup.gerents.exists()
+                
+                if not te_gerents:
+                    self.stdout.write(f"-> Esborrant duplicat sense gerents: '{dup.nom}' (ID: {dup.id})")
+                    dup.delete()
+                    eliminats_count += 1
+                else:
+                    self.stdout.write(f"-> Ometent '{dup.nom}' (ID: {dup.id}) perquè té gerents assignats.")
+
+        self.stdout.write(self.style.SUCCESS(f"\nProcés finalitzat. S'han eliminat {eliminats_count} registres duplicats."))
