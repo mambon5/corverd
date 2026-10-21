@@ -6,42 +6,60 @@ class Command(BaseCommand):
     help = "Esborra associacions duplicades similars que no tenen gerents assignats"
 
     def similarity(self, a, b):
-        """Retorna un valor entre 0 i 1 de semblança entre dues cadenes de text."""
         return difflib.SequenceMatcher(None, a.lower(), b.lower()).ratio()
 
     def handle(self, *args, **options):
         self.stdout.write("Buscant associacions amb noms similars o duplicats...")
-        
-        associacions = list(Associacio.objects.all().order_by('id'))
-        eliminats_count = 0
+
+        # Afegim un conjunt per portar el registre dels IDs que ja hem esborrat
         esborrats_ids = set()
 
-        for i in range(len(associacions)):
-            a1 = associacions[i]
-            if a1.id in esborrats_ids:
+        # Obtenim els IDs en un ordre establert
+        associacio_ids = list(Associacio.objects.values_list('id', flat=True).order_by('id'))
+        eliminats_count = 0
+
+        for i in range(len(associacio_ids)):
+            id1 = associacio_ids[i]
+            if id1 in esborrats_ids:
                 continue
 
-            for j in range(i + 1, len(associacions)):
-                a2 = associacions[j]
-                if a2.id in esborrats_ids:
+            # Carreguem l'objecte actual directament de la BD
+            try:
+                a1 = Associacio.objects.get(pk=id1)
+            except Associacio.DoesNotExist:
+                continue
+
+            for j in range(i + 1, len(associacio_ids)):
+                id2 = associacio_ids[j]
+                if id2 in esborrats_ids:
+                    continue
+
+                try:
+                    a2 = Associacio.objects.get(pk=id2)
+                except Associacio.DoesNotExist:
                     continue
 
                 # Càlcul de similitud
                 score = self.similarity(a1.nom, a2.nom)
                 
-                # També comprovem si un nom conté l'altre (ex: "Satalia..." i "La Satalia...")
-                nom1_clean = a1.nom.lower().replace("la ", "").replace("l'", "").replace("associació ", "").replace("assiciació ", "")
-                nom2_clean = a2.nom.lower().replace("la ", "").replace("l'", "").replace("associació ", "").replace("assiciació ", "")
+                # Normalitzem els noms treient caràcters habituals per fer una comparació neta
+                clean_prefixes = ["la ", "l'", "associació ", "assiciació ", "avv de la ", "avv "]
+                nom1_clean = a1.nom.lower()
+                nom2_clean = a2.nom.lower()
                 
-                són_similars = score > 0.80 or (len(nom1_clean) > 5 and nom1_clean in nom2_clean) or (len(nom2_clean) > 5 and nom2_clean in nom1_clean)
+                for prefix in clean_prefixes:
+                    nom1_clean = nom1_clean.replace(prefix, "")
+                    nom2_clean = nom2_clean.replace(prefix, "")
 
-                if són_similars:
+                # Considerem que són duplicats si superen el 82% de semblança O si la versió neta és exactament la mateixa
+                són_duplicats = (score >= 0.82) or (nom1_clean.strip() == nom2_clean.strip())
+
+                if són_duplicats:
                     self.stdout.write(f"\n[DETECTAT DUPLICAT] ({score*100:.0f}% semblança):")
                     self.stdout.write(f"  - ID {a1.id}: '{a1.nom}' (Gerents: {a1.gerents.count()})")
                     self.stdout.write(f"  - ID {a2.id}: '{a2.nom}' (Gerents: {a2.gerents.count()})")
 
-                    # Decidim quin esborrar:
-                    # Preferim mantenir el que TÉ gerents. Si cap dels dos en té, mantenim el primer (ID menor).
+                    # Decidim quin esborrar (mantenim el que TÉ gerents)
                     g1 = a1.gerents.exists()
                     g2 = a2.gerents.exists()
 
@@ -62,4 +80,4 @@ class Command(BaseCommand):
                     target_to_delete.delete()
                     eliminats_count += 1
 
-        self.stdout.write(self.style.SUCCESS(f"\nProcés finalitzat. S'han eliminat {eliminats_count} registres duplicats/erronis."))
+        self.stdout.write(self.style.SUCCESS(f"\nProcés finalitzat. S'han eliminat {eliminats_count} registres duplicats."))
