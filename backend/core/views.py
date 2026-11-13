@@ -19,7 +19,8 @@ def custom_logout(request):
     return redirect('index')
 
 # Associacions internes o de coordinació que no s'han de mostrar a la web pública
-ENTITATS_OCULTES_IDS = [26, 27]  # 26: Coordinadora Verda, 27: Altres entitats
+# ENTITATS_OCULTES_IDS = [26, 27]
+ENTITATS_OCULTES_IDS = []  # 26: Coordinadora Verda, 27: Altres entitats
 
 def entitats_list(request):
     entitats = Associacio.objects.exclude(id__in=ENTITATS_OCULTES_IDS).order_by('nom')
